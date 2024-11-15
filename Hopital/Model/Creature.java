@@ -72,13 +72,6 @@ public abstract class Creature {
         moral = 0;
     }
 
-
-
-
-
-    
-
-
     public List<Maladie> getMaladies() {
         return maladies;
     }

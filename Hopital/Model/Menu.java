@@ -1,9 +1,11 @@
 package Model;
 
+
+
 import java.util.List;
 import java.util.Scanner;
 
-public class Menu {
+public class Menu implements Runnable{
     private HopitalFantastique hopital;
     private Scanner scanner;
 
@@ -12,21 +14,38 @@ public class Menu {
         this.scanner = new Scanner(System.in);
     }
 
-    public void demarrer() {
+    @Override
+    public void run() {
         while (true) {
-            System.out.println("\n=== Bienvenue dans le menu de gestion de l'Hôpital Fantastique ===");
-            hopital.pauseSimulation(); // Pause la simulation
+            synchronized (hopital) {
+                while (!hopital.isPauseSimulation()) {
+                    try {
+                        hopital.wait(); // Attend que la simulation se termine
+                    } catch (InterruptedException e) {
+                        Thread.currentThread().interrupt();
+                        return;
+                    }               
+                }
+                
+                if (hopital.estJeuTermine()) {
+                    System.out.println("\n=== Fin du jeu : Toutes les créatures sont mortes. Merci d'avoir joué ! ===");
+                    return; // Arrête le thread du menu
+                }
+            }
 
-            System.out.println("Veuillez sélectionner un médecin pour prendre la main sur l'hôpital :");
+            System.out.println("\n=== Tour du joueur ===");
+            System.out.println("Sélectionnez un médecin pour prendre la main sur l'hôpital :");
             Medecin medecin = choisirMedecin();
-
-            if (medecin != null) {
+            if (medecin == null)
+            {
+            	hopital.setJeuTermine(true);
+            }
+            else {
                 System.out.println("Vous avez choisi le médecin : " + medecin.getNom());
-                int actionsRestantes = 3; // Limite d'actions
+                int actionsRestantes = 3;
                 long tempsLimite = System.currentTimeMillis() + 10000; // Limite de 10 secondes
 
                 while (actionsRestantes > 0 && System.currentTimeMillis() < tempsLimite) {
-                    System.out.println("\nActions restantes : " + actionsRestantes);
                     afficherOptions();
                     int choix = lireChoix();
 
@@ -34,44 +53,45 @@ public class Menu {
                         case 1 -> soignerCreatures(medecin);
                         case 2 -> reviserBudget(medecin);
                         case 3 -> transfererCreature(medecin);
-                        case 4 -> {
-                            actionsRestantes = 0;
-                            System.out.println("Fin des actions pour ce médecin.");
-                        }
-                        default -> System.out.println("Choix invalide. Veuillez réessayer.");
+                        default -> System.out.println("Fin des actions pour ce médecin.");
                     }
                     actionsRestantes--;
                 }
-            } else {
-                System.out.println("Aucun médecin sélectionné.");
             }
 
-            hopital.resumeSimulation(); // Relance la simulation
+            // Réveille le thread de simulation
+            hopital.resumeSimulation();
         }
     }
-
+    
+    
     private Medecin choisirMedecin() {
         List<Medecin> medecins = hopital.getMedecins();
         if (medecins.isEmpty()) {
-            System.out.println("Aucun médecin n'est disponible.");
+            System.out.println("Aucun médecin disponible.");
             return null;
         }
 
         for (int i = 0; i < medecins.size(); i++) {
             System.out.println((i + 1) + ". " + medecins.get(i).getNom());
         }
+        System.out.println((medecins.size()+1) + ". " +"Abandonner la partie");
 
         int choix = lireChoix();
         if (choix > 0 && choix <= medecins.size()) {
             return medecins.get(choix - 1);
-        } else {
+        } 
+        else if (choix == medecins.size()+1){
+        	return null;
+        }
+        else {
             System.out.println("Choix invalide.");
             return null;
         }
     }
 
     private void afficherOptions() {
-        System.out.println("\nVeuillez sélectionner une action :");
+        System.out.println("\nSélectionnez une action :");
         System.out.println("1. Soigner les créatures dans un service médical");
         System.out.println("2. Réviser le budget d'un service médical");
         System.out.println("3. Transférer une créature entre services médicaux");
@@ -103,13 +123,11 @@ public class Menu {
     private void transfererCreature(Medecin medecin) {
         ServiceMedical serviceDepart = choisirService();
         if (serviceDepart != null && !serviceDepart.getCreatures().isEmpty()) {
-            System.out.println("Sélectionnez une créature à transférer :");
             Creature creature = choisirCreature(serviceDepart);
-
             ServiceMedical serviceArrivee = choisirService();
             if (serviceArrivee != null && serviceArrivee != serviceDepart) {
                 medecin.transfererCreature(creature, serviceDepart, serviceArrivee);
-                System.out.println("Créature " + creature.getNom() + " transférée de " +
+                System.out.println("Créature " + creature.getNom() + " transférée de " + 
                         serviceDepart.getNom() + " à " + serviceArrivee.getNom());
             } else {
                 System.out.println("Service d'arrivée invalide.");
@@ -122,7 +140,7 @@ public class Menu {
     private ServiceMedical choisirService() {
         List<ServiceMedical> services = hopital.getServices();
         if (services.isEmpty()) {
-            System.out.println("Aucun service médical n'est disponible.");
+            System.out.println("Aucun service médical disponible.");
             return null;
         }
 
@@ -135,7 +153,7 @@ public class Menu {
         if (choix > 0 && choix <= services.size()) {
             return services.get(choix - 1);
         } else {
-            System.out.println("Choix de service invalide.");
+            System.out.println("Choix invalide.");
             return null;
         }
     }
@@ -143,7 +161,7 @@ public class Menu {
     private Creature choisirCreature(ServiceMedical service) {
         List<Creature> creatures = service.getCreatures();
         if (creatures.isEmpty()) {
-            System.out.println("Aucune créature n'est disponible dans ce service.");
+            System.out.println("Aucune créature disponible dans ce service.");
             return null;
         }
 
@@ -155,7 +173,7 @@ public class Menu {
         if (choix > 0 && choix <= creatures.size()) {
             return creatures.get(choix - 1);
         } else {
-            System.out.println("Choix de créature invalide.");
+            System.out.println("Choix invalide.");
             return null;
         }
     }

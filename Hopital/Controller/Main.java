@@ -18,14 +18,14 @@ public class Main {
         // Création de créatures et ajout aux services
         Creature orque1 = new Orque("Orque Grunt", "Mâle", 90.5, 1.8, "jeune");
         Creature orque2 = new Orque("Orque Gore", "Femelle", 85.0, 1.75, "jeune");
-        Creature vampire1 = new Elfe("Elfe Sombre", "Femelle", 70.0, 1.6, "jeune");
-        Creature vampire2 = new Elfe("Elfe Nocturne", "Mâle", 65.0, 1.65, "jeune");
+        Creature elfe1 = new Elfe("Elfe Sombre", "Femelle", 70.0, 1.6, "jeune");
+        Creature elfe2 = new Elfe("Elfe Nocturne", "Mâle", 65.0, 1.65, "jeune");
 
         // Ajout des créatures dans les services
         centreQuarantaine.ajouterCreature(orque1);
         centreQuarantaine.ajouterCreature(orque2);
-        crypte.ajouterCreature(vampire1);
-        crypte.ajouterCreature(vampire2);
+        crypte.ajouterCreature(elfe1);
+        crypte.ajouterCreature(elfe2);
 
         // Création de médecins
         Medecin medecin1 = new Medecin("Docteur Malthus", "Mâle", 45);
@@ -46,6 +46,6 @@ public class Main {
         
         // Démarrer le menu pour permettre à l'utilisateur de prendre la main
         Menu menu = new Menu(hopital);
-        menu.demarrer(); // Lance le menu en ligne de commande
+        new Thread(menu).start(); // Lance le menu en ligne de commande
     }
 }
