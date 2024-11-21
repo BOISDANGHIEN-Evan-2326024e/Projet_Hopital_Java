@@ -4,13 +4,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 public abstract class ServiceMedical {
-    protected String nom;
-    protected double superficie;
-    protected int capaciteMax;
-    protected List<Creature> creatures;
-    protected String budget;
+    private String nom;
+    private double superficie;
+    private int capaciteMax;
+    private List<Creature> creatures;
+    private int budget;
 
-    public ServiceMedical(String nom, double superficie, int capaciteMax, String budget) {
+    public ServiceMedical(String nom, double superficie, int capaciteMax, int budget) {
         this.nom = nom;
         this.superficie = superficie;
         this.capaciteMax = capaciteMax;
@@ -18,13 +18,7 @@ public abstract class ServiceMedical {
         this.budget = budget;
     }
 
-    public void afficherDetails() {
-        System.out.println("Service : " + nom);
-        System.out.println("Capacité : " + capaciteMax);
-        for (Creature creature : creatures) {
-            System.out.println(creature.getNom() + ", Moral: " + creature.getMoral());
-        }
-    }
+    public abstract void afficherDetails();
 
     public void ajouterCreature(Creature creature) {
         if (creatures.size() < capaciteMax) {
@@ -45,16 +39,20 @@ public abstract class ServiceMedical {
     public List<Creature> getCreatures() {
         return creatures;
     }
+    
+    public int getCapacite() {
+    	return creatures.size();
+    }
 
     public void setCreatures(List<Creature> creatures) {
         this.creatures = creatures;
     }
 
-    public String getBudget() {
+    public int getBudget() {
         return budget;
     }
 
-    public void setBudget(String budget) {
+    public void setBudget(int budget) {
         this.budget = budget;
     }
 
@@ -79,5 +77,5 @@ public abstract class ServiceMedical {
     }
 
     /* Méthode abstraite pour réviser le budget spécifique de chaque sous-classe */
-    public abstract void reviserBudget(String nouveauBudget);
+    public abstract void reviserBudget(int nouveauBudget);
 }

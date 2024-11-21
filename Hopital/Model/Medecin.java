@@ -21,7 +21,7 @@ public class Medecin {
         service.soignerCreatures();
     }
 
-    public void reviserBudget(ServiceMedical service, String nouveauBudget) {
+    public void reviserBudget(ServiceMedical service, int nouveauBudget) {
         service.reviserBudget(nouveauBudget);
     }
 
