@@ -4,7 +4,7 @@ public class Crypte extends ServiceMedical {
     private int ventilation;
     private double temperature;
 
-    public Crypte(String nom, double superficie, int capaciteMax, String budget, int ventilation, double temperature) {
+    public Crypte(String nom, double superficie, int capaciteMax, int budget, int ventilation, double temperature) {
         super(nom, superficie, capaciteMax, budget);
         this.ventilation = ventilation;
         this.temperature = temperature;
@@ -27,8 +27,21 @@ public class Crypte extends ServiceMedical {
     }
 
     @Override
-    public void reviserBudget(String nouveauBudget) {
-        this.budget = nouveauBudget;
-        System.out.println("Budget pour la crypte révisé. Ventilation: " + ventilation + ", Température: " + temperature);
+    public void reviserBudget(int nouveauBudget) {
+        setBudget(nouveauBudget);
+        //System.out.println("Budget pour la crypte révisé. Ventilation: " + ventilation + ", Température: " + temperature);
     }
+
+	@Override
+	public void afficherDetails() {
+        System.out.println("Service : " + getNom());
+        System.out.println("Capacité : " + getCapaciteMax());
+        System.out.println("Ventilation : " + ventilation);
+        System.out.println("Temperature : " + temperature);
+        for (Creature creature : getCreatures()) {
+            System.out.println(creature.nom + ", Moral: " + creature.moral + creature.getMaladies() );
+        }
+	}
+    
+    
 }

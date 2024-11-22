@@ -8,8 +8,8 @@ public class Main {
         HopitalFantastique hopital = new HopitalFantastique("Hôpital Fantastique", 5);
 
         // Création de services médicaux
-        CentreQuarantaine centreQuarantaine = new CentreQuarantaine("Centre de Quarantaine", 200, 10, "Médiocre", true);
-        Crypte crypte = new Crypte("Crypte", 150, 5, "Faible", 3, 18.0);
+        CentreQuarantaine centreQuarantaine = new CentreQuarantaine("Centre de Quarantaine", 200, 10, 5000, true);
+        Crypte crypte = new Crypte("Crypte", 150, 5, 5000, 3, 18.0);
 
         // Ajout des services à l'hôpital
         hopital.ajouterService(centreQuarantaine);
@@ -18,6 +18,7 @@ public class Main {
         // Création de créatures et ajout aux services
         Creature orque1 = new Orque("Orque Grunt", "Mâle", 90.5, 1.8, "jeune");
         Creature orque2 = new Orque("Orque Gore", "Femelle", 85.0, 1.75, "jeune");
+        orque2.tomberMalade();
         Creature elfe1 = new Elfe("Elfe Sombre", "Femelle", 70.0, 1.6, "jeune");
         Creature elfe2 = new Elfe("Elfe Nocturne", "Mâle", 65.0, 1.65, "jeune");
 

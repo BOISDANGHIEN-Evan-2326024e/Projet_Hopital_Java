@@ -39,8 +39,6 @@ public class Maladie {
 
 
 
-
-
     public String getNomComplet() {
         return nomComplet;
     }
@@ -72,4 +70,12 @@ public class Maladie {
     public void setNiveauMax(int niveauMax) {
         this.niveauMax = niveauMax;
     }
+
+	@Override
+	public String toString() {
+		return  nomComplet + "(aka " + nomAbrege + ") " + niveauActuel
+				+ "/" + niveauMax;
+	}
+
+    
 }
