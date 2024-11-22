@@ -1,8 +1,7 @@
 package Model;
 
-
-public class Elfe extends Creature {
-	public Elfe(String nom, String sexe, double poids, double taille, String age) {
+public class Vampire extends Creature{
+	public Vampire(String nom, String sexe, double poids, double taille, String age) {
 		super(nom, sexe, poids, taille, age);
 	}
 
@@ -12,7 +11,7 @@ public class Elfe extends Creature {
 
 	@Override
 	public Categorie getCategorie() {
-		return Categorie.VIP; // Elfe est une créature VIP
+		return Categorie.VIP; // Vampire est une créature VIP
 	}
 
 }
