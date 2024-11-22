@@ -9,10 +9,13 @@ public class Main {
 
         // Création de services médicaux
         CentreQuarantaine centreQuarantaine = new CentreQuarantaine("Centre de Quarantaine", 200, 10, 5000, true);
+        CentreQuarantaine centreQuarantaineOrques = new CentreQuarantaine("Centre de Quarantaine orques", 200, 10, 5000, false);
+
         Crypte crypte = new Crypte("Crypte", 150, 5, 5000, 3, 18.0);
 
         // Ajout des services à l'hôpital
         hopital.ajouterService(centreQuarantaine);
+        hopital.ajouterService(centreQuarantaineOrques);
         hopital.ajouterService(crypte);
 
         // Création de créatures et ajout aux services

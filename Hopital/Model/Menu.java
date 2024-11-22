@@ -156,7 +156,9 @@ public class Menu implements Runnable{
 		if (serviceDepart != null && !serviceDepart.getCreatures().isEmpty()) {
 			Creature creature = choisirCreature(serviceDepart);
 			ServiceMedical serviceArrivee = choisirService();
-			if (serviceArrivee != null && serviceArrivee != serviceDepart) {
+			Class<?> typePremiereCreature = serviceArrivee.getCreatures().get(0).getClass();
+			if (serviceArrivee != null && serviceArrivee != serviceDepart && creature.getClass().equals(typePremiereCreature)) {
+				
 				medecin.transfererCreature(creature, serviceDepart, serviceArrivee);
 				System.out.println("Créature " + creature.nom + " transférée de " + 
 						serviceDepart.getNom() + " à " + serviceArrivee.getNom());

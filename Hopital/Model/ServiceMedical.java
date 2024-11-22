@@ -78,4 +78,9 @@ public abstract class ServiceMedical {
 
     /* Méthode abstraite pour réviser le budget spécifique de chaque sous-classe */
     public abstract void reviserBudget(int nouveauBudget);
+    
+    public boolean estDetruit() {
+        return creatures.stream().allMatch(creature -> !creature.estEnVie()); // Tous les créatures sont mortes
+    }
+
 }

@@ -86,6 +86,12 @@ public class HopitalFantastique {
 						return;
 					}
 
+	                if (verifierDefaiteDestruction()) {
+	                    jeuTermine = true;
+	                    notify();
+	                    return;
+	                }
+	                
 					if (verifierFinDuJeu()) {
 						System.out.println("\n=== Toutes les créatures sont mortes. Le jeu est terminé. ===");
 						jeuTermine = true;
@@ -117,7 +123,7 @@ public class HopitalFantastique {
 										creature.getMaladies().get(0).augmenterNiveau();
 									}
 									else {
-										
+
 									}
 								}
 								}
@@ -129,13 +135,13 @@ public class HopitalFantastique {
 							switch (action) {
 							case 0 -> {
 								// Ajout d’une créature
-								if (service.getCapaciteMax() > service.getCapacite()) {
-									Creature nouvelleCreature = genererNouvelleCreature(service);
-									if (nouvelleCreature != null) {
-										service.ajouterCreature(nouvelleCreature);
-										System.out.println("Nouvelle créature dans " + service.getNom() + (nouvelleCreature.getMaladies().isEmpty() ? " en bonne santé." : 
-											" avec la maladie : " + nouvelleCreature.getMaladies().get(0).getNomComplet()));
-									}
+
+								Creature nouvelleCreature = genererNouvelleCreature(service);
+								if (nouvelleCreature != null) {
+									service.ajouterCreature(nouvelleCreature);
+									System.out.println("Nouvelle créature dans " + service.getNom() + (nouvelleCreature.getMaladies().isEmpty() ? " en bonne santé." : 
+										" avec la maladie : " + nouvelleCreature.getMaladies().get(0).getNomComplet()));
+
 								}
 
 							}
@@ -245,9 +251,23 @@ public class HopitalFantastique {
 		return true;
 	}
 
+	private boolean verifierDefaiteDestruction() {
+		int servicesDetruits = 0; // Compteur des services détruits
+		for (ServiceMedical service : services) {
+			if (service.estDetruit()) { // Vérifie si le service est détruit
+				servicesDetruits++;
+			}
+		}
+		if (servicesDetruits >= 3) {
+			System.out.println("\n=== Défaite : Trois services médicaux sont détruits. Vous avez perdu ! ===");
+			return true;
+		}
+		return false;
+	}
+
 	public boolean verifierVictoire() {
 		//Verifie si le joueur à gagné et met à jour l'état des créatures
-		
+
 		for (ServiceMedical service : services) {
 			for (Creature creature : service.getCreatures()) {		
 				creature.estEnVie();

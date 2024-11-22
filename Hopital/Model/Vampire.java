@@ -8,10 +8,14 @@ public class Vampire extends Creature{
 	public void demoraliser() {
 		System.out.println(nom + " démoralise son entourage !");
 	}
-
+	
+	public void regenerer() {
+		System.out.println(nom + " se régenere !");
+	}
+	
 	@Override
 	public Categorie getCategorie() {
-		return Categorie.VIP; // Vampire est une créature VIP
+		return Categorie.VIP; 
 	}
 
 }
