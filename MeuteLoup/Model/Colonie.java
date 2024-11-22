@@ -125,7 +125,7 @@ public class Colonie {
                 Lycanthrope recepteur = lycanthropes.get(random.nextInt(lycanthropes.size()));
                 if (!emetteur.equals(recepteur)) {
                     Hurlement hurlement = new Hurlement("domination", emetteur);
-                    recepteur.entendreHurlement(hurlement);
+                    recepteur.entendreHurlement(hurlement, false);// A MODIFIER
                 }
             }
         }
