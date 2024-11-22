@@ -9,8 +9,9 @@ public class Lycanthrope {
     private int niveau; // Niveau calculé du lycanthrope
     private int facteurImpetuosite; // Facteur d’impétuosité
     private Meute meute; // Meute à laquelle il appartient (null s’il est solitaire)
+    private String Nom;
     
-    public Lycanthrope(String sexe, String categorieAge, int force, int facteurDomination, int rang, int facteurImpetuosite) {
+    public Lycanthrope(String sexe, String categorieAge, int force, int facteurDomination, int rang, int facteurImpetuosite,String Nom) {
         this.sexe = sexe;
         this.categorieAge = categorieAge;
         this.force = force;
@@ -19,10 +20,12 @@ public class Lycanthrope {
         this.facteurImpetuosite = facteurImpetuosite;
         this.niveau = calculNiveau(); // Calcul automatique du niveau lors de la création
         this.meute = null; // Par défaut, le lycanthrope est solitaire
+        this.Nom=Nom;
     }
     
     // Méthode pour afficher les caractéristiques
     public void afficherCaracteristiques() {
+    	System.out.println("Nom :" + Nom);
         System.out.println("Sexe : " + sexe);
         System.out.println("Catégorie d'âge : " + categorieAge);
         System.out.println("Force : " + force);
@@ -35,31 +38,31 @@ public class Lycanthrope {
     
     // Méthode pour hurler
     public void hurler(Hurlement hurlement) {
-        System.out.println("Le lycanthrope hurle : " + hurlement.getTypeHurlement());
+        System.out.println(this.Nom+" hurle : " + hurlement.getTypeHurlement());
     }
     
     // Méthode pour entendre un hurlement (si le lycanthrope n’est pas malade)
     public void entendreHurlement(Hurlement hurlement, boolean estMalade) {
         if (estMalade) {
-            System.out.println("Le lycanthrope est trop malade pour réagir au hurlement.");
+            System.out.println(this.Nom+" est trop malade pour réagir au hurlement.");
         } else {
-            System.out.println("Le lycanthrope entend un hurlement : " + hurlement.getTypeHurlement());
+            System.out.println(this.Nom+" entend un hurlement : " + hurlement.getTypeHurlement());
         }
     }
     
     // Méthode pour se séparer de la meute
     public void separationMeute() {
         if (meute != null) {
-            System.out.println("Le lycanthrope quitte la meute.");
+            System.out.println(this.Nom+" quitte la meute.");
             meute = null;
         } else {
-            System.out.println("Le lycanthrope est déjà solitaire.");
+            System.out.println(this.Nom+" est déjà solitaire.");
         }
     }
     
     // Méthode pour se transformer en humain
     public void transformation() {
-        System.out.println("Le lycanthrope se transforme en humain.");
+        System.out.println(this.Nom+" se transforme en humain.");
         meute=null;
     }
     
@@ -145,5 +148,18 @@ public class Lycanthrope {
 	public int getNiveau() {
 		return niveau;
 	}
+
+	public String getNom() {
+		return Nom;
+	}
+
+	public void setNom(String nom) {
+		Nom = nom;
+	}
+
+	public void setNiveau(int niveau) {
+		this.niveau = niveau;
+	}
+	
 }
 

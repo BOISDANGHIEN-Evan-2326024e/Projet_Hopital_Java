@@ -66,18 +66,20 @@ public class Colonie {
 
     // Déterminer si une nouvelle meute doit être créée
     private boolean doitCreerNouvelleMeute() {
-        // Exemple : créer une nouvelle meute si une meute a plus de 10 lycanthropes
         for (Meute meute : listeMeutes) {
-            if (meute.getLycanthropes().size() > 10) {
+            if (meute.getLycanthropes().size() > 12) {
                 return true;
             }
+        }
+        if(listeMeutes.size()==0) {
+        	return true;
         }
         return false;
     }
 
     // Créer une nouvelle meute
     private void creerNouvelleMeute() {
-        Meute nouvelleMeute = new Meute();
+        Meute nouvelleMeute = new Meute(null); // A MODIFIER EN METTANT NOM A LA MAIN
         System.out.println("Une nouvelle meute a été créée !");
         listeMeutes.add(nouvelleMeute);
     }
@@ -109,7 +111,15 @@ public class Colonie {
         System.out.println("Les lycanthropes vieillissent...");
         for (Meute meute : listeMeutes) {
             for (Lycanthrope lycan : meute.getLycanthropes()) {
-                lycan.setCategorieAge(null); // A MODIFIER CEST PAS BON !!!!
+            	if(lycan.getCategorieAge()=="jeune") {
+            		lycan.setCategorieAge("adulte");
+            	}
+            	if(lycan.getCategorieAge()=="adulte") {
+            		lycan.setCategorieAge("vieux");
+            	}
+            	else {
+            		continue;
+            	}
             }
         }
     }

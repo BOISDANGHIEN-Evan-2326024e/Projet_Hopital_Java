@@ -71,13 +71,14 @@ public class Couple {
             int rangDesJeunes = verifierPresenceRangBeta(nouveauxLycanthropes) ? 3 : 2;
 
             for (int i = 0; i < nbJeunes; i++) {
-                Lycanthrope jeune = new Lycanthrope(null, null, i, i, i, i);
+                Lycanthrope jeune = new Lycanthrope(null, null, i, i, i, i, null);
                 jeune.setSexe(random.nextBoolean() ? "mâle" : "femelle");
                 jeune.setCategorieAge("jeune");
                 jeune.setForce(random.nextInt(10) + 1); // Force aléatoire entre 1 et 10
                 jeune.setRang(rangDesJeunes); 
                 jeune.setFacteurDomination(0); // Par défaut, le facteur de domination est neutre
                 jeune.setFacteurImpetuosite(random.nextInt(10) + 1); // Impétuosité aléatoire entre 1 et 10
+                jeune.setNom("lycan "+i);
 
                 // Ajouter le nouveau lycanthrope à la liste des nouveaux-nés
                 nouveauxLycanthropes.add(jeune);

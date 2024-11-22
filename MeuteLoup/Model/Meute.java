@@ -6,10 +6,12 @@ import java.util.List;
 public class Meute {
     private Couple coupleAlpha; // Couple α (chef de la meute)
     private List<Lycanthrope> lycanthropes; // Liste des lycanthropes de la meute
+    private String nomMeute;
 
-    public Meute() {
+    public Meute(String nomMeute) {
         this.lycanthropes = new ArrayList<>();
         this.coupleAlpha = null; // Pas de couple α par défaut
+        this.nomMeute=nomMeute;
     }
 
 
@@ -62,15 +64,15 @@ public class Meute {
     // Méthode pour ajouter un lycanthrope à la meute
     public void ajouterLycanthrope(Lycanthrope lycanthrope) {
         lycanthropes.add(lycanthrope);
-        System.out.println("Lycanthrope ajouté à la meute.");
+        System.out.println(lycanthrope.getNom()+" ajouté à la meute.");
     }
 
     // Méthode pour enlever un lycanthrope de la meute
     public void enleverLycanthrope(Lycanthrope lycanthrope) {
         if (lycanthropes.remove(lycanthrope)) {
-            System.out.println("Lycanthrope retiré de la meute.");
+            System.out.println(lycanthrope.getNom()+" retiré de la meute.");
         } else {
-            System.out.println("Lycanthrope non trouvé dans la meute.");
+            System.out.println(lycanthrope.getNom()+" non trouvé dans la meute.");
         }
     }
 
@@ -102,6 +104,15 @@ public class Meute {
 		this.lycanthropes = lycanthropes;
 	}
 
+	public String getNomMeute() {
+		return nomMeute;
+	}
+
+
+	public void setNomMeute(String nomMeute) {
+		this.nomMeute = nomMeute;
+	}
+
 
 	// Méthode pour déclarer les lycanthropes ω
     public void declarerLycanthropesOmega() {
@@ -115,7 +126,7 @@ public class Meute {
         for (Lycanthrope lycan : lycanthropes) {
             if ("adulte".equals(lycan.getCategorieAge()) && lycan.getForce() < moyenneForce) {
                 lycan.setRang(26); // Rang ω (dernier rang)
-                System.out.println("Lycanthrope déclaré ω : " + lycan.getSexe());
+                System.out.println(lycan.getNom()+" déclaré ω : " + lycan.getSexe());
             }
         }
     }
@@ -125,7 +136,7 @@ public class Meute {
         for (Lycanthrope lycan : lycanthropes) {
             if (lycan.getFacteurDomination() < 0 && lycan.getRang() > 1) {
                 lycan.setRang(lycan.getRang() + 1); // Décroît le rang (descend dans la hiérarchie)
-                System.out.println("Lycanthrope " + lycan.getSexe() + " a perdu un rang.");
+                System.out.println(lycan.getNom()+" a perdu un rang.");
             }
         }
     }
