@@ -185,6 +185,7 @@ public class HopitalFantastique {
 								System.out.println(" Le budget du service " + service.getNom() + " a été augmenté de " + augmentationBudget + " crédits.");
 							}
 							case 9 -> {
+								
 								//Le saint médecin soigne des créatures VIP 
 								List<ServiceMedical> servicesVIP = new ArrayList<>();
 								for (ServiceMedical serviceVIP : services) {
