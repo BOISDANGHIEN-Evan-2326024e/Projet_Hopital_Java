@@ -4,11 +4,12 @@ public class Medecin {
     private String nom;
     private String sexe;
     private int age;
+    private ServiceMedical serviceAssocie;
 
-    public Medecin(String nom, String sexe, int age) {
-        this.nom = nom;
+    public Medecin(String nom, String sexe, int age, ServiceMedical serviceAssocie) {        this.nom = nom;
         this.sexe = sexe;
         this.age = age;
+        this.serviceAssocie = serviceAssocie;
     }
 
     public void examiner(ServiceMedical service) {
@@ -16,11 +17,18 @@ public class Medecin {
         service.afficherDetails();
     }
 
-    public void soigner(ServiceMedical service) {
-        System.out.println(nom + " soigne les créatures du service " + service.getNom());
-        service.soignerCreatures();
+    public void soigner(Creature creature) {
+        if (serviceAssocie.getCreatures().contains(creature)) {
+            creature.soigner();
+            System.out.println(nom + " a soigné " + creature.nom + ".");
+            serviceAssocie.retirerCreature(creature); // La créature quitte le service après avoir été soignée
+            System.out.println(creature.nom + " a quitté le service " + serviceAssocie.getNom() + ".");
+        } else {
+            System.out.println("Erreur : La créature n'est pas dans le service associé au médecin.");
+        }
     }
 
+    
     public void reviserBudget(ServiceMedical service, int nouveauBudget) {
         service.reviserBudget(nouveauBudget);
     }
@@ -31,7 +39,17 @@ public class Medecin {
             serviceArrivee.ajouterCreature(creature);
         }
     }
+    
+    
 
+    public ServiceMedical getServiceAssocie() {
+        return serviceAssocie;
+    }
+
+    public void setServiceAssocie(ServiceMedical serviceAssocie) {
+        this.serviceAssocie = serviceAssocie;
+    }
+    
 	public String getNom() {
 		return nom;
 	}

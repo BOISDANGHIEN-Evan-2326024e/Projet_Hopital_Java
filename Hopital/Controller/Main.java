@@ -21,9 +21,12 @@ public class Main {
         // Création de créatures et ajout aux services
         Creature orque1 = new Orque("Orque Grunt", "Mâle", 90.5, 1.8, "jeune");
         Creature orque2 = new Orque("Orque Gore", "Femelle", 85.0, 1.75, "jeune");
-        orque2.tomberMalade();
+        orque1.tomberMaladeDebut();
+        orque2.tomberMaladeDebut();
         Creature elfe1 = new Elfe("Elfe Sombre", "Femelle", 70.0, 1.6, "jeune");
         Creature elfe2 = new Elfe("Elfe Nocturne", "Mâle", 65.0, 1.65, "jeune");
+        elfe1.tomberMaladeDebut();
+        elfe2.tomberMaladeDebut();
 
         // Ajout des créatures dans les services
         centreQuarantaine.ajouterCreature(orque1);
@@ -32,12 +35,14 @@ public class Main {
         crypte.ajouterCreature(elfe2);
 
         // Création de médecins
-        Medecin medecin1 = new Medecin("Docteur Malthus", "Mâle", 45);
-        Medecin medecin2 = new Medecin("Docteur Sélène", "Femelle", 50);
+        Medecin medecin1 = new Medecin("Docteur Malthus", "Mâle", 45, centreQuarantaine);
+        Medecin medecin2 = new Medecin("Docteur Sélène", "Femelle", 50, centreQuarantaineOrques);
+        Medecin medecin3 = new Medecin("Docteur Coline", "Femelle", 50, crypte);   
 
         // Ajout des médecins à l'hôpital
         hopital.ajouterMedecin(medecin1);
         hopital.ajouterMedecin(medecin2);
+        hopital.ajouterMedecin(medecin3);
 
         // Affichage des informations initiales
         System.out.println("=== Informations Initiales de l'Hôpital ===");

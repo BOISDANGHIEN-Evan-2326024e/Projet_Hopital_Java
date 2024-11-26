@@ -65,13 +65,23 @@ public abstract class Creature {
 
 	public void emporter() {};
 
-	public void tomberMalade() {
+	public void tomberMaladeDebut() {
 		Maladie maladie = genererMaladieAleatoire();
 		maladies.add(maladie);
 		moral -= 10;
-		System.out.println(nom + " a contracté une nouvelle maladie : " + maladie.getNomAbrege());
 	}
 
+	public void tomberMalade(ServiceMedical service) {
+	    Maladie nouvelleMaladie = service.obtenirMaladieDepuisService();
+	    if (nouvelleMaladie != null) {
+	        maladies.add(nouvelleMaladie);
+	        moral -= 10; // Réduit le moral en raison de la maladie
+	    }
+	    else {
+	    	
+	    }
+	}
+	
 	public void soigner() {
 		if (!maladies.isEmpty()) {
 			maladies.remove(0);

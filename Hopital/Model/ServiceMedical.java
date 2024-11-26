@@ -1,6 +1,7 @@
 package Model;
 
 import java.util.ArrayList;
+import java.util.Random;
 import java.util.List;
 
 public abstract class ServiceMedical {
@@ -30,10 +31,20 @@ public abstract class ServiceMedical {
         creatures.remove(creature);
     }
 
+    /*
     public void soignerCreatures() {
         for (Creature creature : creatures) {
             creature.soigner();
         }
+    }*/
+    
+    public Maladie obtenirMaladieDepuisService() {
+        for (Creature creature : creatures) {
+        		Random random = new Random();
+                return creature.getMaladies().get(random.nextInt(creature.getMaladies().size())); // Maladie aléatoire
+            
+        }
+        return null; // Ce cas ne se produit pas si il y a aucune creature
     }
 
     public List<Creature> getCreatures() {
@@ -79,8 +90,5 @@ public abstract class ServiceMedical {
     /* Méthode abstraite pour réviser le budget spécifique de chaque sous-classe */
     public abstract void reviserBudget(int nouveauBudget);
     
-    public boolean estDetruit() {
-        return creatures.stream().allMatch(creature -> !creature.estEnVie()); // Tous les créatures sont mortes
-    }
 
 }
