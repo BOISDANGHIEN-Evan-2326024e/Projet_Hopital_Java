@@ -6,14 +6,13 @@ public class Elfe extends Creature {
 		super(nom, sexe, poids, taille, age);
 	}
 
-	@Override
-	public void emporter() {
+	public void demoraliser() {
 		System.out.println(nom + " démoralise son entourage !");
 	}
 
 	@Override
 	public Categorie getCategorie() {
-		return Categorie.VIP;
+		return Categorie.VIP; // Elfe est une créature VIP
 	}
 
 }

@@ -15,6 +15,7 @@ public class HopitalFantastique {
 	private boolean pauseSimulation; // Variable pour contrôler la pause de la simulation
 	private boolean jeuTermine;
 	private int round;
+	public int nbrMort;
 
 	public HopitalFantastique(String nom, int maxServices) {
 		this.nom = nom;
@@ -58,6 +59,7 @@ public class HopitalFantastique {
 			totalCreatures += service.getCreatures().size();
 		}
 		System.out.println("Nombre de créatures dans l'hôpital : " + totalCreatures);
+		System.out.println("Nombre de créatures mortes depuis le début : " + nbrMort);
 	}
 
 	public void afficherDetailsCreatures() {
@@ -79,19 +81,28 @@ public class HopitalFantastique {
 							return;
 						}
 					}
-					if (verifierVictoire()) {
-						System.out.println("\n=== Félicitations ! Toutes les maladies ont été éradiquées. Vous avez gagné ! ===");
-						jeuTermine = true;
-						notify(); // Informe le thread du joueur
-						return;
+					
+					for (ServiceMedical service : services) {
+						for (Creature creature : service.getCreatures()) {
+							if (!creature.estEnVie())
+							{
+								nbrMort += 1;
+							}
+							if(creature.getMaladies().isEmpty()) 
+							{
+								service.retirerCreature(creature);
+							}
+						}
 					}
 
+	                
 					if (verifierFinDuJeu()) {
-						System.out.println("\n=== Toutes les créatures sont mortes. Le jeu est terminé. ===");
+						System.out.println("\n=== Il y a eu trop de mort dans votre hopital ("+nbrMort+")... Le jeu est terminé. ===");
 						jeuTermine = true;
 						notify(); // Informe le thread du joueur
 						return;
 					}
+					
 				}
 				round++;
 				gererMortsEtHeritage();
@@ -108,7 +119,7 @@ public class HopitalFantastique {
 								switch (action) {
 								case 0 -> { 
 									if (random.nextInt(100) < 20) { 
-										creature.tomberMalade();
+										creature.tomberMalade(service);
 									}
 								}
 								case 1 -> creature.attendre(service.getCreatures(), round);
@@ -117,7 +128,7 @@ public class HopitalFantastique {
 										creature.getMaladies().get(0).augmenterNiveau();
 									}
 									else {
-										
+
 									}
 								}
 								}
@@ -129,13 +140,13 @@ public class HopitalFantastique {
 							switch (action) {
 							case 0 -> {
 								// Ajout d’une créature
-								if (service.getCapaciteMax() > service.getCapacite()) {
-									Creature nouvelleCreature = genererNouvelleCreature(service);
-									if (nouvelleCreature != null) {
-										service.ajouterCreature(nouvelleCreature);
-										System.out.println("Nouvelle créature dans " + service.getNom() + (nouvelleCreature.getMaladies().isEmpty() ? " en bonne santé." : 
-											" avec la maladie : " + nouvelleCreature.getMaladies().get(0).getNomComplet()));
-									}
+
+								Creature nouvelleCreature = genererNouvelleCreature(service);
+								if (nouvelleCreature != null) {
+									service.ajouterCreature(nouvelleCreature);
+									System.out.println("Nouvelle créature " + nouvelleCreature.nom +" dans " + service.getNom() + (nouvelleCreature.getMaladies().isEmpty() ? " en bonne santé." : 
+										" avec la maladie : " + nouvelleCreature.getMaladies().get(0).getNomComplet()));
+
 								}
 
 							}
@@ -174,8 +185,21 @@ public class HopitalFantastique {
 								System.out.println(" Le budget du service " + service.getNom() + " a été augmenté de " + augmentationBudget + " crédits.");
 							}
 							case 9 -> {
-								System.out.println("Vous avez énormément de chance aujourd'hui !!!! Le service " + service.getNom() + " vient de subir la visite d'un grand médecin gratuitement ! Tout le service est soigné :D");
-								service.soignerCreatures();
+								
+								//Le saint médecin soigne des créatures VIP 
+								List<ServiceMedical> servicesVIP = new ArrayList<>();
+								for (ServiceMedical serviceVIP : services) {
+								    for (Creature creature : serviceVIP.getCreatures()) {
+								        if (creature.getCategorie() == Categorie.VIP) {
+								            servicesVIP.add(serviceVIP); // Ajoute le service à la liste si une créature VIP est trouvée
+								            break; // Pas besoin de vérifier les autres créatures de ce service
+								        }
+								    }
+								}
+								ServiceMedical serviceVIP = servicesVIP.get(random.nextInt(servicesVIP.size()));
+								saintMedecin(serviceVIP);
+								System.out.println("Les VIP avant votre vie :D : Le saint médecin rend visite au service " + serviceVIP.getNom());								
+								//service.soignerCreatures();
 							}
 							}
 
@@ -232,32 +256,12 @@ public class HopitalFantastique {
 	}
 
 	public boolean verifierFinDuJeu() {
-		if (jeuTermine) {
+		if (jeuTermine || nbrMort >= 5) {
 			return true;
 		}
-		for (ServiceMedical service : services) {
-			for (Creature creature : service.getCreatures()) {
-				if (creature.estEnVie()) {
-					return false;
-				}
-			}
-		}
-		return true;
+		return false;
 	}
 
-	public boolean verifierVictoire() {
-		//Verifie si le joueur à gagné et met à jour l'état des créatures
-		
-		for (ServiceMedical service : services) {
-			for (Creature creature : service.getCreatures()) {		
-				creature.estEnVie();
-				if (!creature.getMaladies().isEmpty()) {
-					return false; // Il reste des maladies
-				}
-			}
-		}
-		return true; // Aucune maladie détectée
-	}
 
 
 	public Creature genererNouvelleCreature(ServiceMedical service) {
@@ -305,11 +309,7 @@ public class HopitalFantastique {
 			default -> throw new IllegalStateException("Type de créature inconnu");
 			}
 
-			// Ajouter une maladie aléatoire dans certains cas
-			if (random.nextBoolean()) { // 50% de chance
-				creature.tomberMalade();
-			}
-
+			creature.tomberMalade(service);
 			return creature;
 		}	
 		return null;
@@ -341,7 +341,34 @@ public class HopitalFantastique {
 		}
 	}
 
+	public void saintMedecin(ServiceMedical service) {
+	    List<Creature> creatures = service.getCreatures();
 
+	    if (creatures.isEmpty()) {
+	        System.out.println("Le service " + service.getNom() + " ne contient aucune créature.");
+	        return;
+	    }
+
+	    Random random = new Random();
+	    int nombreCreaturesSoignees = Math.min(3, creatures.size()); // Soigne au maximum 3 créatures
+	    List<Creature> creaturesChoisies = new ArrayList<>();
+
+	    // Sélection aléatoire de 3 créatures
+	    for (int i = 0; i < nombreCreaturesSoignees; i++) {
+	        Creature creature;
+	        do {
+	            creature = creatures.get(random.nextInt(creatures.size()));
+	        } while (creaturesChoisies.contains(creature)); // Assure que chaque créature est unique
+	        creaturesChoisies.add(creature);
+	    }
+
+	    // Soigne les créatures choisies
+	    for (Creature creature : creaturesChoisies) {
+	        creature.soigner();
+	        System.out.println("Le Saint medecin a soigné " + creature.nom + ".");
+	        service.retirerCreature(creature); // La créature quitte le service après le soin
+	    }
+	}
 
 
 	public String getNom() {
@@ -376,6 +403,7 @@ public class HopitalFantastique {
 		this.jeuTermine = jeuTermine;
 	}
 
+	
 
 
 

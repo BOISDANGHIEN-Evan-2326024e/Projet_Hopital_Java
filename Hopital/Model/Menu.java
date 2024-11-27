@@ -79,7 +79,7 @@ public class Menu implements Runnable{
 		}
 
 		for (int i = 0; i < medecins.size(); i++) {
-			System.out.println((i + 1) + ". " + medecins.get(i).getNom());
+			System.out.println((i + 1) + ". " + medecins.get(i).getNom() + "  -- " + medecins.get(i).getServiceAssocie().getNom()+ " -- ");
 		}
 		System.out.println((medecins.size() + 1) + ". Afficher les statistiques");
 		System.out.println((medecins.size() + 2) + ". Afficher les détails des créatures");
@@ -93,6 +93,7 @@ public class Menu implements Runnable{
 				hopital.afficherStatistiques();
 			} else if (choix == medecins.size() + 2) {
 				hopital.afficherDetailsCreatures();
+				afficherOptions();
 			}
 			choix = lireChoix(); 
 		}
@@ -133,16 +134,39 @@ public class Menu implements Runnable{
 	    }
 	    return choix; 
 	}
-
+/*
 	private void soignerCreatures(Medecin medecin) {
 		ServiceMedical service = choisirService();
 		if (service != null) {
 			medecin.soigner(service);
 		}
+	}*/
+	private void soignerCreatures(Medecin medecin) {
+	    ServiceMedical service = medecin.getServiceAssocie();
+	    if (service.getCreatures().isEmpty()) {
+	        System.out.println("Le service " + service.getNom() + " ne contient aucune créature.");
+	        return;
+	    }
+
+	    System.out.println("Sélectionnez une créature à soigner dans le service " + service.getNom() + " :");
+	    List<Creature> creatures = service.getCreatures();
+	    for (int i = 0; i < creatures.size(); i++) {
+	        System.out.println((i + 1) + ". " + creatures.get(i).nom + " (Moral: " + creatures.get(i).moral + ")");
+	    }
+
+	    int choix = lireChoix();
+	    if (choix > 0 && choix <= creatures.size()) {
+	        Creature creatureChoisie = creatures.get(choix - 1);
+	        medecin.soigner(creatureChoisie);
+	    } else {
+	        System.out.println("Choix invalide.");
+	    }
 	}
 
+	
+
 	private void reviserBudget(Medecin medecin) {
-		ServiceMedical service = choisirService();
+		ServiceMedical service = medecin.getServiceAssocie();
 		if (service != null) {
 			System.out.print("Entrez le nouveau budget pour le service : ");
 			int nouveauBudget = scanner.nextInt();
@@ -152,11 +176,13 @@ public class Menu implements Runnable{
 	}
 
 	private void transfererCreature(Medecin medecin) {
-		ServiceMedical serviceDepart = choisirService();
+		ServiceMedical serviceDepart = medecin.getServiceAssocie();
 		if (serviceDepart != null && !serviceDepart.getCreatures().isEmpty()) {
 			Creature creature = choisirCreature(serviceDepart);
 			ServiceMedical serviceArrivee = choisirService();
-			if (serviceArrivee != null && serviceArrivee != serviceDepart) {
+			Class<?> typePremiereCreature = serviceArrivee.getCreatures().get(0).getClass();
+			if (serviceArrivee != null && serviceArrivee != serviceDepart && creature.getClass().equals(typePremiereCreature)) {
+				
 				medecin.transfererCreature(creature, serviceDepart, serviceArrivee);
 				System.out.println("Créature " + creature.nom + " transférée de " + 
 						serviceDepart.getNom() + " à " + serviceArrivee.getNom());
