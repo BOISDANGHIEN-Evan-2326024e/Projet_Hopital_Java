@@ -35,27 +35,23 @@ public class Colonie {
             try {
                 Thread.sleep(10000); // Pause pour simuler le passage du temps (10 secondes ici)
 
-                // 1. Créer une nouvelle meute si nécessaire
                 if (doitCreerNouvelleMeute()) {
                     creerNouvelleMeute();
                 }
 
-                // 2. Vérifier si c'est la saison des amours et lancer la reproduction
                 if (estSaisonAmours()) {
                     lancerReproduction();
                 }
 
-                // 3. Faire évoluer la hiérarchie des meutes
                 evoluerHierarchieMeutes();
 
-                // 4. Faire vieillir certains lycanthropes
                 faireVieillirLycanthropes();
 
-                // 5. Générer des hurlements aléatoires entre lycanthropes
                 genererHurlementsAleatoires();
 
-                // 6. Transformer quelques lycanthropes en humains
                 transformerLycanthropes();
+                
+                
 
             } catch (InterruptedException e) {
                 System.out.println("Simulation interrompue.");
@@ -102,7 +98,9 @@ public class Colonie {
     private void evoluerHierarchieMeutes() {
         System.out.println("Évolution naturelle des hiérarchies dans les meutes...");
         for (Meute meute : listeMeutes) {
-            meute.decroitreRangsNaturellement();
+        	if(random.nextInt(100) < 20) {
+                meute.decroitreRangsNaturellement();
+        	}
         }
     }
 
@@ -111,15 +109,19 @@ public class Colonie {
         System.out.println("Les lycanthropes vieillissent...");
         for (Meute meute : listeMeutes) {
             for (Lycanthrope lycan : meute.getLycanthropes()) {
-            	if(lycan.getCategorieAge()=="jeune") {
-            		lycan.setCategorieAge("adulte");
+            	if(random.nextInt(100) < 20) {
+            		if(lycan.getCategorieAge()=="jeune") {
+                		
+                		lycan.setCategorieAge("adulte");
+                	}
+                	if(lycan.getCategorieAge()=="adulte") {
+                		lycan.setCategorieAge("vieux");
+                	}
+                	else {
+                		continue;
+                	}
             	}
-            	if(lycan.getCategorieAge()=="adulte") {
-            		lycan.setCategorieAge("vieux");
-            	}
-            	else {
-            		continue;
-            	}
+            	
             }
         }
     }
@@ -130,11 +132,11 @@ public class Colonie {
         for (Meute meute : listeMeutes) {
             List<Lycanthrope> lycanthropes = meute.getLycanthropes();
             if (lycanthropes.size() > 1) {
-                // Sélectionner deux lycanthropes au hasard pour l'interaction
                 Lycanthrope emetteur = lycanthropes.get(random.nextInt(lycanthropes.size()));
                 Lycanthrope recepteur = lycanthropes.get(random.nextInt(lycanthropes.size()));
                 if (!emetteur.equals(recepteur)) {
                     Hurlement hurlement = new Hurlement("domination", emetteur);
+                    emetteur.hurler(hurlement);
                     recepteur.entendreHurlement(hurlement, false);// A MODIFIER
                 }
             }
@@ -148,6 +150,8 @@ public class Colonie {
             for (Lycanthrope lycan : meute.getLycanthropes()) {
                 if (random.nextInt(100) < 5) { // 5 % de chance de transformation
                     lycan.transformation();
+                    System.out.println(lycan.getNom()+" se transforme !");
+                    meute.enleverLycanthrope(lycan);
                 }
             }
         }
