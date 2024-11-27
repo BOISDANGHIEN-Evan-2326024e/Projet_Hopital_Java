@@ -136,9 +136,9 @@ public class HopitalFantastique {
 						}
 
 						for (ServiceMedical service : services) {
-							int action = random.nextInt(10); // Ajouté 5 possibilités d'action
+							int action = random.nextInt(15); // Ajouté 5 possibilités d'action
 							switch (action) {
-							case 0 -> {
+							case 0 | 12 | 13 -> {
 								// Ajout d’une créature
 
 								Creature nouvelleCreature = genererNouvelleCreature(service);
@@ -196,10 +196,16 @@ public class HopitalFantastique {
 								        }
 								    }
 								}
-								ServiceMedical serviceVIP = servicesVIP.get(random.nextInt(servicesVIP.size()));
-								saintMedecin(serviceVIP);
-								System.out.println("Les VIP avant votre vie :D : Le saint médecin rend visite au service " + serviceVIP.getNom());								
-								//service.soignerCreatures();
+								if (servicesVIP != null && !servicesVIP.isEmpty()) {
+								    Random random = new Random();
+								    ServiceMedical serviceVIP = servicesVIP.get(random.nextInt(servicesVIP.size()));
+								    System.out.println("Les VIP avant votre vie :D : Le saint médecin rend visite au service " + serviceVIP.getNom());
+								    saintMedecin(serviceVIP);
+								} else {
+								    System.out.println("La liste des services VIP est vide ou nulle.");
+								}
+								
+																
 							}
 							}
 

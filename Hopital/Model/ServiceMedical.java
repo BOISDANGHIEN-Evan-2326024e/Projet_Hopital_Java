@@ -9,14 +9,14 @@ public abstract class ServiceMedical {
     private double superficie;
     private int capaciteMax;
     private List<Creature> creatures;
-    private int budget;
+    private int capital;
 
     public ServiceMedical(String nom, double superficie, int capaciteMax, int budget) {
         this.nom = nom;
         this.superficie = superficie;
         this.capaciteMax = capaciteMax;
         this.creatures = new ArrayList<>();
-        this.budget = budget;
+        this.capital = budget;
     }
 
     public abstract void afficherDetails();
@@ -39,13 +39,16 @@ public abstract class ServiceMedical {
     }*/
     
     public Maladie obtenirMaladieDepuisService() {
+        Random random = new Random();
         for (Creature creature : creatures) {
-        		Random random = new Random();
-                return creature.getMaladies().get(random.nextInt(creature.getMaladies().size())); // Maladie aléatoire
-            
+            List<Maladie> maladies = creature.getMaladies();
+            if (maladies != null && !maladies.isEmpty()) {
+                return maladies.get(random.nextInt(maladies.size())); // Maladie aléatoire
+            }
         }
-        return null; // Ce cas ne se produit pas si il y a aucune creature
+        return null; // Retourne null si aucune maladie n'est trouvée
     }
+
 
     public List<Creature> getCreatures() {
         return creatures;
@@ -60,11 +63,11 @@ public abstract class ServiceMedical {
     }
 
     public int getBudget() {
-        return budget;
+        return capital;
     }
 
     public void setBudget(int budget) {
-        this.budget = budget;
+        this.capital = budget;
     }
 
     public int getCapaciteMax() {
