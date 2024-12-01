@@ -311,9 +311,11 @@ public class Colonie {
             	if(random.nextInt(100) < 20) {
                 	if(lycan.getCategorieAge()=="adulte") {
                 		lycan.setCategorieAge("vieux");
+                		lycan.setForce(lycan.getForce()-1);
                 	}
                 	if(lycan.getCategorieAge()=="jeune") {
                 		lycan.setCategorieAge("adulte");
+                		lycan.setForce(lycan.getForce()+2);
                 	}
                 	else {
                 		continue;
