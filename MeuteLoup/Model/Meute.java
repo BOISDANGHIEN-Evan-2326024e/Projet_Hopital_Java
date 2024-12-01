@@ -2,12 +2,14 @@ package Model;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 public class Meute {
     private Couple coupleAlpha; // Couple α (chef de la meute)
     private List<Lycanthrope> lycanthropes; // Liste des lycanthropes de la meute
     private String nomMeute;
-
+    private Random random=new Random();
+    
     public Meute(String nomMeute) {
         this.lycanthropes = new ArrayList<>();
         this.coupleAlpha = null; // Pas de couple α par défaut
@@ -59,6 +61,13 @@ public class Meute {
         } else {
             System.out.println("Impossible de constituer le couple α : vérifiez les candidats.");
         }
+    }
+    
+    public boolean coupleAlphaExiste() {
+    	if(this.coupleAlpha==null) {
+    		return false;
+    	}
+    	return true;
     }
 
     // Méthode pour ajouter un lycanthrope à la meute
@@ -134,10 +143,13 @@ public class Meute {
     // Méthode pour faire décroître les rangs naturellement
     public void decroitreRangsNaturellement() {
         for (Lycanthrope lycan : lycanthropes) {
-            if (lycan.getFacteurDomination() < 0 && lycan.getRang() > 1) {
-                lycan.setRang(lycan.getRang() + 1); // Décroît le rang (descend dans la hiérarchie)
-                System.out.println(lycan.getNom()+" a perdu un rang.");
-            }
+        	if(random.nextInt(100) < 30) {
+        		if (lycan.getFacteurDomination() < 0 && lycan.getRang() > 1) {
+                    lycan.setRang(lycan.getRang() - 1); // Décroît le rang (descend dans la hiérarchie)
+                    System.out.println(lycan.getNom()+" a perdu un rang.");
+                }
+        	}
+            
         }
     }
 }

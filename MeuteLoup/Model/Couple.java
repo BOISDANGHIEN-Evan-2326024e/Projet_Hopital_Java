@@ -38,13 +38,13 @@ public class Couple {
     public void afficherCaracteristiques() {
         System.out.println("===== Caractéristiques du couple α =====");
         if (maleAlpha != null) {
-            System.out.println("Mâle α : ");
+            System.out.println("===== Caractéristiques du male α =====");
             maleAlpha.afficherCaracteristiques();
         } else {
             System.out.println("Pas de mâle α actuellement.");
         }
         if (femelleAlpha != null) {
-            System.out.println("Femelle α : ");
+            System.out.println("===== Caractéristiques de la femelle α =====");
             femelleAlpha.afficherCaracteristiques();
         } else {
             System.out.println("Pas de femelle α actuellement.");
@@ -53,7 +53,6 @@ public class Couple {
 
     public List<Lycanthrope> reproduction(boolean saisonDesAmours) {
         List<Lycanthrope> nouveauxLycanthropes = new ArrayList<>();
-
         if (!saisonDesAmours) {
             System.out.println("Ce n'est pas la saison des amours. La reproduction n'est pas possible.");
             return nouveauxLycanthropes;
@@ -71,8 +70,8 @@ public class Couple {
             int rangDesJeunes = verifierPresenceRangBeta(nouveauxLycanthropes) ? 3 : 2;
 
             for (int i = 0; i < nbJeunes; i++) {
-                Lycanthrope jeune = new Lycanthrope(null, null, i, i, i, i, null);
-                jeune.setSexe(random.nextBoolean() ? "mâle" : "femelle");
+                Lycanthrope jeune = new Lycanthrope(null, i, i, i, i, null);
+                jeune.setSexe(random.nextBoolean() ? "male" : "femelle");
                 jeune.setCategorieAge("jeune");
                 jeune.setForce(random.nextInt(10) + 1); // Force aléatoire entre 1 et 10
                 jeune.setRang(rangDesJeunes); 
@@ -94,7 +93,7 @@ public class Couple {
     // Méthode pour vérifier s'il existe déjà des lycanthropes de rang β
     private boolean verifierPresenceRangBeta(List<Lycanthrope> lycanthropes) {
         for (Lycanthrope lycan : lycanthropes) {
-            if (lycan.getRang() == 2) {
+            if (lycan.getRang() == 9) {
                 return true;
             }
         }

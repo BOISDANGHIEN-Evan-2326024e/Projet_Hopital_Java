@@ -1,7 +1,7 @@
 package Model;
 
 public class Lycanthrope {
-    private String sexe; // Sexe du lycanthrope : "mâle" ou "femelle"
+    private String sexe; // Sexe du lycanthrope : "male" ou "femelle"
     private String categorieAge; // Catégorie d’âge : "jeune", "adulte", "vieux"
     private int force; // Force du lycanthrope
     private int facteurDomination; // Différence entre les dominations exercées et subies
@@ -11,15 +11,15 @@ public class Lycanthrope {
     private Meute meute; // Meute à laquelle il appartient (null s’il est solitaire)
     private String Nom;
     
-    public Lycanthrope(String sexe, String categorieAge, int force, int facteurDomination, int rang, int facteurImpetuosite,String Nom) {
+    public Lycanthrope(String sexe, int force, int facteurDomination, int rang, int facteurImpetuosite,String Nom) {
         this.sexe = sexe;
-        this.categorieAge = categorieAge;
+        this.categorieAge = "jeune";
         this.force = force;
         this.facteurDomination = facteurDomination;
         this.rang = rang;
         this.facteurImpetuosite = facteurImpetuosite;
-        this.niveau = calculNiveau(); // Calcul automatique du niveau lors de la création
-        this.meute = null; // Par défaut, le lycanthrope est solitaire
+        this.niveau = calculNiveau(); 
+        this.meute = null; 
         this.Nom=Nom;
     }
     
@@ -33,7 +33,7 @@ public class Lycanthrope {
         System.out.println("Rang : " + rang);
         System.out.println("Niveau : " + niveau);
         System.out.println("Facteur d’impétuosité : " + facteurImpetuosite);
-        System.out.println("Meute : " + (meute == null ? "Solitaire" : "Appartient à une meute"));
+        System.out.println("Meute : " + (meute == null ? "Solitaire" : meute.getNomMeute()));
     }
     
     // Méthode pour hurler
@@ -69,6 +69,11 @@ public class Lycanthrope {
     // Méthode pour calculer le niveau
     private int calculNiveau() {
         int niveauAge;
+        int niveauSexe;
+        if(this.sexe=="male") {
+        	niveauSexe=3;
+        }
+        niveauSexe=1;
         switch (categorieAge) {
             case "jeune":
                 niveauAge = 1;
@@ -82,7 +87,7 @@ public class Lycanthrope {
             default:
                 throw new IllegalArgumentException("Catégorie d'âge invalide.");
         }
-        return niveauAge + force + facteurDomination + rang;
+        return niveauAge + force + facteurDomination + rang + niveauSexe ;
     }
 
     public String getSexe() {

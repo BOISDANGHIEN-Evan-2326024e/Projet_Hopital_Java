@@ -3,12 +3,13 @@ package Model;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.util.Scanner;
 
 public class Colonie {
 
-    private List<Meute> listeMeutes; // Liste des meutes dans la colonie
-    private Random random; // Générateur aléatoire pour diverses actions
-
+    private List<Meute> listeMeutes; 
+    private Random random; 
+    
     public Colonie() {
         this.listeMeutes = new ArrayList<>();
         this.random = new Random();
@@ -27,32 +28,164 @@ public class Colonie {
         }
     }
 
-    // Méthode principale (point d'entrée de la simulation)
+
     public void gestionColonie() {
         System.out.println("Début de la simulation de la colonie...");
-
-        while (true) { // Boucle infinie pour la simulation
+        Scanner scanner = new Scanner(System.in);
+        int compteurJour=1;
+        while (true) { 
             try {
-                Thread.sleep(10000); // Pause pour simuler le passage du temps (10 secondes ici)
+            	
+            	Thread.sleep(10000); 
 
-                if (doitCreerNouvelleMeute()) {
-                    creerNouvelleMeute();
-                }
+            	
+            	System.out.println("Nous sommes au jour "+compteurJour+" !");
+            	Thread.sleep(1000);
+            	System.out.println("Il y a actuellement "+this.listeMeutes.size()+" meute/s, Voulez vous en créer une nouvelle ? Tapez 'meute' si oui.");
+            	String commande2 = scanner.nextLine();
+            	if(commande2.equals("meute")) {
+            		System.out.println("Donnez le nom de la meute ?");
+                	String commandeee = scanner.nextLine();
+            		creerNouvelleMeute(commandeee);
+            	}
+            	System.out.println("Voulez vous créer un lycanthrope ? si oui tapez 'lycan'. Si non tapez 'non'.");
+            	String commandeee1 = scanner.nextLine();
+            	while(!commandeee1.equals("non")) {
+            		if(commandeee1.equals("lycan")) {
+                		System.out.println("Donnez le nom du lycan");
+                		String commandeee2 = scanner.nextLine();
+                		Lycanthrope lycan;
+                		if(random.nextInt(3)==1) {
+                			lycan=new Lycanthrope("femelle",random.nextInt(5), 0, random.nextInt(10), random.nextInt(4)+1, commandeee2);
+                		}
+                		else {
+                			lycan=new Lycanthrope("male",random.nextInt(5), 0, random.nextInt(10), random.nextInt(4)+1, commandeee2);
+                		}
+                		lycan.afficherCaracteristiques();
+                		System.out.println("Voulez vous associez le lycanthrope a la meute ? Tapez 'oui' si oui.");
+                    	String commandeee3 = scanner.nextLine();
+                    	if(commandeee3.equals("oui")){
+                    		System.out.println("Voici les meutes disponibles :");
+                    		for(int k=0;k<this.listeMeutes.size();k++) {
+                            	System.out.println(listeMeutes.get(k).getNomMeute());
+                            }
+                    		System.out.println("Tapez le nom de la meute a qui vous souhaitez l'associé.");
+                    		String commandeee4 = scanner.nextLine();
+                    		for(int k=0;k<this.listeMeutes.size();k++) {
+                            	if(listeMeutes.get(k).getNomMeute().equals(commandeee4)) {
+                            		listeMeutes.get(k).ajouterLycanthrope(lycan);
+                            		lycan.setMeute(listeMeutes.get(k));
+                            	}
+                            }
+                    	}
+                	}
+            		else {
+            			System.out.println("Commande inconnue.");
+            		}
+            		System.out.println("Voulez vous créer un autre lycanthrope ? si oui tapez 'lycan' si non tapez 'non'");
+                	commandeee1 = scanner.nextLine();
+            	}
 
+            	for(int k=0;k<this.listeMeutes.size();k++) {
+            		if(this.listeMeutes.get(k).coupleAlphaExiste()==false) {
+            			Meute meuteEnCours=this.listeMeutes.get(k);
+            			Lycanthrope maleAlpha=null;
+            			Lycanthrope femelleAlpha=null;
+            			for(int i=0;i<meuteEnCours.getLycanthropes().size();i++) {
+            				Lycanthrope lycan=meuteEnCours.getLycanthropes().get(i);
+            				if(lycan.getSexe().equals("femelle")) {
+            					if(femelleAlpha==null) {
+            						femelleAlpha=lycan;
+            					}
+            					if(lycan.getRang()>femelleAlpha.getRang()) {
+            						femelleAlpha=lycan;
+            					}
+            				}
+            				else {
+            					if(maleAlpha==null) {
+            						maleAlpha=lycan;
+            					}
+            					if(lycan.getRang()>maleAlpha.getRang()) {
+            						maleAlpha=lycan;
+            					}
+            				}
+            			}
+            			this.listeMeutes.get(k).constituerCoupleAlpha(maleAlpha, femelleAlpha);;
+            		}
+            	}
+            	
+                Thread.sleep(1000);
+                
                 if (estSaisonAmours()) {
                     lancerReproduction();
                 }
 
+                Thread.sleep(1000);
+                
                 evoluerHierarchieMeutes();
 
+                Thread.sleep(1000);
+                
                 faireVieillirLycanthropes();
 
+                Thread.sleep(1000);
+                
                 genererHurlementsAleatoires();
 
+                Thread.sleep(1000);
+                
                 transformerLycanthropes();
                 
+                Thread.sleep(1000);
                 
-
+                System.out.println("Si vous voulez consulter une meute tapez 'C', sinon tapez 'Suite");
+                String commande = scanner.nextLine();
+                
+                while(!commande.equals("Suite")) {
+                	if(commande.equals("C")) {
+                        System.out.println("Tapez le nom de la meute que vous souhaitez consulter :");
+                        for(int k=0;k<this.listeMeutes.size();k++) {
+                        	System.out.println(listeMeutes.get(k).getNomMeute());
+                        }
+                        String nom = scanner.nextLine();
+                        for(int k=0;k<this.listeMeutes.size();k++) {
+                        	if(listeMeutes.get(k).getNomMeute().equals(nom)) {
+                        		Meute meuteEnCours=listeMeutes.get(k);
+                        		System.out.println("Si vous souhaitez consulter les statistiques de la meute, tapez 'C'. Si vous voulez consulter les caracteristiques d'un loup tapez 'L'. Pour faire retour tapez 'R' ");
+                        		String nom1 = scanner.nextLine();
+                        		if(nom1.equals("C")) {
+                        			meuteEnCours.afficherCaracteristiques();
+                        		}
+                        		if(nom1.equals("L")) {
+                        			System.out.println("Quel loup souhaitez vous consulter ses caractéristiques ?");
+                        			for(int i=0;i<meuteEnCours.getLycanthropes().size();i++) {
+                        				System.out.println(meuteEnCours.getLycanthropes().get(i).getNom());
+                        			}
+                        			String commande23 = scanner.nextLine();
+                        			for(int i=0;i<meuteEnCours.getLycanthropes().size();i++) {
+                        				if(meuteEnCours.getLycanthropes().get(i).getNom().equals(commande23)) {
+                        					System.out.println("===== Caractéristiques du lycanthrope =====");
+                        					meuteEnCours.getLycanthropes().get(i).afficherCaracteristiques();
+                        				}
+                        			}
+                        		}
+                        		if(nom1.equals("R")) {
+                        			continue;
+                        		}
+                        		else {
+                        			System.out.println("Commande inconnue");
+                        		}
+                        	}
+                        }
+                     }
+                	else {
+                		System.out.print("Commande inconnue");
+                	}
+                	System.out.println("Si vous voulez consulter une meute tapez 'C', sinon tapez 'Suite");
+                    commande = scanner.nextLine();
+                }
+                compteurJour+=1;
+                System.out.println("Nous passons au jour d'aprés.");
             } catch (InterruptedException e) {
                 System.out.println("Simulation interrompue.");
                 break;
@@ -74,8 +207,8 @@ public class Colonie {
     }
 
     // Créer une nouvelle meute
-    private void creerNouvelleMeute() {
-        Meute nouvelleMeute = new Meute(null); // A MODIFIER EN METTANT NOM A LA MAIN
+    private void creerNouvelleMeute(String nomMeute) {
+        Meute nouvelleMeute = new Meute(nomMeute);
         System.out.println("Une nouvelle meute a été créée !");
         listeMeutes.add(nouvelleMeute);
     }
@@ -98,9 +231,7 @@ public class Colonie {
     private void evoluerHierarchieMeutes() {
         System.out.println("Évolution naturelle des hiérarchies dans les meutes...");
         for (Meute meute : listeMeutes) {
-        	if(random.nextInt(100) < 20) {
                 meute.decroitreRangsNaturellement();
-        	}
         }
     }
 
@@ -110,12 +241,11 @@ public class Colonie {
         for (Meute meute : listeMeutes) {
             for (Lycanthrope lycan : meute.getLycanthropes()) {
             	if(random.nextInt(100) < 20) {
-            		if(lycan.getCategorieAge()=="jeune") {
-                		
-                		lycan.setCategorieAge("adulte");
-                	}
                 	if(lycan.getCategorieAge()=="adulte") {
                 		lycan.setCategorieAge("vieux");
+                	}
+                	if(lycan.getCategorieAge()=="jeune") {
+                		lycan.setCategorieAge("adulte");
                 	}
                 	else {
                 		continue;
