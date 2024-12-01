@@ -53,6 +53,9 @@ public class Meute {
         if (maleAlpha != null && femelleAlpha != null) {
             if (coupleAlpha != null) {
                 System.out.println("Ancien couple α déchu.");
+                if(!femelleAlpha.equals(coupleAlpha.getFemelleAlpha())) {
+                	coupleAlpha.getFemelleAlpha().setFacteurDomination(coupleAlpha.getMaleAlpha().getFacteurDomination());
+                }
             }
             coupleAlpha = new Couple(maleAlpha, femelleAlpha);
             coupleAlpha.setMaleAlpha(maleAlpha);

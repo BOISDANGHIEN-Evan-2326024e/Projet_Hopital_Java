@@ -56,10 +56,10 @@ public class Colonie {
                 		String commandeee2 = scanner.nextLine();
                 		Lycanthrope lycan;
                 		if(random.nextInt(3)==1) {
-                			lycan=new Lycanthrope("femelle",random.nextInt(5), 0, random.nextInt(10), random.nextInt(4)+1, commandeee2);
+                			lycan=new Lycanthrope("femelle",random.nextInt(10), 0, random.nextInt(10), random.nextInt(4)+1, commandeee2);
                 		}
                 		else {
-                			lycan=new Lycanthrope("male",random.nextInt(5), 0, random.nextInt(10), random.nextInt(4)+1, commandeee2);
+                			lycan=new Lycanthrope("male",random.nextInt(10), 0, random.nextInt(10), random.nextInt(4)+1, commandeee2);
                 		}
                 		lycan.afficherCaracteristiques();
                 		System.out.println("Voulez vous associez le lycanthrope a la meute ? Tapez 'oui' si oui.");
@@ -85,34 +85,15 @@ public class Colonie {
             		System.out.println("Voulez vous créer un autre lycanthrope ? si oui tapez 'lycan' si non tapez 'non'");
                 	commandeee1 = scanner.nextLine();
             	}
+            	
+            	Thread.sleep(1000);
 
-            	for(int k=0;k<this.listeMeutes.size();k++) {
-            		if(this.listeMeutes.get(k).coupleAlphaExiste()==false) {
-            			Meute meuteEnCours=this.listeMeutes.get(k);
-            			Lycanthrope maleAlpha=null;
-            			Lycanthrope femelleAlpha=null;
-            			for(int i=0;i<meuteEnCours.getLycanthropes().size();i++) {
-            				Lycanthrope lycan=meuteEnCours.getLycanthropes().get(i);
-            				if(lycan.getSexe().equals("femelle")) {
-            					if(femelleAlpha==null) {
-            						femelleAlpha=lycan;
-            					}
-            					if(lycan.getRang()>femelleAlpha.getRang()) {
-            						femelleAlpha=lycan;
-            					}
-            				}
-            				else {
-            					if(maleAlpha==null) {
-            						maleAlpha=lycan;
-            					}
-            					if(lycan.getRang()>maleAlpha.getRang()) {
-            						maleAlpha=lycan;
-            					}
-            				}
-            			}
-            			this.listeMeutes.get(k).constituerCoupleAlpha(maleAlpha, femelleAlpha);;
-            		}
-            	}
+            	evoluerForce();
+            	
+            	Thread.sleep(1000);
+            	
+            	creeMajCouple();
+            	
             	
                 Thread.sleep(1000);
                 
@@ -193,6 +174,93 @@ public class Colonie {
         }
     }
 
+    //Créer un couple automatiquement si il n'y en a pas ou mets a jour les couples des meutes si il y a un nouveau male alpha.
+    public void creeMajCouple() {
+    	for(int k=0;k<this.listeMeutes.size();k++) {
+    		Meute meuteEnCours=this.listeMeutes.get(k);
+    		if(meuteEnCours.coupleAlphaExiste()==false) {
+    			Lycanthrope maleAlpha=null;
+    			Lycanthrope femelleAlpha=null;
+    			for(int i=0;i<meuteEnCours.getLycanthropes().size();i++) {
+    				Lycanthrope lycan=meuteEnCours.getLycanthropes().get(i);
+    				if(lycan.getSexe().equals("femelle")) {
+    					if(femelleAlpha==null) {
+    						femelleAlpha=lycan;
+    					}
+    					if(lycan.getForce()>femelleAlpha.getForce()) {
+    						femelleAlpha=lycan;
+    					}
+    				}
+    				else {
+    					if(maleAlpha==null) {
+    						maleAlpha=lycan;
+    					}
+    					if(lycan.getForce()>maleAlpha.getForce()) {
+    						maleAlpha=lycan;
+    					}
+    				}
+    			}
+    			System.out.println("Nouveau couple crée dans la meute : "+this.listeMeutes.get(k).getNomMeute()+". Avec en male alpha :"+maleAlpha.getNom()+" et en femelle Alpha :"+femelleAlpha.getNom());
+    			this.listeMeutes.get(k).constituerCoupleAlpha(maleAlpha, femelleAlpha);;
+    		}
+    		if(!meuteEnCours.getLycanthropes().contains(meuteEnCours.getCoupleAlpha().getMaleAlpha())) {
+    			Lycanthrope maleAlpha=null;
+    			Lycanthrope femelleAlpha=meuteEnCours.getCoupleAlpha().getFemelleAlpha();
+    			for(int i=0;i<meuteEnCours.getLycanthropes().size();i++) {
+    				Lycanthrope lycan=meuteEnCours.getLycanthropes().get(i);
+    				if((maleAlpha.getForce()<lycan.getForce() && lycan.getSexe()=="male") || maleAlpha==null) {
+    					maleAlpha=lycan;
+    				}
+    				if(femelleAlpha.getForce()<lycan.getForce() && lycan.getSexe()=="femelle") {
+    					femelleAlpha=lycan;
+    				}
+    			}
+    				meuteEnCours.constituerCoupleAlpha(maleAlpha, femelleAlpha);
+    		}
+    		if(!meuteEnCours.getLycanthropes().contains(meuteEnCours.getCoupleAlpha().getFemelleAlpha())) {
+    			Lycanthrope femelleAlpha=null;
+    			for(int i=0;i<meuteEnCours.getLycanthropes().size();i++) {
+    				Lycanthrope lycan=meuteEnCours.getLycanthropes().get(i);
+    				if((femelleAlpha.getForce()<lycan.getForce() && lycan.getSexe()=="femelle") || femelleAlpha==null) {
+    					femelleAlpha=lycan;
+    				}
+    			}
+    				meuteEnCours.constituerCoupleAlpha(meuteEnCours.getCoupleAlpha().getMaleAlpha(), femelleAlpha);
+    		}
+    		else {
+    			Lycanthrope maleAlphaC=meuteEnCours.getCoupleAlpha().getMaleAlpha();
+    			Lycanthrope maleAlpha=meuteEnCours.getCoupleAlpha().getMaleAlpha();
+    			Lycanthrope femelleAlpha=meuteEnCours.getCoupleAlpha().getFemelleAlpha();
+    			for(int i=0;i<meuteEnCours.getLycanthropes().size();i++) {
+    				Lycanthrope lycan=meuteEnCours.getLycanthropes().get(i);
+    				if(maleAlpha.getForce()<lycan.getForce() && lycan.getSexe()=="male") {
+    					maleAlpha=lycan;
+    				}
+    				if(femelleAlpha.getForce()<lycan.getForce() && lycan.getSexe()=="femelle") {
+    					femelleAlpha=lycan;
+    				}
+    			}
+    			if(!maleAlpha.equals(maleAlphaC)) {
+    				meuteEnCours.constituerCoupleAlpha(maleAlpha, femelleAlpha);
+    			}
+    		}
+    	}
+    }
+    
+    //Fais évoluer aléatoirement la force des lycanthropes
+    public void evoluerForce() {
+    	for (Meute meute : listeMeutes) {
+            for(Lycanthrope lycan : meute.getLycanthropes()) {
+            	if(random.nextInt(100) < 40) {
+            		lycan.setForce(lycan.getForce()+1);
+            	}
+            	if(random.nextInt(100) < 40) {
+            		lycan.setForce(lycan.getForce()+1);
+            	}
+            }
+        }
+    }
+    
     // Déterminer si une nouvelle meute doit être créée
     private boolean doitCreerNouvelleMeute() {
         for (Meute meute : listeMeutes) {
