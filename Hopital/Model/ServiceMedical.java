@@ -9,14 +9,15 @@ public abstract class ServiceMedical {
     private double superficie;
     private int capaciteMax;
     private List<Creature> creatures;
-    private int capital;
+    protected int capital;
+    protected String budget;
 
-    public ServiceMedical(String nom, double superficie, int capaciteMax, int budget) {
+    public ServiceMedical(String nom, double superficie, int capaciteMax, int capital) {
         this.nom = nom;
         this.superficie = superficie;
         this.capaciteMax = capaciteMax;
         this.creatures = new ArrayList<>();
-        this.capital = budget;
+        this.capital = capital;
     }
 
     public abstract void afficherDetails();
@@ -31,12 +32,6 @@ public abstract class ServiceMedical {
         creatures.remove(creature);
     }
 
-    /*
-    public void soignerCreatures() {
-        for (Creature creature : creatures) {
-            creature.soigner();
-        }
-    }*/
     
     public Maladie obtenirMaladieDepuisService() {
         Random random = new Random();
@@ -77,6 +72,7 @@ public abstract class ServiceMedical {
     public double getSuperficie() {
         return superficie;
     }
+    
 
     public void setSuperficie(double superficie) {
         this.superficie = superficie;
@@ -91,7 +87,35 @@ public abstract class ServiceMedical {
     }
 
     /* Méthode abstraite pour réviser le budget spécifique de chaque sous-classe */
-    public abstract void reviserBudget(int nouveauBudget);
+    public abstract void reviserBudget();
     
+    
+    protected void conversionNiveauBudget(int capitalService) {
+        int tranche = capitalService / 400; // Division pour déterminer la tranche
+
+        switch (tranche) {
+            case 0 -> budget = "inexistant";  // < 400
+            case 1 -> budget = "insuffisant"; // [400, 800[
+            case 2 -> budget = "faible";      // [800, 1200[
+            case 3 -> budget = "médiocre";    // [1200, 1600[
+            case 4 -> budget = "suffisant";   // [1600, 2000[
+            case 5 -> budget = "bon";         // [2000, 2400[
+            default -> budget = "excellent";  // >= 2400
+        }
+
+        System.out.println("Le niveau du budget pour le service " + nom + " est : " + budget);
+    }
+
+	public int getCapital() {
+		return capital;
+	}
+
+	public void setCapital(int capital) {
+		this.capital = capital;
+	}
+
+	public void setBudget(String budget) {
+		this.budget = budget;
+	}
 
 }

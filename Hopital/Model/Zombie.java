@@ -5,13 +5,20 @@ public class Zombie extends Creature{
 		super(nom, sexe, poids, taille, age);
 	}
 	
-	public void regenerer() {
-		System.out.println(nom + " se régenere !");
-	}
+	@Override
+    public void trepasser(ServiceMedical service) {
+        moral = 0;
+        System.out.println(nom + " (Zombie) est décédé mais il se régénère immédiatement après sa mort !");
+        regenerer();
+    }
+
+    private void regenerer() {
+        moral = 1000; 
+    }
 
 	@Override
 	public Categorie getCategorie() {
-		return Categorie.TRIAGE; // Zombie est une créature de triage
+		return Categorie.TRIAGE; 
 	}
 
 }
