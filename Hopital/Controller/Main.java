@@ -7,6 +7,8 @@ import java.util.Random;
 import Model.*;
 
 public class Main {
+	private static TextColor color = new TextColor();
+	
 	public static void main(String[] args) {
 
 		HopitalFantastique hopital = new HopitalFantastique("Hôpital Fantastique", 10);		
@@ -39,19 +41,15 @@ public class Main {
 			ajouterCreaturesAuService(standard, 5 + random.nextInt(3));
 
 		}
-		System.out.println("\u001B[31mTexte rouge\u001B[0m"); // Rouge
-        System.out.println("\u001B[32mTexte vert\u001B[0m"); // Vert
-        System.out.println("\u001B[33mTexte jaune\u001B[0m"); // Jaune
-        System.out.println("\u001B[34mTexte bleu\u001B[0m"); // Bleu
-        System.out.println("\u001B[1;35mTexte magenta en gras\u001B[0m"); // Magenta en gras
-        System.out.println("\u001B[4;36mTexte cyan souligné\u001B[0m"); 
+		
 		// Affichage des informations initiales
-        System.out.println("=== Informations Initiales de l'Hôpital ===");
+        System.out.println(color.CYANBOLD  +"=== Informations Initiales de l'Hôpital ===\\u001B[0m" + color.RESET);
+      
         hopital.afficherStatistiques();
         hopital.afficherDetailsCreatures();
 
         // Démarrer la simulation
-        System.out.println("\n=== Démarrage de la Simulation ===");
+        System.out.println(color.GREENBOLD  +"\n=== Démarrage de la Simulation ===" + color.RESET);
         hopital.demarrerSimulation();
 
         // Démarrer le menu pour permettre à l'utilisateur de prendre la main

@@ -115,6 +115,8 @@ public class HopitalFantastique {
 					}
 
 				}
+				
+		        System.out.println("\n=== Lancement de la Simulation : Tour "+ round +" ===");
 				round++;
 				gererMortsEtHeritage();
 
