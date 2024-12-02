@@ -27,12 +27,13 @@ public class CentreQuarantaine extends ServiceMedical {
     
 	@Override
 	public void afficherDetails() {
-        System.out.println("\nService : " + getNom());
-        System.out.println("Capacité : " + getCapaciteMax());
-        System.out.println("Isolation : " + isolation);
-        System.out.println("Budget : " + getBudget() + " (" +getCapital()+")");
+		String emojiCreature = emoji();
+        System.out.println(color.RED_BOLD + "\n☢️ Service : " + getNom() + color.RESET);
+        System.out.println("  Capacité : " + getCapaciteMax());
+        System.out.println("  Isolation : " + isolation);
+        System.out.println("  Budget : " + getBudget() + " (" +getCapital()+")");
         for (Creature creature : getCreatures()) {
-            System.out.println(creature.nom + ", Moral: " + creature.moral + " " + creature.getMaladies() );
+            System.out.println("     " + emojiCreature + " " + creature.nom + ", Moral: " + creature.moral + " " + creature.getMaladies() );
         }
 	}
 }

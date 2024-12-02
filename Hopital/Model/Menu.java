@@ -9,6 +9,7 @@ import java.util.Scanner;
 public class Menu implements Runnable{
 	private HopitalFantastique hopital;
 	private Scanner scanner;
+	private TextColor color;
 
 	public Menu(HopitalFantastique hopital) {
 		this.hopital = hopital;
@@ -67,8 +68,9 @@ public class Menu implements Runnable{
 				case 5 -> {
 					if (medecin.isEcoPossible()) {
 						medecin.reviserBudget(); // Révision du budget via économie
-						medecin.getServiceAssocie().setCapital(medecin.getServiceAssocie().getCapital() + 800);
+						medecin.getServiceAssocie().setCapital(medecin.getServiceAssocie().getCapital() + 1000);
 						actionsRestantes = 1; // Fin des actions
+						System.out.println("Fin des actions pour ce médecin.");
 					}
 					else {
 						actionsRestantes++;
@@ -88,23 +90,35 @@ public class Menu implements Runnable{
 	}
 
 	private void afficherMedecin() {
-		List<Medecin> medecins = hopital.getMedecins();
-		if (medecins.isEmpty()) {
-			System.out.println("Aucun médecin disponible.");
-		}
+	    List<Medecin> medecins = hopital.getMedecins();
 
-		for (int i = 0; i < medecins.size(); i++) {
-			if (medecins.get(i).isEcoPossible()) {
-				System.out.println((i + 1) + ". " + medecins.get(i).getNom() + "  -- " + medecins.get(i).getServiceAssocie().getNom()+ " -- " + "Eco Possible");
-			}
-			else {
-				System.out.println((i + 1) + ". " + medecins.get(i).getNom() + "  -- " + medecins.get(i).getServiceAssocie().getNom()+ " -- ");
-			}
-		}
-		System.out.println((medecins.size() + 1) + ". Afficher les statistiques");
-		System.out.println((medecins.size() + 2) + ". Afficher les détails des créatures");
-		System.out.println((medecins.size() + 3) + ". Abandonner la partie");
+	  
+	    // Vérifier si la liste des médecins est vide
+	    if (medecins.isEmpty()) {
+	        System.out.println(color.RED_BOLD + "🏚️ Aucun médecin disponible." + color.RESET);
+	        return;
+	    }
 
+	    // Parcourir et afficher les médecins
+	    for (int i = 0; i < medecins.size(); i++) {
+	        Medecin medecin = medecins.get(i);
+	        String emojiGenre = medecin.getSexe() == "Homme" ? "👨🏻‍⚕️" : "👩🏽‍⚕️"; // Emoji basé sur le genre
+	        String ecoStatus = medecin.isEcoPossible() 
+	            ? color.GREEN + "Eco Possible" + color.RESET 
+	            : "";
+
+	        System.out.println("    " + color.YELLOW_BOLD + (i + 1) + ". " 
+	                + emojiGenre + " " 
+	                + color.YELLOW + medecin.getNom() + color.RESET
+	                + " -- " 
+	                +  medecin.getServiceAssocie().getNom() 
+	                + " -- " + ecoStatus);
+	    }
+
+	    // Options supplémentaires
+	    System.out.println("    " + color.BRIGHT_BLUE_BOLD + (medecins.size() + 1) + ". 📊 Afficher les statistiques" + color.RESET);
+	    System.out.println("    " + color.GREEN_BOLD + (medecins.size() + 2) + ". 📊 Afficher les détails des créatures" + color.RESET);
+	    System.out.println("    " + color.RED_BOLD + (medecins.size() + 3) + ". 🏚️ Abandonner la partie" + color.RESET);
 	}
 
 	private Medecin choisirMedecin() {
@@ -166,7 +180,7 @@ public class Menu implements Runnable{
 		
 		System.out.println("4. Fin des actions pour ce médecin");
 		if (ecoPossible) {
-			System.out.println("5. Economisez -- Gain 800 -- (Attention cette action prend tout le tour) ");
+			System.out.println("5. Economisez -- Gain 1000 -- (Attention cette action prend tout le tour) ");
 		}
 	}
 

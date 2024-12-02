@@ -11,6 +11,7 @@ public abstract class ServiceMedical {
     private List<Creature> creatures;
     protected int capital;
     protected String budget;
+    protected static TextColor color = new TextColor();
 
     public ServiceMedical(String nom, double superficie, int capaciteMax, int capital) {
         this.nom = nom;
@@ -116,6 +117,23 @@ public abstract class ServiceMedical {
 
 	public void setBudget(String budget) {
 		this.budget = budget;
+	}
+	
+	public String emoji() {
+		String type = this.getCreatures().get(0).getClass().getSimpleName();
+		String emoji;
+		emoji = switch (type) {
+	        case "Orque" ->  "🧌";
+	        case "HommeBete" ->  "👨";
+	        case "Vampire" ->  "🧛";
+	        case "Zombie" ->  "🧟";
+	        case "Nain" ->  "👶";
+	        case "Elfe" ->  "🧝‍♀️";
+	        case "Reptilien" ->  "🐊";
+	        case "Lycanthrope" -> "🐺";
+	        default -> throw new IllegalArgumentException("Type de créature inconnu : " + type);
+	    };
+	    return emoji;
 	}
 
 }

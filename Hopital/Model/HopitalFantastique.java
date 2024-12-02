@@ -16,6 +16,8 @@ public class HopitalFantastique {
 	private boolean jeuTermine;
 	private int round;
 	public int nbrMort;
+	private static TextColor color = new TextColor();
+
 
 	public HopitalFantastique(String nom, int maxServices) {
 		this.nom = nom;
@@ -58,8 +60,8 @@ public class HopitalFantastique {
 		for (ServiceMedical service : services) {
 			totalCreatures += service.getCreatures().size();
 		}
-		System.out.println("Nombre de créatures dans l'hôpital : " + totalCreatures);
-		System.out.println("Nombre de créatures mortes depuis le début : " + nbrMort);
+		System.out.println(color.BRIGHT_BLUE +"Nombre de créatures dans l'hôpital : "+ color.RESET + totalCreatures);
+		System.out.println(color.BRIGHT_BLUE + "Nombre de créatures mortes depuis le début : "+ color.RESET + color.RED + nbrMort + color.RESET);
 	}
 
 	public void afficherDetailsCreatures() {
@@ -366,6 +368,7 @@ public class HopitalFantastique {
 	        case "Nain" -> new Nain(type + " " + nom, sexe, poids, taille, age);
 	        case "Elfe" -> new Elfe(type + " " + nom, sexe, poids, taille, age);
 	        case "Reptilien" -> new Reptilien(type + " " + nom, sexe, poids, taille, age);
+	        //case "Lycanthor............
 	        default -> throw new IllegalArgumentException("Type de créature inconnu : " + type);
 	    };
 
@@ -376,55 +379,6 @@ public class HopitalFantastique {
 
 
 
-/*
-	public Creature genererNouvelleCreature(ServiceMedical service) {
-		//SI on a plus de noms dans le tableau, on return null donc aucune créature ne sera créé
-		ArrayList<String> noms;
-		ArrayList<String> types;
-		String sexe = new Random().nextBoolean() ? "Mâle" : "Femelle";
-		double poids = 50 + random.nextDouble() * 50; // Entre 50 et 100 kg
-		double taille = 1.5 + random.nextDouble() * 0.5; // Entre 1.5 et 2.0 m
-		ArrayList<String> ages = new ArrayList<>(List.of("jeune", "adulte", "vieux"));
-		String age = ages.get(random.nextInt(ages.size()));
-
-		if (service instanceof CentreQuarantaine) {
-			noms = new ArrayList<>(List.of("Tarasbroast", "Vamrgi", "Alecndou", "Ujloff", "Mabmpios", "theecamp", "shaberus", "philisk", "kruana", "edxl"));
-			types =  new ArrayList<>(List.of("Orque", "Homme-bêtes", "Lycanthrope", "Vampire"));
-			
-		}
-		else {
-			noms = new ArrayList<>(List.of("Grunt", "Gore", "Fang", "Shadow", "Moon"));
-			types =  new ArrayList<>(List.of("Zombie", "Vampire"));
-			
-		}
-		if (!noms.isEmpty()) {
-			int posNom = random.nextInt(noms.size());
-			String nom = noms.get(posNom);
-			noms.remove(posNom);
-
-			int posType = random.nextInt(types.size());
-			String type = types.get(posType);
-			Creature creature;
-
-			//FORCE ORQUE OU ELFE
-
-
-			switch (type) {
-			case "Orque" -> creature = new Orque(nom, sexe, poids, taille, age);
-			//case "Homme-bêtes" -> creature = new HommeBêtes(nom, sexe, poids, taille, age);
-			//case "Lycanthrope" -> creature = new Lycanthrope(nom, sexe, poids, taille, age);
-			//case "Vampire" -> creature = new Vampire(nom, sexe, poids, taille, age);
-			//case "Zombie" -> creature = new Zombie(nom, sexe, poids, taille, age);
-			case "Elfe" -> creature = new Elfe(nom, sexe, poids, taille, age);
-
-			default -> throw new IllegalStateException("Type de créature inconnu");
-			}
-
-			creature.tomberMalade(service);
-			return creature;
-		}	
-		return null;
-	}*/
 
 	public void choisirJustification(String bm) {
 		if (bm == "malus") {
