@@ -92,6 +92,14 @@ public class Colonie {
             	
             	Thread.sleep(1000);
             	
+            	faireVieillirLycanthropes();
+            	
+            	Thread.sleep(1000);
+            	
+            	majHierarchie();
+            	
+            	Thread.sleep(1000);
+            	
             	creeMajCouple();
             	
             	
@@ -104,10 +112,6 @@ public class Colonie {
                 Thread.sleep(1000);
                 
                 evoluerHierarchieMeutes();
-
-                Thread.sleep(1000);
-                
-                faireVieillirLycanthropes();
 
                 Thread.sleep(1000);
                 
@@ -252,7 +256,7 @@ public class Colonie {
     	for (Meute meute : listeMeutes) {
             for(Lycanthrope lycan : meute.getLycanthropes()) {
             	if(random.nextInt(100) < 40) {
-            		lycan.setForce(lycan.getForce()+1);
+            		lycan.setForce(lycan.getForce()-1);
             	}
             	if(random.nextInt(100) < 40) {
             		lycan.setForce(lycan.getForce()+1);
@@ -355,6 +359,28 @@ public class Colonie {
                 }
             }
         }
+    }
+    
+    public void majHierarchie() {
+    	for(Meute meute : listeMeutes) {
+    		for(int k=0;k<meute.getLycanthropes().size();k++) {
+    			Lycanthrope lycan=meute.getLycanthropes().get(k);
+    			List<Lycanthrope> lDomines= new ArrayList<Lycanthrope>();
+    			List<Lycanthrope> lDominance= new ArrayList<Lycanthrope>();
+    			for(int i=0;i<meute.getLycanthropes().size();i++) {
+    				Lycanthrope lycanTest=meute.getLycanthropes().get(i);
+    				if(lycan.getForce()>meute.getLycanthropes().get(i).getForce()) {
+    					lDomines.add(lycanTest);
+    				}
+    				if(lycan.getForce()>meute.getLycanthropes().get(i).getForce()) {
+    					lDominance.add(lycanTest);
+    				}
+    			}
+    			lycan.setListeDominance(lDominance);
+    			lycan.setListeDomines(lDomines);
+    			lycan.setFacteurDomination(lDomines.size()-lDominance.size());
+    		}
+    	}
     }
 }
 

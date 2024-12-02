@@ -1,5 +1,8 @@
 package Model;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Lycanthrope {
     private String sexe; // Sexe du lycanthrope : "male" ou "femelle"
     private String categorieAge; // Catégorie d’âge : "jeune", "adulte", "vieux"
@@ -9,7 +12,9 @@ public class Lycanthrope {
     private int niveau; // Niveau calculé du lycanthrope
     private int facteurImpetuosite; // Facteur d’impétuosité
     private Meute meute; // Meute à laquelle il appartient (null s’il est solitaire)
-    private String Nom;
+    private String Nom; // Nom du lycanthrope
+    private List<Lycanthrope> listeDominance; // Liste des lycanthropes qui dominent celui la
+    private List<Lycanthrope> listeDomines; // Liste des lycanthropes que ce lycan dominent
     
     public Lycanthrope(String sexe, int force, int facteurDomination, int rang, int facteurImpetuosite,String Nom) {
         this.sexe = sexe;
@@ -21,6 +26,8 @@ public class Lycanthrope {
         this.niveau = calculNiveau(); 
         this.meute = null; 
         this.Nom=Nom;
+        this.listeDominance= new ArrayList<Lycanthrope>();
+        this.listeDomines= new ArrayList<Lycanthrope>();
     }
     
     // Méthode pour afficher les caractéristiques
@@ -165,6 +172,23 @@ public class Lycanthrope {
 	public void setNiveau(int niveau) {
 		this.niveau = niveau;
 	}
+
+	public List<Lycanthrope> getListeDominance() {
+		return listeDominance;
+	}
+
+	public void setListeDominance(List<Lycanthrope> listeDominance) {
+		this.listeDominance = listeDominance;
+	}
+
+	public List<Lycanthrope> getListeDomines() {
+		return listeDomines;
+	}
+
+	public void setListeDomines(List<Lycanthrope> listeDomines) {
+		this.listeDomines = listeDomines;
+	}
+	
 	
 }
 
