@@ -4,7 +4,16 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-import Model.*;
+import ClassColonie.*;
+import Model.CentreQuarantaine;
+import Model.Creature;
+import Model.Crypte;
+import Model.HopitalFantastique;
+import Model.Medecin;
+import Model.Menu;
+import Model.ServiceMedical;
+import Model.ServiceStandard;
+import Model.TextColor;
 
 public class Main {
 	private static TextColor color = new TextColor();
