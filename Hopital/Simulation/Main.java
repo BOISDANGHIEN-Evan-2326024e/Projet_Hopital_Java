@@ -1,10 +1,19 @@
-package Controller;
+package Simulation;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-import Model.*;
+import Affichage.TextColor;
+import Creatures.Creature;
+import Creatures.Medecin;
+import Maladie.*;
+import ServicesMedicaux.CentreQuarantaine;
+import ServicesMedicaux.Crypte;
+import ServicesMedicaux.ServiceMedical;
+import ServicesMedicaux.ServiceStandard;
+import Simulation.HopitalFantastique;
+import Simulation.Menu;
 
 public class Main {
 	private static TextColor color = new TextColor();

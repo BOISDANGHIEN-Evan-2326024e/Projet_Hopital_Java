@@ -1,5 +1,7 @@
-package Model;
+package Creatures;
 
+import Enum.Categorie;
+import ServicesMedicaux.ServiceMedical;
 
 public class Elfe extends Creature {
 	public Elfe(String nom, String sexe, double poids, double taille, String age) {
@@ -7,23 +9,23 @@ public class Elfe extends Creature {
 	}
 
 	public void demoraliser() {
-		System.out.println(nom + " démoralise son entourage !");
+		System.out.println(getNom() + " démoralise son entourage !");
 	}
 
 
     @Override
     public void trepasser(ServiceMedical service) {
-        moral = 0;
-        System.out.println(nom + " (Elfe) est décédé.");
+        setMoral(0);
+        System.out.println(getNom() + " (Elfe) est décédé.");
         demoraliser(service);
         service.retirerCreature(this);
     }
 
     private void demoraliser(ServiceMedical service) {
-        System.out.println(nom + " démoralise les autres créatures dans le service " + service.getNom() + ".");
+        System.out.println(getNom() + " démoralise les autres créatures dans le service " + service.getNom() + ".");
         for (Creature creature : service.getCreatures()) {
             if (!creature.equals(this)) {
-            	moral = moral - 200;
+            	setMoral(getMoral() - 200);
             }
         }
     }

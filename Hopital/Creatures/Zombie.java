@@ -1,4 +1,7 @@
-package Model;
+package Creatures;
+
+import Enum.Categorie;
+import ServicesMedicaux.ServiceMedical;
 
 public class Zombie extends Creature{
 	public Zombie(String nom, String sexe, double poids, double taille, String age) {
@@ -7,13 +10,13 @@ public class Zombie extends Creature{
 	
 	@Override
     public void trepasser(ServiceMedical service) {
-        moral = 0;
-        System.out.println(nom + " (Zombie) est décédé mais il se régénère immédiatement après sa mort !");
+        setMoral(0);
+        System.out.println(getNom() + " (Zombie) est décédé mais il se régénère immédiatement après sa mort !");
         regenerer();
     }
 
     private void regenerer() {
-        moral = 1000; 
+        setMoral(1000); 
     }
 
 	@Override

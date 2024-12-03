@@ -1,7 +1,12 @@
-package Model;
+package ServicesMedicaux;
 
 import java.util.ArrayList;
 import java.util.Random;
+
+import Affichage.TextColor;
+import Creatures.Creature;
+import Maladie.Maladie;
+
 import java.util.List;
 
 public abstract class ServiceMedical {
@@ -36,14 +41,28 @@ public abstract class ServiceMedical {
     
     public Maladie obtenirMaladieDepuisService() {
         Random random = new Random();
+
+        // On parcourt les créatures dans le service
         for (Creature creature : creatures) {
             List<Maladie> maladies = creature.getMaladies();
             if (maladies != null && !maladies.isEmpty()) {
-                return maladies.get(random.nextInt(maladies.size())); // Maladie aléatoire
+                // On récupère une maladie aléatoire de la créature
+                Maladie maladieOriginale = maladies.get(random.nextInt(maladies.size()));
+                
+                // Créer une nouvelle instance de la maladie avec le même nom mais évolution différente
+                Maladie nouvelleMaladie = new Maladie(maladieOriginale.getNomComplet(),
+                                                       maladieOriginale.getNomAbrege(),
+                                                       random.nextInt(5) + 10);  // Niveau de gravité aléatoire entre 10 et max 15
+
+                // Retourne la nouvelle maladie
+                return nouvelleMaladie;
             }
         }
-        return null; // Retourne null si aucune maladie n'est trouvée
+
+        // Retourne null si aucune maladie n'est trouvée
+        return null;
     }
+
 
 
     public List<Creature> getCreatures() {
@@ -120,6 +139,11 @@ public abstract class ServiceMedical {
 	}
 	
 	public String emoji() {
+		if (this.getCreatures().size() == 0) {
+			System.out.println("00000 pas de creatures jdegfuzejrghzeiokg");
+			return null;
+		}
+		else {
 		String type = this.getCreatures().get(0).getClass().getSimpleName();
 		String emoji;
 		emoji = switch (type) {
@@ -133,7 +157,9 @@ public abstract class ServiceMedical {
 	        case "Lycanthrope" -> "🐺";
 	        default -> throw new IllegalArgumentException("Type de créature inconnu : " + type);
 	    };
+		
 	    return emoji;
+		}
 	}
 
 }

@@ -1,4 +1,6 @@
-package Model;
+package ServicesMedicaux;
+
+import Creatures.Creature;
 
 public class CentreQuarantaine extends ServiceMedical {
     private boolean isolation;
@@ -33,7 +35,7 @@ public class CentreQuarantaine extends ServiceMedical {
         System.out.println("  Isolation : " + isolation);
         System.out.println("  Budget : " + getBudget() + " (" +getCapital()+")");
         for (Creature creature : getCreatures()) {
-            System.out.println("     " + emojiCreature + " " + creature.nom + ", Moral: " + creature.moral + " " + creature.getMaladies() );
+            System.out.println("     " + emojiCreature + " " + creature.getNom() + ", Moral: " + creature.getMoral() + " " + creature.getMaladies() );
         }
 	}
 }

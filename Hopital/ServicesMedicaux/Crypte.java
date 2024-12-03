@@ -1,4 +1,6 @@
-package Model;
+package ServicesMedicaux;
+
+import Creatures.Creature;
 
 public class Crypte extends ServiceMedical {
     private int ventilation;
@@ -46,7 +48,7 @@ public class Crypte extends ServiceMedical {
         System.out.println("  Temperature : " + temperature);
         System.out.println("  Budget : " + getBudget() + " (" +getCapital()+")");
         for (Creature creature : getCreatures()) {
-            System.out.println("     " + emojiCreature + " " + creature.nom + ", Moral: " + creature.moral + " " + creature.getMaladies() );
+            System.out.println("     " + emojiCreature + " " + creature.getNom() + ", Moral: " + creature.getMoral() + " " + creature.getMaladies() );
         }
 	}
     

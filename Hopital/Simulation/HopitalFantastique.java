@@ -1,10 +1,26 @@
-package Model;
+package Simulation;
 
 
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
+
+import Affichage.TextColor;
+import Creatures.Creature;
+import Creatures.Elfe;
+import Creatures.HommeBete;
+import Creatures.Medecin;
+import Creatures.Nain;
+import Creatures.Orque;
+import Creatures.Reptilien;
+import Creatures.Vampire;
+import Creatures.Zombie;
+import Enum.Categorie;
+import Maladie.Maladie;
+import ServicesMedicaux.CentreQuarantaine;
+import ServicesMedicaux.Crypte;
+import ServicesMedicaux.ServiceMedical;
 
 public class HopitalFantastique {
 	private String nom;
@@ -36,7 +52,7 @@ public class HopitalFantastique {
 
 	public synchronized void resumeSimulation() {
 		this.pauseSimulation = false;
-		notify(); // Réveille le thread de simulation
+		notify();
 	}
 
 	public synchronized boolean estJeuTermine() {
@@ -85,9 +101,10 @@ public class HopitalFantastique {
 					}
 
 					for (ServiceMedical service : new ArrayList<>(services)) {
-					    for (Creature creature : new ArrayList<>(service.getCreatures())) {
+
+						for (Creature creature : new ArrayList<>(service.getCreatures())) {
 							//Si une maladie a atteint le niveau léthal, la créature meurt
-							for (Maladie maladie : creature.maladies) {
+							for (Maladie maladie : creature.getMaladies()) {
 								if (maladie.estLethal()) {
 									creature.trepasser(service);
 								}
@@ -117,50 +134,79 @@ public class HopitalFantastique {
 					}
 
 				}
-				
-		        System.out.println("\n=== Lancement de la Simulation : Tour "+ round +" ===");
+
+				System.out.println("\n=== Lancement de la Simulation : Tour "+ round +" ===");
 				round++;
 				gererMortsEtHeritage();
 
-				long endTime = System.currentTimeMillis() + 10000; 
+				long endTime = System.currentTimeMillis() + 8000; 
 				//long endTime = System.currentTimeMillis() + 6000; 
 				while (System.currentTimeMillis() < endTime) {
 					try {
-						Thread.sleep(2000); // Modification toutes les 2 secondes
+						Thread.sleep(4000); // Modification toutes les 10 secondes
 
-						// Modifier aléatoirement l'état des créatures et services
+						// Modifier aléatoirement l'état des créatures
 						for (ServiceMedical service : services) {
-							for (Creature creature : service.getCreatures()) {
-								int action = random.nextInt(5);
+							if (random.nextInt(100) >= 50) {
+								continue; // Passe ce service si le tirage est supérieur ou égal à 50
+							}
+							Iterator<Creature> creatureIterator = service.getCreatures().iterator();
+							while (creatureIterator.hasNext()) {
+								Creature creature = creatureIterator.next();
+								int action = random.nextInt(10);
 								switch (action) {
-								case 0 | 1 -> { 
-									if (random.nextInt(100) < 20) { 
+								case 0, 1 -> {
+									if (random.nextInt(100) < 20) {
 										creature.tomberMalade(service);
 									}
 								}
-								case 2 -> creature.attendre(service.getCreatures(), round);
-								case 3 | 4 -> {
+								case 2 -> {
+									creature.assignerStrategie();
+									creature.attendre(service.getCreatures(), round);
+								}
+								case 3, 4 -> {
 									if (!creature.getMaladies().isEmpty()) {
 										creature.getMaladies().get(0).augmenterNiveau();
 									}
-									else {
-
-									}
 								}
+								//case 6 -> mangerPapierToilette(service, creature);
+								case 8 -> sangAil(service);
+								case 5 -> { 
+									choisirJustificationeMoraleCreature("bonus");
+									int augmentationMoral = random.nextInt(100) + 100; // Augmente entre 100 et 200 
+									if (!service.getCreatures().isEmpty()) {
+										System.out.println( service.getNom() + " : Le moral des créatures augmente !");
+										for (Creature creatureService : service.getCreatures()) {
+											creatureService.setMoral(creature.getMoral() + augmentationMoral);
+										}
+									}	
+								}
+								case 7, 6 -> {
+									choisirJustificationeMoraleCreature("malus");
+									int diminutionMoral = random.nextInt(100); // Augmente entre 0 a 100
+									if (!service.getCreatures().isEmpty()) {
+										System.out.println( service.getNom() + " : Le moral des créatures diminue !");
+										for (Creature creatureService : service.getCreatures()) {
+											creatureService.setMoral(creature.getMoral() - diminutionMoral);
+										}
+									}	    							}
 								}
 							}
 						}
 
 						for (ServiceMedical service : services) {
+							if (random.nextInt(100) >= 50) {
+								continue; // Passe ce service si le tirage est supérieur ou égal à 50
+							}
 							int action = random.nextInt(15); // Ajouté 5 possibilités d'action
 							switch (action) {
-							case 0 | 12 | 13 -> {
+							case 0, 12, 13 -> {
 								// Ajout d’une créature
 
 								Creature nouvelleCreature = genererNouvelleCreature(service);
 								if (nouvelleCreature != null) {
 									service.ajouterCreature(nouvelleCreature);
-									System.out.println("Nouvelle créature " + nouvelleCreature.nom +" dans " + service.getNom() + (nouvelleCreature.getMaladies().isEmpty() ? " en bonne santé." : 
+									System.out.println("Nouvelle créature " + nouvelleCreature.getNom() +" dans " + service.getNom() + (nouvelleCreature.getMaladies().isEmpty() ? " en bonne santé." : 
 										" avec la maladie : " + nouvelleCreature.getMaladies().get(0).getNomComplet()));
 
 								}
@@ -181,24 +227,24 @@ public class HopitalFantastique {
 									System.out.println("La ventilation est bouchée dans le service : " + service.getNom() +  ". Niveau de ventilation : " + nouvelleVentilation);
 								}
 							}
-							case 3 | 4 | 5 | 6 -> {
+							case 3, 4, 5, 6 -> {
 								// Événement : Réduction aléatoire du budget avec justification
-								choisirJustification("malus");
+								choisirJustificationCapital("malus");
 								int reductionBudget = random.nextInt(200) + 100; // Réduit entre 100 et 300 crédits			
 								if ((service.getBudget() - reductionBudget) > 0) {
 									service.setCapital(service.getCapital() - reductionBudget);
 									service.reviserBudget();
-									System.out.println(" Le budget du service " + service.getNom() + " a été réduit de " + reductionBudget + " crédits.");
+									System.out.println("Le budget du service " + service.getNom() + " a été réduit de " + reductionBudget + " crédits.");
 								}
 								else {
 									service.setCapital(0);
 									service.reviserBudget();
-									System.out.println(" Le budget du service " + service.getNom() + " est de 0... Ca commence à chauffer");
+									System.out.println("Le budget du service " + service.getNom() + " est de 0... Ca commence à chauffer");
 								}
 							}
-							case 7 | 8 -> {
+							case 7, 8 -> {
 								// Événement : Augmentaiton aléatoire du budget avec justification
-								choisirJustification("bonus");
+								choisirJustificationCapital("bonus");
 								int augmentationBudget = random.nextInt(200) + 100; // Augmente entre 100 et 300 crédits
 								service.setCapital(service.getCapital() + augmentationBudget);
 								System.out.println(" Le budget du service " + service.getNom() + " a été augmenté de " + augmentationBudget + " crédits.");
@@ -225,10 +271,9 @@ public class HopitalFantastique {
 									if (!service.getCreatures().isEmpty()) {
 										Creature creatureASoigner = service.getCreatures().get(random.nextInt(service.getCreatures().size()));
 										creatureASoigner.soigner(service);
-										System.out.println("Aucun VIP ? Occupons nous du sous peuple : " + creatureASoigner.nom + " est soigné et quitte donc le service " + service.getNom());
+										System.out.println("Aucun VIP ? Occupons nous du sous peuple : " + creatureASoigner.getNom() + " est soigné et quitte donc le service " + service.getNom());
 									}
 								}
-
 
 							}
 							}
@@ -252,6 +297,8 @@ public class HopitalFantastique {
 
 		simulationThread.start();
 	}
+
+
 
 	public void gererMortsEtHeritage() {
 
@@ -294,93 +341,125 @@ public class HopitalFantastique {
 	}
 
 	public static Creature genererNouvelleCreature(ServiceMedical service) {
-	    ArrayList<String> noms;
-	    ArrayList<String> types;
+		ArrayList<String> noms;
+		ArrayList<String> types;
 
-	    // Vérifie si le service est vide (aucune créature)
-	    boolean serviceVide = service.getCreatures().isEmpty();
+		// Vérifie si le service est vide (aucune créature)
+		boolean serviceVide = service.getCreatures().isEmpty();
 
-	    // Définir les noms et types disponibles en fonction du service
-	    if (service instanceof CentreQuarantaine) {
-	        noms = new ArrayList<>(List.of(
-	            "Tarasbroast", "Vamrgi", "Alecndou", "Ujloff", "Mabmpios", "Theecamp", "Shaberus", "Philisk", 
-	            "Kruana", "Edxl", "Mogdar", "Dugruk", "Kargath", "Grashnak", "Bolgor", "Thrall", "Zogoth", "Turgar", 
-	            "Loktar", "Goroth", "Orkkaz", "Morgath", "Drogan", "Kilgore", "Skarn", "Thrash", "Voktar", "Harnok", 
-	            "Rend", "Wargoth", "Krul", "Harnash", "Mokthar", "Thragor", "Karnak", "Blargh", "Guthar", "Druknar",
-	            "Graltor", "Zargrath", "Loknar", "Zogg", "Grashnak", "Molgar", "Trogdor", "Krangor", "Varg", "Krognar",
-	            "Gorthal", "Durzan", "Tarnok", "Blorg", "Vorgrath", "Nargul", "Drogath", "Orgrimmar", "Zalthar", "Trokthar"
-	        ));
-	        types = serviceVide ? new ArrayList<>(List.of("Orque", "HommeBete", "Vampire")) 
-                    : new ArrayList<>(List.of(service.getCreatures().get(0).getClass().getSimpleName()));
+		// Définir les noms et types disponibles en fonction du service
+		if (service instanceof CentreQuarantaine) {
+			noms = new ArrayList<>(List.of(
+					"Tarasbroast", "Vamrgi", "Alecndou", "Ujloff", "Mabmpios", "Theecamp", "Shaberus", "Philisk", 
+					"Kruana", "Edxl", "Mogdar", "Dugruk", "Kargath", "Grashnak", "Bolgor", "Thrall", "Zogoth", "Turgar", 
+					"Loktar", "Goroth", "Orkkaz", "Morgath", "Drogan", "Kilgore", "Skarn", "Thrash", "Voktar", "Harnok", 
+					"Rend", "Wargoth", "Krul", "Harnash", "Mokthar", "Thragor", "Karnak", "Blargh", "Guthar", "Druknar",
+					"Graltor", "Zargrath", "Loknar", "Zogg", "Grashnak", "Molgar", "Trogdor", "Krangor", "Varg", "Krognar",
+					"Gorthal", "Durzan", "Tarnok", "Blorg", "Vorgrath", "Nargul", "Drogath", "Orgrimmar", "Zalthar", "Trokthar"
+					));
+			types = serviceVide ? new ArrayList<>(List.of("Orque", "HommeBete", "Vampire")) 
+					: new ArrayList<>(List.of(service.getCreatures().get(0).getClass().getSimpleName()));
 
-	    } else if (service instanceof Crypte) {
-	        noms = new ArrayList<>(List.of(
-	            "Grunt", "Gore", "Fang", "Shadow", "Moon", "Rotfang", "Blackveil", "Skullface", "Bonecrush", 
-	            "Deathfang", "Darkshade", "Blooddrinker", "Soulreaper", "Nightshade", "Raven", "Howler", "Shadovar", 
-	            "Varnel", "Zharak", "Kaelrin", "Morgrave", "Selzith", "Draven", "Korthul", "Xalthis", "Vilzith", 
-	            "Vorthak", "Malzrak", "Narzath", "Karnith", "Skelvin", "Razen", "Dreadnought", "Bloodshade", 
-	            "Soulfang", "Thalzon", "Xalvar", "Zarnak", "Krovath", "Morthas", "Velshar", "Zharak", "Xarnath",
-	            "Bloodfang", "Rotshade", "Soulblade", "Vexthar", "Korzath", "Malgrim", "Thrashveil", "Darkmourne", 
-	            "Soulreaver", "Nightfang", "Shadowclaw", "Vexoth", "Grimveil", "Bonefang", "Rotclaw", "Dreadshade"
-	        ));
-	        types = serviceVide ? new ArrayList<>(List.of("Zombie", "Zombie", "Vampire")) 
-	                            : new ArrayList<>(List.of(service.getCreatures().get(0).getClass().getSimpleName()));
+		} else if (service instanceof Crypte) {
+			noms = new ArrayList<>(List.of(
+					"Grunt", "Gore", "Fang", "Shadow", "Moon", "Rotfang", "Blackveil", "Skullface", "Bonecrush", 
+					"Deathfang", "Darkshade", "Blooddrinker", "Soulreaper", "Nightshade", "Raven", "Howler", "Shadovar", 
+					"Varnel", "Zharak", "Kaelrin", "Morgrave", "Selzith", "Draven", "Korthul", "Xalthis", "Vilzith", 
+					"Vorthak", "Malzrak", "Narzath", "Karnith", "Skelvin", "Razen", "Dreadnought", "Bloodshade", 
+					"Soulfang", "Thalzon", "Xalvar", "Zarnak", "Krovath", "Morthas", "Velshar", "Zharak", "Xarnath",
+					"Bloodfang", "Rotshade", "Soulblade", "Vexthar", "Korzath", "Malgrim", "Thrashveil", "Darkmourne", 
+					"Soulreaver", "Nightfang", "Shadowclaw", "Vexoth", "Grimveil", "Bonefang", "Rotclaw", "Dreadshade"
+					));
+			types = serviceVide ? new ArrayList<>(List.of("Zombie", "Zombie", "Vampire")) 
+					: new ArrayList<>(List.of(service.getCreatures().get(0).getClass().getSimpleName()));
 
-	    } else { // Service Standard
-	        noms = new ArrayList<>(List.of(
-	            "Elindir", "Thranduil", "Durin", "Fingolfin", "Ecthelion", "Gloin", "Dwalin", "Kili", "Fili", 
-	            "Balin", "Thorin", "Legolas", "Celeborn", "Galadriel", "Arwen", "Eowyn", "Elrohir", "Elladan", 
-	            "Isildur", "Anarion", "Aragorn", "Boromir", "Faramir", "Denethor", "Gimli", "Glorfindel", 
-	            "Cirdan", "Elrond", "Thranduil", "Tauriel", "Luthien", "Melian", "Thingol", "Finrod", "Feanor", 
-	            "Maedhros", "Maglor", "Caranthir", "Curufin", "Amrod", "Amras", "Turgon", "Idril", "Ecthelion", 
-	            "Eärendil", "Aegnor", "Angrod", "Haldir", "Oropher", "Gil-galad", "Ar-Pharazôn", "Tar-Miriel", 
-	            "Numenor", "Elros", "Barahir", "Beren", "Luthien", "Thingol", "Beleg", "Hurin", "Morwen", "Turin"
-	        ));
-	        types = serviceVide ? new ArrayList<>(List.of("Nain", "Elfe", "Reptilien")) 
-                    : new ArrayList<>(List.of(service.getCreatures().get(0).getClass().getSimpleName()));
-	    }
+		} else { // Service Standard
+			noms = new ArrayList<>(List.of(
+					"Elindir", "Thranduil", "Durin", "Fingolfin", "Ecthelion", "Gloin", "Dwalin", "Kili", "Fili", 
+					"Balin", "Thorin", "Legolas", "Celeborn", "Galadriel", "Arwen", "Eowyn", "Elrohir", "Elladan", 
+					"Isildur", "Anarion", "Aragorn", "Boromir", "Faramir", "Denethor", "Gimli", "Glorfindel", 
+					"Cirdan", "Elrond", "Thranduil", "Tauriel", "Luthien", "Melian", "Thingol", "Finrod", "Feanor", 
+					"Maedhros", "Maglor", "Caranthir", "Curufin", "Amrod", "Amras", "Turgon", "Idril", "Ecthelion", 
+					"Eärendil", "Aegnor", "Angrod", "Haldir", "Oropher", "Gil-galad", "Ar-Pharazôn", "Tar-Miriel", 
+					"Numenor", "Elros", "Barahir", "Beren", "Luthien", "Thingol", "Beleg", "Hurin", "Morwen", "Turin"
+					));
+			types = serviceVide ? new ArrayList<>(List.of("Nain", "Elfe", "Reptilien")) 
+					: new ArrayList<>(List.of(service.getCreatures().get(0).getClass().getSimpleName()));
+		}
 
-	    if (noms.isEmpty()) {
-	        return null; // Pas de noms disponibles, aucune créature ne sera créée
-	    }
+		if (noms.isEmpty()) {
+			return null; // Pas de noms disponibles, aucune créature ne sera créée
+		}
 
-	    // Sélection aléatoire d'un nom
-	    int posNom = random.nextInt(noms.size());
-	    String nom = noms.get(posNom);
-	    noms.remove(posNom); // Supprime le nom utilisé de la liste
+		// Sélection aléatoire d'un nom
+		int posNom = random.nextInt(noms.size());
+		String nom = noms.get(posNom);
+		noms.remove(posNom); // Supprime le nom utilisé de la liste
 
-	    // Sélection aléatoire d'un type
-	    int posType = random.nextInt(types.size());
-	    String type = types.get(posType);
+		// Sélection aléatoire d'un type
+		int posType = random.nextInt(types.size());
+		String type = types.get(posType);
 
-	    // Caractéristiques aléatoires de la créature
-	    String sexe = random.nextBoolean() ? "Mâle" : "Femelle";
-	    double poids = 50 + random.nextDouble() * 50; // Entre 50 et 100 kg
-	    double taille = 1.5 + random.nextDouble() * 0.5; // Entre 1.5 et 2.0 m
-	    String age = List.of("jeune", "adulte", "vieux").get(random.nextInt(3));
+		// Caractéristiques aléatoires de la créature
+		String sexe = random.nextBoolean() ? "Mâle" : "Femelle";
+		double poids = 50 + random.nextDouble() * 50; // Entre 50 et 100 kg
+		double taille = 1.5 + random.nextDouble() * 0.5; // Entre 1.5 et 2.0 m
+		String age = List.of("jeune", "adulte", "vieux").get(random.nextInt(3));
 
-	    // Création de la créature
-	    Creature creature = switch (type) {
-	        case "Orque" -> new Orque(type + " " + nom, sexe, poids, taille, age);
-	        case "HommeBete" -> new HommeBete(type + " " + nom, sexe, poids, taille, age);
-	        case "Vampire" -> new Vampire(type + " " + nom, sexe, poids, taille, age);
-	        case "Zombie" -> new Zombie(type + " " + nom, sexe, poids, taille, age);
-	        case "Nain" -> new Nain(type + " " + nom, sexe, poids, taille, age);
-	        case "Elfe" -> new Elfe(type + " " + nom, sexe, poids, taille, age);
-	        case "Reptilien" -> new Reptilien(type + " " + nom, sexe, poids, taille, age);
-	        //case "Lycanthor............
-	        default -> throw new IllegalArgumentException("Type de créature inconnu : " + type);
-	    };
+		// Création de la créature
+		Creature creature = switch (type) {
+		case "Orque" -> new Orque(type + " " + nom, sexe, poids, taille, age);
+		case "HommeBete" -> new HommeBete(type + " " + nom, sexe, poids, taille, age);
+		case "Vampire" -> new Vampire(type + " " + nom, sexe, poids, taille, age);
+		case "Zombie" -> new Zombie(type + " " + nom, sexe, poids, taille, age);
+		case "Nain" -> new Nain(type + " " + nom, sexe, poids, taille, age);
+		case "Elfe" -> new Elfe(type + " " + nom, sexe, poids, taille, age);
+		case "Reptilien" -> new Reptilien(type + " " + nom, sexe, poids, taille, age);
+		//case "Lycanthor............
+		default -> throw new IllegalArgumentException("Type de créature inconnu : " + type);
+		};
 
-	    // Affecter une maladie dès la création
-	    creature.tomberMalade(service);
-	    return creature;
+		// Affecter une maladie dès la création
+		creature.tomberMalade(service);
+		return creature;
+	}
+
+
+	public void choisirJustificationeMoraleCreature(String bm) {
+		if (bm.equals("malus")) { // Comparaison correcte pour les chaînes
+			String[] justifications = {
+					"Panique générale dans le service : ",
+					"Un cri terrifiant a retenti, semant la peur parmi les créatures : ",
+					"Un accident a provoqué un effondrement partiel, créant un chaos généralisé : ",
+					"Une créature enragée a semé la terreur : ",
+					"Des bruits étranges résonnent dans le service, inquiétant tout le monde : ",
+					"Une coupure d'électricité a plongé le service dans l'obscurité totale : ",
+					"Un étrange gaz s'est répandu, rendant les créatures agitées : ",
+					"Les créatures se sentent seules et abandonnées : ",
+					"Un conflit a éclaté entre plusieurs créatures : "
+			};
+			String justification = justifications[random.nextInt(justifications.length)];
+			System.out.print(justification);
+		} else { // Bonus pour le moral
+			String[] justifications = {
+					"Le clown est passé, tout le monde l'adore : ",
+					"Un banquet improvisé a ravi les créatures : ",
+					"Une musique apaisante a calmé les esprits : ",
+					"Un événement joyeux a redonné le sourire à tous : ",
+					"Une créature charismatique a remonté le moral du groupe : ",
+					"Les créatures ont reçu des cadeaux inattendus : ",
+					"Une séance de détente et de méditation a été organisée : ",
+					"Un feu de camp convivial a rassemblé tout le monde : ",
+					"Les créatures se sentent en sécurité grâce à un nouveau médecin compétent : "
+			};
+			String justification = justifications[random.nextInt(justifications.length)];
+			System.out.print(justification);
+		}
 	}
 
 
 
-
-	public void choisirJustification(String bm) {
+	public void choisirJustificationCapital(String bm) {
 		if (bm == "malus") {
 			String[] justifications = {
 					"Un voleur s'est emparé des caisses de l'hôpital : ",
@@ -390,7 +469,8 @@ public class HopitalFantastique {
 					"Une panne d'équipement a immobilisé un service : "
 			};
 			String justification = justifications[random.nextInt(justifications.length)];
-			System.out.print(justification);
+			System.out.println(justification);
+			
 		}
 		else {
 			String[] justifications = {
@@ -402,7 +482,8 @@ public class HopitalFantastique {
 					"Un partenariat avec un laboratoire a rapporté des fonds : "
 			};
 			String justification = justifications[random.nextInt(justifications.length)];
-			System.out.print(justification);
+			System.out.println(justification);
+			
 		}
 	}
 
@@ -430,7 +511,21 @@ public class HopitalFantastique {
 		// Soigne les créatures choisies
 		for (Creature creature : creaturesChoisies) {
 			creature.soigner(service);
-			System.out.println("Le Saint medecin a soigné " + creature.nom + ".");
+			System.out.println("Le Saint medecin a soigné " + creature.getNom() + ".");
+		}
+	}
+
+
+	private void sangAil(ServiceMedical service) {
+		boolean contientVampire = service.getCreatures().stream()
+				.anyMatch(creature -> creature instanceof Vampire);
+		if (contientVampire) {
+			System.out.println("Sang à l'ail dans le service " + service.getNom() + " : Les maladies des créatures augmentent !");
+			for (Creature creature : service.getCreatures()) {
+				if (!creature.getMaladies().isEmpty()) {
+					creature.getMaladies().forEach(Maladie::augmenterNiveau);
+				}
+			}
 		}
 	}
 
@@ -466,9 +561,5 @@ public class HopitalFantastique {
 	public void setJeuTermine(boolean jeuTermine) {
 		this.jeuTermine = jeuTermine;
 	}
-
-
-
-
 
 }

@@ -1,4 +1,4 @@
-package Model;
+package Affichage;
 
 public class TextColor {
     // Réinitialisation

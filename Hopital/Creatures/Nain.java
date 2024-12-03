@@ -1,4 +1,6 @@
-package Model;
+package Creatures;
+
+import Enum.Categorie;
 
 public class Nain extends Creature{
 

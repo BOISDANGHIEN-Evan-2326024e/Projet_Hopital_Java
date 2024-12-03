@@ -1,4 +1,6 @@
-package Model;
+package Creatures;
+
+import ServicesMedicaux.ServiceMedical;
 
 public class Medecin {
     private String nom;
@@ -22,8 +24,8 @@ public class Medecin {
     public void soigner(Creature creature) {
         if (serviceAssocie.getCreatures().contains(creature)) {
             creature.soigner(serviceAssocie);
-            System.out.println(nom + " a soigné " + creature.nom + ".");
-            System.out.println(creature.nom + " a quitté le service " + serviceAssocie.getNom() + ".");
+            System.out.println(nom + " a soigné " + creature.getNom() + ".");
+            System.out.println(creature.getNom() + " a quitté le service " + serviceAssocie.getNom() + ".");
         } else {
             System.out.println("Erreur : La créature n'est pas dans le service associé au médecin.");
         }

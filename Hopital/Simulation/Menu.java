@@ -1,10 +1,15 @@
-package Model;
+package Simulation;
 
 
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
+
+import Affichage.TextColor;
+import Creatures.Creature;
+import Creatures.Medecin;
+import ServicesMedicaux.ServiceMedical;
 
 public class Menu implements Runnable{
 	private HopitalFantastique hopital;
@@ -49,24 +54,35 @@ public class Menu implements Runnable{
 			long tempsLimite = System.currentTimeMillis() + 10000; // Limite de 10 secondes
 
 			while (actionsRestantes > 0 && System.currentTimeMillis() < tempsLimite) {
-				afficherOptions(medecin.isEcoPossible(), medecin.getServiceAssocie());
+				Boolean eco = actionsRestantes == 3;
+				afficherOptions(medecin.isEcoPossible(), medecin.getServiceAssocie(), eco);
 				int choix = lireChoix();
 
 				switch (choix) {
-				case 1 -> {
-					soignerCreatures(medecin);
-					medecin.getServiceAssocie().setCapital(medecin.getServiceAssocie().getCapital() - 500);
+				case 1-> {
+					if (medecin.getServiceAssocie().getCapital() < 500) {
+						actionsRestantes++;
+					}
+					else {
+						soignerCreatures(medecin);
+						medecin.getServiceAssocie().setCapital(medecin.getServiceAssocie().getCapital() - 500);
+					}
 				}
 				case 2 -> {
 					reviserBudget(medecin);
 					medecin.getServiceAssocie().setCapital(medecin.getServiceAssocie().getCapital() + 100);
 				}
 				case 3 -> {
-					transfererCreature(medecin);
-					medecin.getServiceAssocie().setCapital(medecin.getServiceAssocie().getCapital() - 200);
+					if (medecin.getServiceAssocie().getCapital() < 500) {
+						actionsRestantes++;
+					}
+					else {
+						transfererCreature(medecin);
+						medecin.getServiceAssocie().setCapital(medecin.getServiceAssocie().getCapital() - 200);
+					}
 				}
 				case 5 -> {
-					if (medecin.isEcoPossible()) {
+					if (medecin.isEcoPossible() && actionsRestantes == 3) {
 						medecin.reviserBudget(); // Révision du budget via économie
 						medecin.getServiceAssocie().setCapital(medecin.getServiceAssocie().getCapital() + 1000);
 						actionsRestantes = 1; // Fin des actions
@@ -90,35 +106,35 @@ public class Menu implements Runnable{
 	}
 
 	private void afficherMedecin() {
-	    List<Medecin> medecins = hopital.getMedecins();
+		List<Medecin> medecins = hopital.getMedecins();
 
-	  
-	    // Vérifier si la liste des médecins est vide
-	    if (medecins.isEmpty()) {
-	        System.out.println(color.RED_BOLD + "🏚️ Aucun médecin disponible." + color.RESET);
-	        return;
-	    }
 
-	    // Parcourir et afficher les médecins
-	    for (int i = 0; i < medecins.size(); i++) {
-	        Medecin medecin = medecins.get(i);
-	        String emojiGenre = medecin.getSexe() == "Homme" ? "👨🏻‍⚕️" : "👩🏽‍⚕️"; // Emoji basé sur le genre
-	        String ecoStatus = medecin.isEcoPossible() 
-	            ? color.GREEN + "Eco Possible" + color.RESET 
-	            : "";
+		// Vérifier si la liste des médecins est vide
+		if (medecins.isEmpty()) {
+			System.out.println(color.RED_BOLD + "🏚️ Aucun médecin disponible." + color.RESET);
+			return;
+		}
 
-	        System.out.println("    " + color.YELLOW_BOLD + (i + 1) + ". " 
-	                + emojiGenre + " " 
-	                + color.YELLOW + medecin.getNom() + color.RESET
-	                + " -- " 
-	                +  medecin.getServiceAssocie().getNom() 
-	                + " -- " + ecoStatus);
-	    }
+		// Parcourir et afficher les médecins
+		for (int i = 0; i < medecins.size(); i++) {
+			Medecin medecin = medecins.get(i);
+			String emojiGenre = medecin.getSexe() == "Homme" ? "👨🏻‍⚕️" : "👩🏽‍⚕️"; // Emoji basé sur le genre
+			String ecoStatus = medecin.isEcoPossible() 
+					? color.GREEN + "Eco Possible" + color.RESET 
+							: "";
 
-	    // Options supplémentaires
-	    System.out.println("    " + color.BRIGHT_BLUE_BOLD + (medecins.size() + 1) + ". 📊 Afficher les statistiques" + color.RESET);
-	    System.out.println("    " + color.GREEN_BOLD + (medecins.size() + 2) + ". 📊 Afficher les détails des créatures" + color.RESET);
-	    System.out.println("    " + color.RED_BOLD + (medecins.size() + 3) + ". 🏚️ Abandonner la partie" + color.RESET);
+			System.out.println("    " + color.YELLOW_BOLD + (i + 1) + ". " 
+					+ emojiGenre + " " 
+					+ color.YELLOW + medecin.getNom() + color.RESET
+					+ " -- " 
+					+  medecin.getServiceAssocie().getNom() 
+					+ " -- " + ecoStatus);
+		}
+
+		// Options supplémentaires
+		System.out.println("    " + color.BRIGHT_BLUE_BOLD + (medecins.size() + 1) + ". 📊 Afficher les statistiques" + color.RESET);
+		System.out.println("    " + color.GREEN_BOLD + (medecins.size() + 2) + ". 📊 Afficher les détails des créatures" + color.RESET);
+		System.out.println("    " + color.RED_BOLD + (medecins.size() + 3) + ". 🏚️ Abandonner la partie" + color.RESET);
 	}
 
 	private Medecin choisirMedecin() {
@@ -155,31 +171,27 @@ public class Menu implements Runnable{
 	}
 
 
-	private void afficherOptions(boolean ecoPossible, ServiceMedical service) {
+	private void afficherOptions(boolean ecoPossible, ServiceMedical service, boolean eco ) {
 		int argent = service.getCapital(); 
 		System.out.println("\nSélectionnez une action :");
 		System.out.println("Argent actuel : " + argent);
 
 		if (argent >= 500) {
-		    System.out.println("1. Soigner les créatures dans un service médical -- Coût 500 -- DISPONIBLE");
+			System.out.println("1. Soigner les créatures dans un service médical -- Coût 500 -- DISPONIBLE");
 		} else {
-		    System.out.println("1. Soigner les créatures dans un service médical -- Coût 500 -- IMPOSSIBLE");
+			System.out.println("1. Soigner les créatures dans un service médical -- Coût 500 -- IMPOSSIBLE");
 		}
 
-		if (argent >= 100) {
-		    System.out.println("2. Réviser le budget d'un service médical -- Gain 100 -- DISPONIBLE");
-		} else {
-		    System.out.println("2. Réviser le budget d'un service médical -- Gain 100 -- IMPOSSIBLE");
-		}
+		System.out.println("2. Réviser le budget d'un service médical -- Gain 100 -- DISPONIBLE");
 
 		if (argent >= 200) {
-		    System.out.println("3. Transférer une créature entre services médicaux -- Coût 200 -- DISPONIBLE");
+			System.out.println("3. Transférer une créature entre services médicaux -- Coût 200 -- DISPONIBLE");
 		} else {
-		    System.out.println("3. Transférer une créature entre services médicaux -- Coût 200 -- IMPOSSIBLE");
+			System.out.println("3. Transférer une créature entre services médicaux -- Coût 200 -- IMPOSSIBLE");
 		}
-		
+
 		System.out.println("4. Fin des actions pour ce médecin");
-		if (ecoPossible) {
+		if (ecoPossible && eco) {
 			System.out.println("5. Economisez -- Gain 1000 -- (Attention cette action prend tout le tour) ");
 		}
 	}
@@ -199,13 +211,7 @@ public class Menu implements Runnable{
 		}
 		return choix; 
 	}
-	/*
-	private void soignerCreatures(Medecin medecin) {
-		ServiceMedical service = choisirService();
-		if (service != null) {
-			medecin.soigner(service);
-		}
-	}*/
+
 	private void soignerCreatures(Medecin medecin) {
 		ServiceMedical service = medecin.getServiceAssocie();
 		if (service.getCreatures().isEmpty()) {
@@ -216,7 +222,7 @@ public class Menu implements Runnable{
 		System.out.println("Sélectionnez une créature à soigner dans le service " + service.getNom() + " :");
 		List<Creature> creatures = service.getCreatures();
 		for (int i = 0; i < creatures.size(); i++) {
-			System.out.println((i + 1) + ". " + creatures.get(i).nom + " (Moral: " + creatures.get(i).moral + ")");
+			System.out.println((i + 1) + ". " + creatures.get(i).getNom() + " (Moral: " + creatures.get(i).getMoral() + ")");
 		}
 
 		int choix = lireChoix();
@@ -237,70 +243,51 @@ public class Menu implements Runnable{
 			System.out.println("Budget révisé pour le service : " + service.getNom());
 		}
 	}
-/*
+
 	private void transfererCreature(Medecin medecin) {
 		ServiceMedical serviceDepart = medecin.getServiceAssocie();
+
 		if (serviceDepart != null && !serviceDepart.getCreatures().isEmpty()) {
 			Creature creature = choisirCreature(serviceDepart);
-			ServiceMedical serviceArrivee = choisirService();
-			Class<?> typePremiereCreature = serviceArrivee.getCreatures().get(0).getClass();
-			if (serviceArrivee != null && serviceArrivee != serviceDepart && creature.getClass().equals(typePremiereCreature)) {
-				medecin.transfererCreature(creature, serviceDepart, serviceArrivee);
-				System.out.println("Créature " + creature.nom + " transférée de " + 
-						serviceDepart.getNom() + " à " + serviceArrivee.getNom());
+			Class<?> typeCreature = creature.getClass();
 
+			// Créer une liste de services compatibles pour le transfert
+			List<ServiceMedical> servicesCompatibles = new ArrayList<>();
+			for (ServiceMedical service : hopital.getServices()) {
+				// Vérifier que le service d'arrivée a des créatures et que le type de la créature correspond
+				if (!service.getCreatures().isEmpty() && service != serviceDepart) {
+					Class<?> typePremiereCreature = service.getCreatures().get(0).getClass();
+					if (typePremiereCreature.equals(typeCreature)) {
+						servicesCompatibles.add(service);
+					}
+				}
+			}
+
+			// Vérifier s'il existe des services compatibles
+			if (!servicesCompatibles.isEmpty()) {
+				// Afficher les services compatibles pour le transfert
+				System.out.println("Services compatibles pour le transfert :");
+				for (int i = 0; i < servicesCompatibles.size(); i++) {
+					ServiceMedical service = servicesCompatibles.get(i);
+					System.out.println((i + 1) + ". " + service.getNom());
+				}
+
+				// Demander à l'utilisateur de choisir un service pour le transfert
+				int choix = lireChoix();
+				if (choix > 0 && choix <= servicesCompatibles.size()) {
+					ServiceMedical serviceArrivee = servicesCompatibles.get(choix - 1);
+					// Effectuer le transfert
+					medecin.transfererCreature(creature, serviceDepart, serviceArrivee);
+					System.out.println("Créature " + creature.getNom() + " transférée de " + serviceDepart.getNom() + " à " + serviceArrivee.getNom());
+				} else {
+					System.out.println("Choix invalide. Le transfert a été annulé.");
+				}
 			} else {
-				System.out.println("Service d'arrivée invalide. Veuillez réessayer");
-				transfererCreature(medecin);
+				System.out.println("Aucun service compatible trouvé pour ce transfert. Le transfert est annulé.");
 			}
 		} else {
 			System.out.println("Service de départ invalide ou aucune créature disponible.");
 		}
-	}*/
-	private void transfererCreature(Medecin medecin) {
-	    ServiceMedical serviceDepart = medecin.getServiceAssocie();
-
-	    if (serviceDepart != null && !serviceDepart.getCreatures().isEmpty()) {
-	        Creature creature = choisirCreature(serviceDepart);
-	        Class<?> typeCreature = creature.getClass();
-
-	        // Créer une liste de services compatibles pour le transfert
-	        List<ServiceMedical> servicesCompatibles = new ArrayList<>();
-	        for (ServiceMedical service : hopital.getServices()) {
-	            // Vérifier que le service d'arrivée a des créatures et que le type de la créature correspond
-	            if (!service.getCreatures().isEmpty() && service != serviceDepart) {
-	                Class<?> typePremiereCreature = service.getCreatures().get(0).getClass();
-	                if (typePremiereCreature.equals(typeCreature)) {
-	                    servicesCompatibles.add(service);
-	                }
-	            }
-	        }
-
-	        // Vérifier s'il existe des services compatibles
-	        if (!servicesCompatibles.isEmpty()) {
-	            // Afficher les services compatibles pour le transfert
-	            System.out.println("Services compatibles pour le transfert :");
-	            for (int i = 0; i < servicesCompatibles.size(); i++) {
-	                ServiceMedical service = servicesCompatibles.get(i);
-	                System.out.println((i + 1) + ". " + service.getNom());
-	            }
-
-	            // Demander à l'utilisateur de choisir un service pour le transfert
-	            int choix = lireChoix();
-	            if (choix > 0 && choix <= servicesCompatibles.size()) {
-	                ServiceMedical serviceArrivee = servicesCompatibles.get(choix - 1);
-	                // Effectuer le transfert
-	                medecin.transfererCreature(creature, serviceDepart, serviceArrivee);
-	                System.out.println("Créature " + creature.nom + " transférée de " + serviceDepart.getNom() + " à " + serviceArrivee.getNom());
-	            } else {
-	                System.out.println("Choix invalide. Le transfert a été annulé.");
-	            }
-	        } else {
-	            System.out.println("Aucun service compatible trouvé pour ce transfert. Le transfert est annulé.");
-	        }
-	    } else {
-	        System.out.println("Service de départ invalide ou aucune créature disponible.");
-	    }
 	}
 
 
@@ -333,7 +320,7 @@ public class Menu implements Runnable{
 		}
 
 		for (int i = 0; i < creatures.size(); i++) {
-			System.out.println((i + 1) + ". " + creatures.get(i).nom);
+			System.out.println((i + 1) + ". " + creatures.get(i).getNom());
 		}
 
 		int choix = lireChoix();

@@ -1,7 +1,9 @@
-package Model;
+package ServicesMedicaux;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import Creatures.Creature;
 
 public class ServiceStandard extends ServiceMedical{
 
@@ -23,7 +25,7 @@ public class ServiceStandard extends ServiceMedical{
         System.out.println("  Capacité : " + getCapaciteMax());
         System.out.println("  Budget : " + getBudget() + " (" +getCapital()+")");
         for (Creature creature : getCreatures()) {
-            System.out.println("     " + emojiCreature + " " + creature.nom + ", Moral: " + creature.moral + " " + creature.getMaladies() );
+            System.out.println("     " + emojiCreature + " " + creature.getNom() + ", Moral: " + creature.getMoral() + " " + creature.getMaladies() );
         }
 	}
 	

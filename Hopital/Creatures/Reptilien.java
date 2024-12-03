@@ -1,4 +1,6 @@
-package Model;
+package Creatures;
+
+import Enum.Categorie;
 
 public class Reptilien extends Creature{
 	public Reptilien(String nom, String sexe, double poids, double taille, String age) {
