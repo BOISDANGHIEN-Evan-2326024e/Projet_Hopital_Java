@@ -9,14 +9,16 @@ public abstract class ServiceMedical {
     private double superficie;
     private int capaciteMax;
     private List<Creature> creatures;
-    private int budget;
+    protected int capital;
+    protected String budget;
+    protected static TextColor color = new TextColor();
 
-    public ServiceMedical(String nom, double superficie, int capaciteMax, int budget) {
+    public ServiceMedical(String nom, double superficie, int capaciteMax, int capital) {
         this.nom = nom;
         this.superficie = superficie;
         this.capaciteMax = capaciteMax;
         this.creatures = new ArrayList<>();
-        this.budget = budget;
+        this.capital = capital;
     }
 
     public abstract void afficherDetails();
@@ -31,21 +33,18 @@ public abstract class ServiceMedical {
         creatures.remove(creature);
     }
 
-    /*
-    public void soignerCreatures() {
-        for (Creature creature : creatures) {
-            creature.soigner();
-        }
-    }*/
     
     public Maladie obtenirMaladieDepuisService() {
+        Random random = new Random();
         for (Creature creature : creatures) {
-        		Random random = new Random();
-                return creature.getMaladies().get(random.nextInt(creature.getMaladies().size())); // Maladie aléatoire
-            
+            List<Maladie> maladies = creature.getMaladies();
+            if (maladies != null && !maladies.isEmpty()) {
+                return maladies.get(random.nextInt(maladies.size())); // Maladie aléatoire
+            }
         }
-        return null; // Ce cas ne se produit pas si il y a aucune creature
+        return null; // Retourne null si aucune maladie n'est trouvée
     }
+
 
     public List<Creature> getCreatures() {
         return creatures;
@@ -60,11 +59,11 @@ public abstract class ServiceMedical {
     }
 
     public int getBudget() {
-        return budget;
+        return capital;
     }
 
     public void setBudget(int budget) {
-        this.budget = budget;
+        this.capital = budget;
     }
 
     public int getCapaciteMax() {
@@ -74,6 +73,7 @@ public abstract class ServiceMedical {
     public double getSuperficie() {
         return superficie;
     }
+    
 
     public void setSuperficie(double superficie) {
         this.superficie = superficie;
@@ -88,7 +88,52 @@ public abstract class ServiceMedical {
     }
 
     /* Méthode abstraite pour réviser le budget spécifique de chaque sous-classe */
-    public abstract void reviserBudget(int nouveauBudget);
+    public abstract void reviserBudget();
     
+    
+    protected void conversionNiveauBudget(int capitalService) {
+        int tranche = capitalService / 400; // Division pour déterminer la tranche
+
+        switch (tranche) {
+            case 0 -> budget = "inexistant";  // < 400
+            case 1 -> budget = "insuffisant"; // [400, 800[
+            case 2 -> budget = "faible";      // [800, 1200[
+            case 3 -> budget = "médiocre";    // [1200, 1600[
+            case 4 -> budget = "suffisant";   // [1600, 2000[
+            case 5 -> budget = "bon";         // [2000, 2400[
+            default -> budget = "excellent";  // >= 2400
+        }
+
+        System.out.println("Le niveau du budget pour le service " + nom + " est : " + budget);
+    }
+
+	public int getCapital() {
+		return capital;
+	}
+
+	public void setCapital(int capital) {
+		this.capital = capital;
+	}
+
+	public void setBudget(String budget) {
+		this.budget = budget;
+	}
+	
+	public String emoji() {
+		String type = this.getCreatures().get(0).getClass().getSimpleName();
+		String emoji;
+		emoji = switch (type) {
+	        case "Orque" ->  "🧌";
+	        case "HommeBete" ->  "👨";
+	        case "Vampire" ->  "🧛";
+	        case "Zombie" ->  "🧟";
+	        case "Nain" ->  "👶";
+	        case "Elfe" ->  "🧝‍♀️";
+	        case "Reptilien" ->  "🐊";
+	        case "Lycanthrope" -> "🐺";
+	        default -> throw new IllegalArgumentException("Type de créature inconnu : " + type);
+	    };
+	    return emoji;
+	}
 
 }

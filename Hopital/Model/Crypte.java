@@ -27,19 +27,26 @@ public class Crypte extends ServiceMedical {
     }
 
     @Override
-    public void reviserBudget(int nouveauBudget) {
-        setBudget(nouveauBudget);
-        //System.out.println("Budget pour la crypte révisé. Ventilation: " + ventilation + ", Température: " + temperature);
+    public void reviserBudget() {
+        int coefficientVentilation = ventilation * 5; // Chaque niveau de ventilation ajoute un bonus
+        int coefficientTemperature = (temperature >= 19 && temperature <= 30) ? 300 : -200; // Bonus si température idéale
+        int budgetService = capital + coefficientVentilation + coefficientTemperature;
+        conversionNiveauBudget(budgetService);
+        System.out.println("Révision du budget de la Crypte " + getBudget() + 
+            ". Ventilation : " + ventilation + ", Température : " + temperature + "°C.");
+        
     }
 
 	@Override
 	public void afficherDetails() {
-        System.out.println("Service : " + getNom());
-        System.out.println("Capacité : " + getCapaciteMax());
-        System.out.println("Ventilation : " + ventilation);
-        System.out.println("Temperature : " + temperature);
+		String emojiCreature = emoji();
+        System.out.println(color.GREEN_BOLD + "\n🪦 Service : " + getNom() + color.RESET);
+        System.out.println("  Capacité : " + getCapaciteMax());
+        System.out.println("  Ventilation : " + ventilation);
+        System.out.println("  Temperature : " + temperature);
+        System.out.println("  Budget : " + getBudget() + " (" +getCapital()+")");
         for (Creature creature : getCreatures()) {
-            System.out.println(creature.nom + ", Moral: " + creature.moral + creature.getMaladies() );
+            System.out.println("     " + emojiCreature + " " + creature.nom + ", Moral: " + creature.moral + " " + creature.getMaladies() );
         }
 	}
     

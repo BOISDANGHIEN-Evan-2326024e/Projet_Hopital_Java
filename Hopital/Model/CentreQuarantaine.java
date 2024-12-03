@@ -17,21 +17,23 @@ public class CentreQuarantaine extends ServiceMedical {
     }
 
     @Override
-    public void reviserBudget(int nouveauBudget) {
-    	setBudget(nouveauBudget);
-        /*if (isolation) {
-        	System.out.println("Budget pour le centre de quarantaine révisé. Isolation: activée");
-        }
-        System.out.println("Budget pour le centre de quarantaine révisé. Isolation: désactivée");*/
+    public void reviserBudget() {
+        int coefficientIsolation = isolation ? 400 : -200; // Bonus si isolé, malus sinon
+        int budgetService = capital + coefficientIsolation;
+        conversionNiveauBudget(budgetService);
+        System.out.println("Révision du budget du Centre de Quarantaine " + budget + 
+            ". Isolation : " + (isolation ? "Oui" : "Non"));
     }
     
 	@Override
 	public void afficherDetails() {
-        System.out.println("Service : " + getNom());
-        System.out.println("Capacité : " + getCapaciteMax());
-        System.out.println("Isolation : " + isolation);
+		String emojiCreature = emoji();
+        System.out.println(color.RED_BOLD + "\n☢️ Service : " + getNom() + color.RESET);
+        System.out.println("  Capacité : " + getCapaciteMax());
+        System.out.println("  Isolation : " + isolation);
+        System.out.println("  Budget : " + getBudget() + " (" +getCapital()+")");
         for (Creature creature : getCreatures()) {
-            System.out.println(creature.nom + ", Moral: " + creature.moral + creature.getMaladies() );
+            System.out.println("     " + emojiCreature + " " + creature.nom + ", Moral: " + creature.moral + " " + creature.getMaladies() );
         }
 	}
 }

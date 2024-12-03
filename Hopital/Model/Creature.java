@@ -35,7 +35,6 @@ public abstract class Creature {
 				}
 				else {
 					moral -= 5 * probabiliteColere;
-					System.out.println(nom + " attend patiemment avec un autre membre de son espèce.");
 				}
 			} else {
 				if ((moral - 10 * probabiliteColere) < 0) {
@@ -75,18 +74,15 @@ public abstract class Creature {
 	    Maladie nouvelleMaladie = service.obtenirMaladieDepuisService();
 	    if (nouvelleMaladie != null) {
 	        maladies.add(nouvelleMaladie);
-	        moral -= 10; // Réduit le moral en raison de la maladie
+	        moral -= 50; // Réduit le moral en raison de la maladie
 	    }
 	    else {
 	    	
 	    }
 	}
 	
-	public void soigner() {
-		if (!maladies.isEmpty()) {
-			maladies.remove(0);
-			moral += 15;
-		}
+	public void soigner(ServiceMedical service) {
+		service.retirerCreature(this);
 	}
 
 	public boolean estEnVie() {
@@ -94,8 +90,9 @@ public abstract class Creature {
 	}
 
 
-	public void trepasser() {
+	public void trepasser(ServiceMedical service) {
 		moral = 0;
+		service.retirerCreature(this);
 	}
 
 	public List<Maladie> getMaladies() {
@@ -120,11 +117,13 @@ public abstract class Creature {
 		String nomComplet = nomsMaladiesComplets[posMaladie];
 		String nomAbreges = nomsMaladiesAbreges[posMaladie];
 
-		int graviteMax = random.nextInt(5) + 10; // Gravité entre 10 et 15
+		int graviteMax = random.nextInt(10) + 10; // Gravité entre 10 et 20
 
 		// Retourne une nouvelle instance de Maladie
 		return new Maladie(nomComplet, nomAbreges.substring(0, 3), graviteMax); // Nom abrégé : 3 premières lettres
 
 	}
+	
+	
 
 }
