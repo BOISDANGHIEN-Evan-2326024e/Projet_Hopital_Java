@@ -51,40 +51,27 @@ public class Couple {
         }
     }
 
-    public List<Lycanthrope> reproduction(boolean saisonDesAmours) {
+    public List<Lycanthrope> reproduction(Meute meute) {
         List<Lycanthrope> nouveauxLycanthropes = new ArrayList<>();
-        if (!saisonDesAmours) {
-            System.out.println("Ce n'est pas la saison des amours. La reproduction n'est pas possible.");
-            return nouveauxLycanthropes;
-        }
-
         if (maleAlpha != null && femelleAlpha != null) {
-            System.out.println("Reproduction initiée entre le mâle α et la femelle α.");
+            System.out.println("\nReproduction initiée entre le mâle α et la femelle α.");
 
             // Génération aléatoire du nombre de jeunes lycanthropes (entre 1 et 7)
             Random random = new Random();
             int nbJeunes = random.nextInt(7) + 1; // Génère un nombre entre 1 et 7
-            System.out.println("Le couple α a donné naissance à une portée de " + nbJeunes + " jeunes lycanthropes.");
-
-            // Détermination du rang des nouveaux-nés (β s'il n'y a pas de β dans la meute, sinon γ)
-            int rangDesJeunes = verifierPresenceRangBeta(nouveauxLycanthropes) ? 3 : 2;
+            System.out.println("\nLe couple α a donné naissance à une portée de " + nbJeunes + " jeunes lycanthropes.");
 
             for (int i = 0; i < nbJeunes; i++) {
-                Lycanthrope jeune = new Lycanthrope(null, i, i, i, i, null);
+                Lycanthrope jeune = new Lycanthrope(null,null);
                 jeune.setSexe(random.nextBoolean() ? "male" : "femelle");
-                jeune.setCategorieAge("jeune");
-                jeune.setForce(random.nextInt(10) + 1); // Force aléatoire entre 1 et 10
-                jeune.setRang(rangDesJeunes); 
-                jeune.setFacteurDomination(0); // Par défaut, le facteur de domination est neutre
-                jeune.setFacteurImpetuosite(random.nextInt(10) + 1); // Impétuosité aléatoire entre 1 et 10
                 jeune.setNom("lycan "+i);
 
                 // Ajouter le nouveau lycanthrope à la liste des nouveaux-nés
-                nouveauxLycanthropes.add(jeune);
-                System.out.println("Un jeune lycanthrope de rang " + (rangDesJeunes == 2 ? "β" : "γ") + " est né.");
+                meute.ajouterLycanthrope(jeune);
+                System.out.println("\nUn jeune lycanthrope est né et ajouter a la meute : "+meute.getNomMeute()+"\n");
             }
         } else {
-            System.out.println("Impossible d'effectuer la reproduction : couple α incomplet.");
+            System.out.println("\nImpossible d'effectuer la reproduction : couple α incomplet.");
         }
 
         return nouveauxLycanthropes;
@@ -126,4 +113,3 @@ public class Couple {
         System.out.println("Le couple α a été reconstitué.");
     }
 }
-

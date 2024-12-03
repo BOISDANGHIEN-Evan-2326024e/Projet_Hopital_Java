@@ -2,6 +2,7 @@ package Model;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 public class Lycanthrope {
     private String sexe; // Sexe du lycanthrope : "male" ou "femelle"
@@ -9,38 +10,41 @@ public class Lycanthrope {
     private int force; // Force du lycanthrope
     private int facteurDomination; // Différence entre les dominations exercées et subies
     private int rang; // Rang de domination
-    private int niveau; // Niveau calculé du lycanthrope
+	private int niveau; // Niveau calculé du lycanthrope
     private int facteurImpetuosite; // Facteur d’impétuosité
     private Meute meute; // Meute à laquelle il appartient (null s’il est solitaire)
     private String Nom; // Nom du lycanthrope
-    private List<Lycanthrope> listeDominance; // Liste des lycanthropes qui dominent celui la
-    private List<Lycanthrope> listeDomines; // Liste des lycanthropes que ce lycan dominent
+    private String rangLettre;
+    private List<Lycanthrope> listeDominance; // Liste des lycanthropes qui domine celui la
+    private List<Lycanthrope> listeDomines; // Liste des lycanthropes que ce lycan domine
+    private Random random=new Random();
     
-    public Lycanthrope(String sexe, int force, int facteurDomination, int rang, int facteurImpetuosite,String Nom) {
+    public Lycanthrope(String sexe,String Nom) {
         this.sexe = sexe;
         this.categorieAge = "jeune";
-        this.force = force;
-        this.facteurDomination = facteurDomination;
-        this.rang = rang;
-        this.facteurImpetuosite = facteurImpetuosite;
+        this.force = random.nextInt(10);
+        this.facteurDomination = 0;
+        this.rang = 0;
+        this.facteurImpetuosite = random.nextInt(4)+1;
         this.niveau = calculNiveau(); 
         this.meute = null; 
         this.Nom=Nom;
+        this.rangLettre=null;
         this.listeDominance= new ArrayList<Lycanthrope>();
         this.listeDomines= new ArrayList<Lycanthrope>();
     }
     
     // Méthode pour afficher les caractéristiques
     public void afficherCaracteristiques() {
-    	System.out.println("Nom :" + Nom);
-        System.out.println("Sexe : " + sexe);
-        System.out.println("Catégorie d'âge : " + categorieAge);
-        System.out.println("Force : " + force);
-        System.out.println("Facteur de domination : " + facteurDomination);
-        System.out.println("Rang : " + rang);
-        System.out.println("Niveau : " + niveau);
-        System.out.println("Facteur d’impétuosité : " + facteurImpetuosite);
-        System.out.println("Meute : " + (meute == null ? "Solitaire" : meute.getNomMeute()));
+        System.out.println("Nom : " + Nom + 
+            ", Sexe : " + sexe + 
+            ", Âge : " + categorieAge + 
+            ", Force : " + force + 
+            ", Facteur de domination : " + facteurDomination + 
+            ", Rang : " + rang + 
+            ", Niveau : " + niveau + 
+            ", Facteur d’impétuosité : " + facteurImpetuosite + 
+            ", Meute : " + (meute == null ? "Solitaire" : meute.getNomMeute()));
     }
     
     // Méthode pour hurler
@@ -69,7 +73,6 @@ public class Lycanthrope {
     
     // Méthode pour se transformer en humain
     public void transformation() {
-        System.out.println(this.Nom+" se transforme en humain.");
         meute=null;
     }
     
@@ -138,7 +141,7 @@ public class Lycanthrope {
 
     public void setRang(int rang) {
         this.rang = rang;
-        this.niveau = calculNiveau(); 
+        this.niveau = calculNiveau();
     }
 
     public int getFacteurImpetuosite() {
@@ -189,6 +192,13 @@ public class Lycanthrope {
 		this.listeDomines = listeDomines;
 	}
 	
+	public String getRangLettre() {
+		return rangLettre;
+	}
+
+	public void setRangLettre(String rangLettre) {
+		this.rangLettre = rangLettre;
+	}
+	
 	
 }
-

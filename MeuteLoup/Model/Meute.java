@@ -19,13 +19,14 @@ public class Meute {
 
     public void afficherCaracteristiques() {
         System.out.println("===== Caractéristiques de la meute =====");
+        System.out.println("Nombre de lycanthropes dans la meute : " + lycanthropes.size());
+        System.out.println();
         if (coupleAlpha != null) {
             System.out.println("Couple α : ");
             coupleAlpha.afficherCaracteristiques();
         } else {
             System.out.println("Pas de couple α.");
         }
-        System.out.println("Nombre de lycanthropes dans la meute : " + lycanthropes.size());
     }
 
     // Méthode pour afficher les caractéristiques des lycanthropes de la meute
@@ -39,12 +40,10 @@ public class Meute {
 
     // Méthode pour créer une nouvelle hiérarchie de meute
     public void creerHierarchie() {
-    	//Fais une tri à bulles !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-        lycanthropes.sort((l1, l2) -> {
-            // Tri des lycanthropes par leur rang en ordre lexicographique
-            return l1.getRang() - l2.getRang();
-        });
-        System.out.println("Hiérarchie de la meute mise à jour.");
+    	triInsertionForce();
+    	for(int k=0;k<this.lycanthropes.size();k++) {
+    		this.lycanthropes.get(k).setRang(this.lycanthropes.size()-k);
+    	}
     }
 
     // Méthode pour constituer un nouveau couple α
@@ -52,7 +51,7 @@ public class Meute {
         // Vérification si les lycanthropes sont éligibles
         if (maleAlpha != null && femelleAlpha != null) {
             if (coupleAlpha != null) {
-                System.out.println("Ancien couple α déchu.");
+                System.out.println("\nAncien couple α déchu.");
                 if(!femelleAlpha.equals(coupleAlpha.getFemelleAlpha())) {
                 	coupleAlpha.getFemelleAlpha().setFacteurDomination(coupleAlpha.getMaleAlpha().getFacteurDomination());
                 }
@@ -60,7 +59,7 @@ public class Meute {
             coupleAlpha = new Couple(maleAlpha, femelleAlpha);
             coupleAlpha.setMaleAlpha(maleAlpha);
             coupleAlpha.setFemelleAlpha(femelleAlpha);
-            System.out.println("Nouveau couple α constitué.");
+            System.out.println("\nNouveau couple α constitué.");
         } else {
             System.out.println("Impossible de constituer le couple α : vérifiez les candidats.");
         }
@@ -76,22 +75,22 @@ public class Meute {
     // Méthode pour ajouter un lycanthrope à la meute
     public void ajouterLycanthrope(Lycanthrope lycanthrope) {
         lycanthropes.add(lycanthrope);
-        System.out.println(lycanthrope.getNom()+" ajouté à la meute.");
+        System.out.println(lycanthrope.getNom()+" ajouté à la meute : "+this.getNomMeute());
     }
 
     // Méthode pour enlever un lycanthrope de la meute
     public void enleverLycanthrope(Lycanthrope lycanthrope) {
         if (lycanthropes.remove(lycanthrope)) {
-            System.out.println(lycanthrope.getNom()+" retiré de la meute.");
+            System.out.println(lycanthrope.getNom()+" retiré de la meute : "+this.getNomMeute());
         } else {
-            System.out.println(lycanthrope.getNom()+" non trouvé dans la meute.");
+            System.out.println(lycanthrope.getNom()+" non trouvé dans la meute : "+this.getNomMeute());
         }
     }
 
     // Méthode pour lancer une reproduction des lycanthropes
     public void reproduction() {
         if (coupleAlpha != null) {
-            coupleAlpha.reproduction(true);
+            coupleAlpha.reproduction(this);
         } else {
             System.out.println("Pas de couple α pour initier la reproduction.");
         }
@@ -142,17 +141,66 @@ public class Meute {
             }
         }
     }
+    
+    public void triInsertionForce() {
+        for (int i = 1; i < this.lycanthropes.size(); i++) {
+            Lycanthrope current = this.lycanthropes.get(i); // Élément à insérer
+            int j = i - 1;
 
-    // Méthode pour faire décroître les rangs naturellement
-    public void decroitreRangsNaturellement() {
-        for (Lycanthrope lycan : lycanthropes) {
-        	if(random.nextInt(100) < 30) {
-        		if (lycan.getFacteurDomination() < 0 && lycan.getRang() > 1) {
-                    lycan.setRang(lycan.getRang() - 1); // Décroît le rang (descend dans la hiérarchie)
-                    System.out.println(lycan.getNom()+" a perdu un rang.");
-                }
-        	}
-            
+            // Déplacer les éléments ayant un facteur de domination plus petit pour faire de la place
+            while (j >= 0 && this.lycanthropes.get(j).getFacteurDomination() < current.getFacteurDomination()) {
+                this.lycanthropes.set(j + 1, this.lycanthropes.get(j));
+                j--;
+            }
+
+            // Placer l'élément à sa position correcte
+            this.lycanthropes.set(j + 1, current);
         }
+    }
+
+    
+    public void rangToRangLettre() {
+    	int taille=this.lycanthropes.size();
+    	int quart=taille/4;
+    	if(taille>0) {
+    		this.lycanthropes.get(0).setRangLettre("Alpha");
+    	}
+    	for (int i = 1; i < quart; i++) {
+    		this.lycanthropes.get(i).setRangLettre("Bêta");  // 1er quart
+        }
+
+        for (int i = quart; i < 2 * quart; i++) {
+        	this.lycanthropes.get(i).setRangLettre("Gamma"); // 2e quart
+        }
+
+        for (int i = 2 * quart; i < 3 * quart; i++) {
+        	this.lycanthropes.get(i).setRangLettre("Delta"); // 3e quart
+        }
+
+        for (int i = 3 * quart; i < taille - 1; i++) {
+        	this.lycanthropes.get(i).setRangLettre("Delta"); // Dernier quart, sauf le dernier
+        }
+
+        if (taille > 1) {
+        	this.lycanthropes.get(taille -1).setRangLettre("Omega"); // Dernier loup est Oméga
+        }
+    }
+    
+    public void afficherHierarchie() {
+        // Grouper les loups par rôle
+        System.out.println("\n Hiérarchie de la meute : "+this.getNomMeute());
+        List<Lycanthrope> lycan=this.lycanthropes;
+        afficherRole("Alpha", lycan);
+        afficherRole("Bêta", lycan);
+        afficherRole("Gamma", lycan);
+        afficherRole("Delta", lycan);
+        afficherRole("Omega", lycan);
+    }
+
+    private void afficherRole(String role, List<Lycanthrope> lycan) {
+        System.out.println("\n" + role + "s :");
+        lycan.stream()
+                .filter(loup -> loup.getRangLettre().equals(role))
+                .forEach(loup -> loup.afficherCaracteristiques());
     }
 }
