@@ -17,7 +17,7 @@ public abstract class Creature {
 	protected String age;
 	private double moral;
 	protected List<Maladie> maladies;
-    private AttenteStrategy attenteStrategy;  // Le champ de stratégie
+	private AttenteStrategy attenteStrategy;  // Le champ de stratégie
 
 	public Creature(String nom, String sexe, double poids, double taille, String age) {
 		this.setNom(nom);
@@ -32,25 +32,25 @@ public abstract class Creature {
 	public abstract Categorie getCategorie();
 
 	public void setAttenteStrategy(AttenteStrategy strategie) {
-        this.attenteStrategy = strategie;
-    }
+		this.attenteStrategy = strategie;
+	}
 
-    public void attendre(List<Creature> autresCreatures, int round) {
-        if (attenteStrategy != null) {
-            attenteStrategy.attendre(this, autresCreatures, round);  // Appel de la méthode attendre de la stratégie
-        }
-    }
+	public void attendre(List<Creature> autresCreatures, int round) {
+		if (attenteStrategy != null) {
+			attenteStrategy.attendre(this, autresCreatures, round);  // Appel de la méthode attendre de la stratégie
+		}
+	}
 
 
-    // Exemple de méthode pour affecter la stratégie en fonction de la catégorie
-    public void assignerStrategie() {
-        if (this.getCategorie() == Categorie.TRIAGE) {
-            setAttenteStrategy(new AttenteTriageStrategy());
-        } else if (this.getCategorie() == Categorie.VIP) {
-            setAttenteStrategy(new AttenteVIPStrategy());
-        }
-    }
-    /*
+	// Exemple de méthode pour affecter la stratégie en fonction de la catégorie
+	public void assignerStrategie() {
+		if (this.getCategorie() == Categorie.TRIAGE) {
+			setAttenteStrategy(new AttenteTriageStrategy());
+		} else if (this.getCategorie() == Categorie.VIP) {
+			setAttenteStrategy(new AttenteVIPStrategy());
+		}
+	}
+	/*
 	public void attendre(List<Creature> autresCreatures, int round) {
 		double probabiliteColere = 5 * round;
 
@@ -97,16 +97,16 @@ public abstract class Creature {
 	}
 
 	public void tomberMalade(ServiceMedical service) {
-	    Maladie nouvelleMaladie = service.obtenirMaladieDepuisService();
-	    if (nouvelleMaladie != null) {
-	        maladies.add(nouvelleMaladie);
-	        setMoral(getMoral() - 50); // Réduit le moral en raison de la maladie
-	    }
-	    else {
-	    	
-	    }
+		Maladie nouvelleMaladie = service.obtenirMaladieDepuisService();
+		if (nouvelleMaladie != null) {
+			maladies.add(nouvelleMaladie);
+			setMoral(getMoral() - 50); // Réduit le moral en raison de la maladie
+		}
+		else {
+
+		}
 	}
-	
+
 	public void soigner(ServiceMedical service) {
 		service.retirerCreature(this);
 	}
@@ -124,6 +124,8 @@ public abstract class Creature {
 	public List<Maladie> getMaladies() {
 		return maladies;
 	}
+
+
 
 	private Maladie genererMaladieAleatoire() {
 		String[] nomsMaladiesComplets = {
@@ -143,7 +145,7 @@ public abstract class Creature {
 		String nomComplet = nomsMaladiesComplets[posMaladie];
 		String nomAbreges = nomsMaladiesAbreges[posMaladie];
 
-		int graviteMax = random.nextInt(10) + 10; // Gravité entre 10 et 20
+		int graviteMax = random.nextInt(5) + 5; // Gravité entre 5 et 15
 
 		// Retourne une nouvelle instance de Maladie
 		return new Maladie(nomComplet, nomAbreges.substring(0, 3), graviteMax); // Nom abrégé : 3 premières lettres
@@ -165,7 +167,7 @@ public abstract class Creature {
 	public void setMoral(double moral) {
 		this.moral = moral;
 	}
-	
-	
+
+
 
 }

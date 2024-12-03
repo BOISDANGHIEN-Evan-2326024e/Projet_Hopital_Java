@@ -73,7 +73,7 @@ public class Maladie {
 
 	@Override
 	public String toString() {
-		return  nomComplet + "(aka " + nomAbrege + ") " + niveauActuel
+		return  nomAbrege + " " + niveauActuel
 				+ "/" + niveauMax;
 	}
 
