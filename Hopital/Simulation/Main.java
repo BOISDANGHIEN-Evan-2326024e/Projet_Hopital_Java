@@ -16,8 +16,15 @@ import Simulation.HopitalFantastique;
 import Simulation.Menu;
 
 public class Main {
+	/**
+	 * new TextColor
+	 */
 	private static TextColor color = new TextColor();
 	
+	/**
+	 * void main
+	 * @param args
+	 */
 	public static void main(String[] args) {
 
 		HopitalFantastique hopital = new HopitalFantastique("Hôpital Fantastique", 10);		
@@ -67,6 +74,11 @@ public class Main {
         new Thread(menu).start(); // Lance le menu en ligne de commande
 	}
 
+	/**
+	 * static void ajouterCreaturesAuService
+	 * @param service
+	 * @param nombre
+	 */
 	private static void ajouterCreaturesAuService(ServiceMedical service, int nombre) {
 		for (int i = 0; i < nombre; i++) {
 			Creature creature = HopitalFantastique.genererNouvelleCreature(service);
@@ -75,7 +87,10 @@ public class Main {
 		}
 	}
 
-
+	/**
+	 * static String genererNomMedecin
+	 * @return
+	 */
 	public static String genererNomMedecin() {
 		List<String> nomsMedecinsDisponibles = new ArrayList<>(List.of(
 				"Albano", "Serre", "Boisdanghien", "Nevot", 

@@ -8,11 +8,22 @@ import ServicesMedicaux.ServiceMedical;
 
 public class HommeBete extends Creature{
 
+	/**
+	 * HommeBete
+	 * @param nom
+	 * @param sexe
+	 * @param poids
+	 * @param taille
+	 * @param age
+	 */
 	public HommeBete(String nom, String sexe, double poids, double taille, String age) {
 		super(nom, sexe, poids, taille, age);
 		
 	}
 	
+	/**
+	 * void trepasser
+	 */
     @Override
     public void trepasser(ServiceMedical service) {
         setMoral(0);
@@ -21,6 +32,10 @@ public class HommeBete extends Creature{
         service.retirerCreature(this);
     }
 
+    /**
+     * void contaminer
+     * @param service
+     */
     private void contaminer(ServiceMedical service) {
         if (!maladies.isEmpty()) {
             System.out.println(getNom() + " contamine une autre créature dans le service " + service.getNom() + ".");
@@ -35,6 +50,9 @@ public class HommeBete extends Creature{
         }
     }
 
+    /**
+     * Categorie getCategorie
+     */
 	@Override
 	public Categorie getCategorie() {
 		return Categorie.TRIAGE; // Homme-Bête est une créature de triage

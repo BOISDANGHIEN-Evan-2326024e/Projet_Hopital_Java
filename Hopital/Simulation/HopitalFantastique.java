@@ -34,7 +34,11 @@ public class HopitalFantastique {
 	public int nbrMort;
 	private static TextColor color = new TextColor();
 
-
+	/**
+	 * HopitalFantastique
+	 * @param nom
+	 * @param maxServices
+	 */
 	public HopitalFantastique(String nom, int maxServices) {
 		this.nom = nom;
 		this.maxServices = maxServices;
@@ -46,19 +50,33 @@ public class HopitalFantastique {
 		this.round = 1;
 	}
 
+	/**
+	 * void pauseSimulation
+	 */
 	public synchronized void pauseSimulation() {
 		this.pauseSimulation = true;
 	}
 
+	/**
+	 * void resumeSimulation
+	 */
 	public synchronized void resumeSimulation() {
 		this.pauseSimulation = false;
 		notify();
 	}
 
+	/**
+	 * boolean estJeuTermine
+	 * @return
+	 */
 	public synchronized boolean estJeuTermine() {
 		return jeuTermine;
 	}
 
+	/**
+	 * void ajouterService
+	 * @param service
+	 */
 	public void ajouterService(ServiceMedical service) {
 		if (services.size() < maxServices) {
 			services.add(service);
@@ -66,11 +84,18 @@ public class HopitalFantastique {
 			System.out.println("Capacité maximale de services atteinte !");
 		}
 	}
-
+	
+	/**
+	 * void ajouterMedecin
+	 * @param medecin
+	 */
 	public void ajouterMedecin(Medecin medecin) {
 		medecins.add(medecin);
 	}
 
+	/**
+	 * void afficherStatistiques
+	 */
 	public void afficherStatistiques() {
 		int totalCreatures = 0;
 		for (ServiceMedical service : services) {
@@ -80,13 +105,19 @@ public class HopitalFantastique {
 		System.out.println(color.BRIGHT_BLUE + "Nombre de créatures mortes depuis le début : "+ color.RESET + color.RED + nbrMort + color.RESET);
 	}
 
+	/**
+	 * void afficherDetailsCreatures
+	 */
 	public void afficherDetailsCreatures() {
 		for (ServiceMedical service : services) {
 			//System.out.println("Service: " + service.getNom());
 			service.afficherDetails();
 		}
 	}
-
+	
+	/**
+	 * void demarrerSimulation
+	 */
 	public void demarrerSimulation() {
 		Thread simulationThread = new Thread(() -> {
 			while (true) {
@@ -299,7 +330,9 @@ public class HopitalFantastique {
 	}
 
 
-
+	/**
+	 * void gererMortsEtHeritage
+	 */
 	public void gererMortsEtHeritage() {
 
 		for (ServiceMedical service : services) {
@@ -324,6 +357,10 @@ public class HopitalFantastique {
 		}
 	}
 
+	/**
+	 * void lancerHeritage
+	 * @param service
+	 */
 	public void lancerHeritage(ServiceMedical service) {
 
 		if (random.nextInt(100) < 25) { 
@@ -333,6 +370,10 @@ public class HopitalFantastique {
 		}
 	}
 
+	/**
+	 * boolean verifierFinDuJeu
+	 * @return
+	 */
 	public boolean verifierFinDuJeu() {
 		if (jeuTermine || nbrMort >= 5) {
 			return true;
@@ -340,6 +381,11 @@ public class HopitalFantastique {
 		return false;
 	}
 
+	/**
+	 * static Creature genererNouvelleCreature
+	 * @param service
+	 * @return
+	 */
 	public static Creature genererNouvelleCreature(ServiceMedical service) {
 		ArrayList<String> noms;
 		ArrayList<String> types;
@@ -425,6 +471,10 @@ public class HopitalFantastique {
 	}
 
 
+	/**
+	 * void choisirJustificationMoraleCreature
+	 * @param bm
+	 */
 	public void choisirJustificationeMoraleCreature(String bm) {
 		if (bm.equals("malus")) { // Comparaison correcte pour les chaînes
 			String[] justifications = {
@@ -459,6 +509,10 @@ public class HopitalFantastique {
 
 
 
+	/**
+	 * void choisirJustificationCapital
+	 * @param bm
+	 */
 	public void choisirJustificationCapital(String bm) {
 		if (bm == "malus") {
 			String[] justifications = {
@@ -487,6 +541,10 @@ public class HopitalFantastique {
 		}
 	}
 
+	/**
+	 *  void saintMedecin
+	 * @param service
+	 */
 	public void saintMedecin(ServiceMedical service) {
 		List<Creature> creatures = service.getCreatures();
 
@@ -516,6 +574,10 @@ public class HopitalFantastique {
 	}
 
 
+	/** 
+	 * void sangAil
+	 * @param service
+	 */
 	private void sangAil(ServiceMedical service) {
 		boolean contientVampire = service.getCreatures().stream()
 				.anyMatch(creature -> creature instanceof Vampire);
@@ -530,34 +592,66 @@ public class HopitalFantastique {
 	}
 
 
+	/**
+	 * Strong getNom
+	 * @return
+	 */
 	public String getNom() {
 		return nom;
 	}
 
+	/**
+	 * int getMaxServices
+	 * @return
+	 */
 	public int getMaxServices() {
 		return maxServices;
 	}
 
+	/**
+	 * List<ServiceMedical> getServices
+	 * @return
+	 */
 	public List<ServiceMedical> getServices() {
 		return services;
 	}
 
+	/**
+	 * List<Medecin> getMedecins
+	 * @return
+	 */
 	public List<Medecin> getMedecins() {
 		return medecins;
 	}
 
+	/**
+	 * boolean isPauseSimulation
+	 * @return
+	 */
 	public boolean isPauseSimulation() {
 		return pauseSimulation;
 	}
 
+	/**
+	 * void setPausesSimulation
+	 * @param pauseSimulation
+	 */
 	public void setPauseSimulation(boolean pauseSimulation) {
 		this.pauseSimulation = pauseSimulation;
 	}
 
+	/**
+	 * boolean isJeuTermine
+	 * @return
+	 */
 	public boolean isJeuTermine() {
 		return jeuTermine;
 	}
 
+	/**
+	 * void setJeuTermine
+	 * @param jeuTermine
+	 */
 	public void setJeuTermine(boolean jeuTermine) {
 		this.jeuTermine = jeuTermine;
 	}

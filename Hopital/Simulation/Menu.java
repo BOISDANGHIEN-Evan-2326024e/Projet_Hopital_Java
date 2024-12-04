@@ -16,11 +16,18 @@ public class Menu implements Runnable{
 	private Scanner scanner;
 	private TextColor color;
 
+	/**
+	 * Menu
+	 * @param hopital
+	 */
 	public Menu(HopitalFantastique hopital) {
 		this.hopital = hopital;
 		this.scanner = new Scanner(System.in);
 	}
-
+	
+	/**
+	 * void run
+	 */
 	@Override
 	public void run() {
 		while (true) {
@@ -104,7 +111,10 @@ public class Menu implements Runnable{
 			hopital.resumeSimulation();
 		}
 	}
-
+	
+	/**
+	 * void afficherMedecin
+	 */
 	private void afficherMedecin() {
 		List<Medecin> medecins = hopital.getMedecins();
 
@@ -136,7 +146,11 @@ public class Menu implements Runnable{
 		System.out.println("    " + color.GREEN_BOLD + (medecins.size() + 2) + ". 📊 Afficher les détails des créatures" + color.RESET);
 		System.out.println("    " + color.RED_BOLD + (medecins.size() + 3) + ". 🏚️ Abandonner la partie" + color.RESET);
 	}
-
+	
+	/**
+	 * Medecin choisirMedecin
+	 * @return
+	 */
 	private Medecin choisirMedecin() {
 		List<Medecin> medecins = hopital.getMedecins();
 		if (medecins.isEmpty()) {
@@ -171,6 +185,13 @@ public class Menu implements Runnable{
 	}
 
 
+	/**
+	 * void afficherOption
+	 * 
+	 * @param ecoPossible
+	 * @param service
+	 * @param eco
+	 */
 	private void afficherOptions(boolean ecoPossible, ServiceMedical service, boolean eco ) {
 		int argent = service.getCapital(); 
 		System.out.println("\nSélectionnez une action :");
@@ -196,6 +217,10 @@ public class Menu implements Runnable{
 		}
 	}
 
+	/**
+	 * int lireChoix
+	 * @return
+	 */
 	private int lireChoix() {
 		int choix = -1;
 		while (true) { 
@@ -212,6 +237,10 @@ public class Menu implements Runnable{
 		return choix; 
 	}
 
+	/**
+	 * void soignerCreatures
+	 * @param medecin
+	 */
 	private void soignerCreatures(Medecin medecin) {
 		ServiceMedical service = medecin.getServiceAssocie();
 		if (service.getCreatures().isEmpty()) {
@@ -236,6 +265,10 @@ public class Menu implements Runnable{
 
 
 
+	/**
+	 * void reviserBudget
+	 * @param medecin
+	 */
 	private void reviserBudget(Medecin medecin) {
 		ServiceMedical service = medecin.getServiceAssocie();
 		if (service != null) {
@@ -244,6 +277,10 @@ public class Menu implements Runnable{
 		}
 	}
 
+	/**
+	 * void transfererCreature
+	 * @param medecin
+	 */
 	private void transfererCreature(Medecin medecin) {
 		ServiceMedical serviceDepart = medecin.getServiceAssocie();
 
@@ -291,6 +328,10 @@ public class Menu implements Runnable{
 	}
 
 
+	/**
+	 * ServiceMedical choisirService
+	 * @return
+	 */
 	private ServiceMedical choisirService() {
 		List<ServiceMedical> services = hopital.getServices();
 		if (services.isEmpty()) {
@@ -312,6 +353,12 @@ public class Menu implements Runnable{
 		}
 	}
 
+	/**
+	 * Creature choisirCreature
+	 * 
+	 * @param service
+	 * @return
+	 */
 	private Creature choisirCreature(ServiceMedical service) {
 		List<Creature> creatures = service.getCreatures();
 		if (creatures.isEmpty()) {

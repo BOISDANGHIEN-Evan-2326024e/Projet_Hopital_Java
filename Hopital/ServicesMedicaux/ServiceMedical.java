@@ -18,6 +18,13 @@ public abstract class ServiceMedical {
     protected String budget;
     protected static TextColor color = new TextColor();
 
+    /**
+     * ServiceMedical
+     * @param nom
+     * @param superficie
+     * @param capaciteMax
+     * @param capital
+     */
     public ServiceMedical(String nom, double superficie, int capaciteMax, int capital) {
         this.nom = nom;
         this.superficie = superficie;
@@ -26,6 +33,9 @@ public abstract class ServiceMedical {
         this.capital = capital;
     }
 
+    /**
+     * abstract void afficherDetails
+     */
     public abstract void afficherDetails();
 
     public void ajouterCreature(Creature creature) {
@@ -34,11 +44,18 @@ public abstract class ServiceMedical {
         }
     }
 
+    /**
+     * void retirerCreature
+     * @param creature
+     */
     public void retirerCreature(Creature creature) {
         creatures.remove(creature);
     }
 
-    
+    /**
+     * Maladie obtenirMaladieDepuisService
+     * @return
+     */
     public Maladie obtenirMaladieDepuisService() {
         Random random = new Random();
 
@@ -65,51 +82,96 @@ public abstract class ServiceMedical {
 
 
 
+    /**
+     * List<Creature> getCreatures
+     * @return
+     */
     public List<Creature> getCreatures() {
         return creatures;
     }
     
+    /**
+     * int getCapacite
+     * @return
+     */
     public int getCapacite() {
     	return creatures.size();
     }
 
+    /**
+     * void setCreatures
+     * @param creatures
+     */
     public void setCreatures(List<Creature> creatures) {
         this.creatures = creatures;
     }
 
+    /**
+     * int getBudget
+     * @return
+     */
     public int getBudget() {
         return capital;
     }
 
+    /**
+     * void setBudget
+     * @param budget
+     */
     public void setBudget(int budget) {
         this.capital = budget;
     }
 
+    /**
+     * int getCapaciteMax
+     * @return
+     */
     public int getCapaciteMax() {
         return capaciteMax;
     }
 
+    /**
+     * double getSuperficie
+     * @return
+     */
     public double getSuperficie() {
         return superficie;
     }
     
-
+    /**
+     * void setSuperficie
+     * @param superficie
+     */
     public void setSuperficie(double superficie) {
         this.superficie = superficie;
     }
 
+    /**
+     * String getNom
+     * @return
+     */
     public String getNom() {
         return nom;
     }
 
+    /**
+     * void setNom
+     * @param nom
+     */
     public void setNom(String nom) {
         this.nom = nom;
     }
 
-    /* Méthode abstraite pour réviser le budget spécifique de chaque sous-classe */
+    /**
+     *  Méthode abstraite pour réviser le budget spécifique de chaque sous-classe 
+     */
     public abstract void reviserBudget();
     
     
+    /**
+     * void conversionNiveauBudget
+     * @param capitalService
+     */
     protected void conversionNiveauBudget(int capitalService) {
         int tranche = capitalService / 400; // Division pour déterminer la tranche
 
@@ -126,18 +188,34 @@ public abstract class ServiceMedical {
         System.out.println("Le niveau du budget pour le service " + nom + " est : " + budget);
     }
 
+    /**
+     * int getCapital
+     * @return
+     */
 	public int getCapital() {
 		return capital;
 	}
 
+	/**
+	 * void setCapital
+	 * @param capital
+	 */
 	public void setCapital(int capital) {
 		this.capital = capital;
 	}
 
+	/**
+	 * void setBudget
+	 * @param budget
+	 */
 	public void setBudget(String budget) {
 		this.budget = budget;
 	}
 	
+	/**
+	 * String emoji
+	 * @return
+	 */
 	public String emoji() {
 		if (this.getCreatures().size() == 0) {
 			System.out.println("00000 pas de creatures jdegfuzejrghzeiokg");

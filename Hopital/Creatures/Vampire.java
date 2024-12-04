@@ -6,10 +6,22 @@ import Maladie.Maladie;
 import ServicesMedicaux.ServiceMedical;
 
 public class Vampire extends Creature{
+	
+	/**
+	 * Vampire
+	 * @param nom
+	 * @param sexe
+	 * @param poids
+	 * @param taille
+	 * @param age
+	 */
 	public Vampire(String nom, String sexe, double poids, double taille, String age) {
 		super(nom, sexe, poids, taille, age);
 	}
 
+	/**
+	 * void trepasser
+	 */
 	@Override
 	public void trepasser(ServiceMedical service) {
 		setMoral(0);
@@ -19,6 +31,10 @@ public class Vampire extends Creature{
 		regenerer();
 	}
 
+	/**
+	 * void demoraliser
+	 * @param service
+	 */
 	private void demoraliser(ServiceMedical service) {
 		System.out.println(getNom() + " démoralise les autres créatures dans le service " + service.getNom() + ".");
 		for (Creature creature : service.getCreatures()) {
@@ -28,6 +44,10 @@ public class Vampire extends Creature{
 		}
 	}
 
+	/**
+	 * void contaminer
+	 * @param service
+	 */
 	private void contaminer(ServiceMedical service) {
 		if (!maladies.isEmpty()) {
 			System.out.println(getNom() + " contamine une autre créature dans le service " + service.getNom() + ".");
@@ -42,11 +62,17 @@ public class Vampire extends Creature{
 		}
 	}
 
+	/**
+	 * void regenerer
+	 */
 	private void regenerer() {
 		System.out.println(getNom() + " se régénère immédiatement après sa mort !");
 		setMoral(1000);
 	}
 
+	/**
+	 * void Categorie getCategorie
+	 */
 	@Override
 	public Categorie getCategorie() {
 		return Categorie.VIP; 

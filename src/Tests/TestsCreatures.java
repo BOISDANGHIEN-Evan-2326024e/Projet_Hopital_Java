@@ -12,12 +12,15 @@ import Creatures.HommeBete;
 import Creatures.Vampire;
 
 
-class CreatureTests {
+class TestsCreatures {
 
+/**
+ * Tests Homme Bete
+ */
     @Test
     void testAttendreReduitMoralHommeBete() {
         List<Creature> creatures = new ArrayList<>();
-        Creature hommeBete = new HommeBete ("Hercule", "Mâle", 80.0, 1.85, "30");
+        Creature hommeBete = new HommeBete ("Hercule", "Mâle", 120.0, 1.95, "30");
         creatures.add(hommeBete);
         hommeBete.attendre(creatures, 1);
         assertTrue(hommeBete.estEnVie());
@@ -26,15 +29,18 @@ class CreatureTests {
 
     @Test
     void testHurlerHommeBete() {
-    	Creature hommeBete = new HommeBete ("Hercule", "Mâle", 80.0, 1.85, "30");
+    Creature hommeBete = new HommeBete ("Hercule", "Mâle", 80.0, 1.85, "100");
         hommeBete.hurler();
         assertDoesNotThrow(() -> hommeBete.hurler());
     }
     
+    /**
+     * Tests Vampire    
+     */
     @Test
     void testAttendreReduitMoralVampire() {
         List<Creature> creatures = new ArrayList<>();
-        Creature v = new Vampire ("Hercule", "Mâle", 80.0, 1.85, "30");
+        Creature vampire = new Vampire ("Hercule", "Mâle", 80.0, 1.85, "100");
         creatures.add(vampire);
         vampire.attendre(creatures, 1);
         assertTrue(vampire.estEnVie());
@@ -42,9 +48,8 @@ class CreatureTests {
     }
 
     @Test
-    void testHurler() {
-    	Creature vampire = new Vampire ("Hercule", "Mâle", 80.0, 1.85, "30");
-        vampire.hurler();
-        assertDoesNotThrow(() -> vampire.hurler());
+    void testCatégorie() {
+    Creature vampire = new Vampire ("Dracula", "Mâle", 80.0, 1.85, "100");
+        assertEquals("VIP", vampire.getCategorie().toString());
     }
 }

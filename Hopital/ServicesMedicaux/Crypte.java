@@ -6,28 +6,55 @@ public class Crypte extends ServiceMedical {
     private int ventilation;
     private double temperature;
 
+    /**
+     * Crypte
+     * @param nom
+     * @param superficie
+     * @param capaciteMax
+     * @param budget
+     * @param ventilation
+     * @param temperature
+     */
     public Crypte(String nom, double superficie, int capaciteMax, int budget, int ventilation, double temperature) {
         super(nom, superficie, capaciteMax, budget);
         this.ventilation = ventilation;
         this.temperature = temperature;
     }
 
+    /**
+     * int getVentilation
+     * @return
+     */
     public int getVentilation() {
         return ventilation;
     }
-
+    /**
+     * void setVentilation
+     * @param ventilation
+     */
     public void setVentilation(int ventilation) {
         this.ventilation = ventilation;
     }
 
+    /**
+     * double getTemperature
+     * @return
+     */
     public double getTemperature() {
         return temperature;
     }
 
+    /**
+     * setTemperature
+     * @param temperature
+     */
     public void setTemperature(double temperature) {
         this.temperature = temperature;
     }
 
+    /**
+     * void reviserBudget
+     */
     @Override
     public void reviserBudget() {
         int coefficientVentilation = ventilation * 5; // Chaque niveau de ventilation ajoute un bonus
@@ -39,6 +66,9 @@ public class Crypte extends ServiceMedical {
         
     }
 
+    /**
+     * void afficherDetails
+     */
 	@Override
 	public void afficherDetails() {
 		String emojiCreature = emoji();

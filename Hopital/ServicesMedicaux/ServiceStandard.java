@@ -7,17 +7,28 @@ import Creatures.Creature;
 
 public class ServiceStandard extends ServiceMedical{
 
-
-	
+	/**
+	 * ServiceStandard
+	 * @param nom
+	 * @param superficie
+	 * @param capaciteMax
+	 * @param budget
+	 */
     public ServiceStandard(String nom, double superficie, int capaciteMax, int budget) {
 		super(nom, superficie, capaciteMax, budget);
 	}
 
+    /**
+     * void reviserBudget
+     */
 	@Override
 	public void reviserBudget() {
 	    conversionNiveauBudget(getCapital());
 	}
 
+	/**
+	 * void afficherDetails
+	 */
 	@Override
 	public void afficherDetails() {
 		String emojiCreature = emoji();

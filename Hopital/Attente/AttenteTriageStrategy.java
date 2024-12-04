@@ -6,6 +6,9 @@ import Creatures.Creature;
 
 public class AttenteTriageStrategy implements AttenteStrategy{
 
+	/**
+	 * Gere le moral des créatures du Triage
+	 */
     @Override
     public void attendre(Creature creature, List<Creature> autresCreatures, int round) {
         double probabiliteColere = 5 * round;
