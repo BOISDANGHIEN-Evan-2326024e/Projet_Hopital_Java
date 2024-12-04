@@ -1,9 +1,13 @@
-package ClassColonie;
+package TestColonie;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import org.junit.jupiter.api.Test;
+
+import ClassColonie.Hurlement;
+import ClassColonie.Lycanthrope;
+import ClassColonie.Meute;
 
 class LycanthropeTest {
 
@@ -48,7 +52,6 @@ class LycanthropeTest {
         Lycanthrope lycan = new Lycanthrope("male", "Fenrir");
         Hurlement hurlement = new Hurlement("Alerte", lycan);
         lycan.hurler(hurlement);
-        // Test manuel ici, mais vous pouvez vérifier que le hurlement est bien appelé sans exception.
     }
 
     @Test
@@ -57,6 +60,7 @@ class LycanthropeTest {
         Hurlement hurlement = new Hurlement("Rassemblement", lycan);
 
         lycan.entendreHurlement(hurlement, false);
-        // Test manuel ici aussi pour vérifier l'affichage attendu.
     }
+    
+    
 }

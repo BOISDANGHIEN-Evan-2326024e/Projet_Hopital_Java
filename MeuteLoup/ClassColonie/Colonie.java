@@ -336,7 +336,7 @@ public class Colonie {
      * Déterminer si une nouvelle meute doit être créée
      * @return
      */
-    private boolean doitCreerNouvelleMeute() {
+    public boolean doitCreerNouvelleMeute() {
         for (Meute meute : listeMeutes) {
             if (meute.getLycanthropes().size() > 12) {
                 return true;
@@ -352,7 +352,7 @@ public class Colonie {
      * Créer une nouvelle meute
      * @param nomMeute
      */
-    private void creerNouvelleMeute(String nomMeute) {
+    public void creerNouvelleMeute(String nomMeute) {
         Meute nouvelleMeute = new Meute(nomMeute);
         System.out.println("\nUne nouvelle meute a été créée !");
         listeMeutes.add(nouvelleMeute);
@@ -362,7 +362,7 @@ public class Colonie {
      * Déterminer si c'est la saison des amours
      * @return
      */
-    private boolean estSaisonAmours() {
+    public boolean estSaisonAmours() {
         // 10% de chance que ce soit la saison des amours
         return random.nextInt(100) < 50;
     }
@@ -370,7 +370,7 @@ public class Colonie {
     /**
      * Lancer la reproduction dans toutes les meutes
      */
-    private void lancerReproduction() {
+    public void lancerReproduction() {
         System.out.println("\nC'est la saison des amours !");
         for (Meute meute : listeMeutes) {
             meute.reproduction();
@@ -380,7 +380,7 @@ public class Colonie {
     /**
      * Faire vieillir certains lycanthropes
      */
-    private void faireVieillirLycanthropes() {
+    public void faireVieillirLycanthropes() {
         System.out.println("\nLes lycanthropes vieillissent... \n");
         for (Meute meute : listeMeutes) {
             for (Lycanthrope lycan : meute.getLycanthropes()) {
@@ -405,7 +405,7 @@ public class Colonie {
     /**
      * Générer des hurlements aléatoires entre certains lycanthropes
      */
-    private void genererHurlementsAleatoires() {
+    public void genererHurlementsAleatoires() {
         System.out.println("\nDes hurlements aléatoires résonnent dans la colonie...\n");
         for (Meute meute : listeMeutes) {
             List<Lycanthrope> lycanthropes = meute.getLycanthropes();
@@ -424,7 +424,7 @@ public class Colonie {
     /**
      * Transformer quelques lycanthropes en humains
      */
-    private void transformerLycanthropes() {
+    public void transformerLycanthropes() {
         System.out.println("\nDes lycanthropes se transforment peut etre en humains...");
         
         for (Meute meute : listeMeutes) {
@@ -471,4 +471,14 @@ public class Colonie {
     	}
     	
     }
+
+	public List<Meute> getListeMeutes() {
+		return listeMeutes;
+	}
+
+	public void setListeMeutes(List<Meute> listeMeutes) {
+		this.listeMeutes = listeMeutes;
+	}
+    
+    
 }
