@@ -305,10 +305,11 @@ public class Menu implements Runnable{
 			// Vérifier s'il existe des services compatibles
 			if (!servicesCompatibles.isEmpty()) {
 				// Afficher les services compatibles pour le transfert
-				System.out.println("Services compatibles pour le transfert :");
+				System.out.println(color.GREEN_BOLD + "✔️ Services compatibles pour le transfert :" + color.RESET);
 				for (int i = 0; i < servicesCompatibles.size(); i++) {
+					String emojiCreature = servicesCompatibles.get(0).emoji();
 					ServiceMedical service = servicesCompatibles.get(i);
-					System.out.println((i + 1) + ". " + service.getNom());
+					System.out.println("     " + emojiCreature + " " + (i + 1) + ". " + color.BRIGHT_BLUE + service.getNom() + color.RESET);
 				}
 
 				// Demander à l'utilisateur de choisir un service pour le transfert
@@ -317,7 +318,7 @@ public class Menu implements Runnable{
 					ServiceMedical serviceArrivee = servicesCompatibles.get(choix - 1);
 					// Effectuer le transfert
 					medecin.transfererCreature(creature, serviceDepart, serviceArrivee);
-					System.out.println("Créature " + creature.getNom() + " transférée de " + serviceDepart.getNom() + " à " + serviceArrivee.getNom());
+					System.out.println("Créature " + creature.getNom() + color.GREEN +" transférée de " + serviceDepart.getNom() + " à " + serviceArrivee.getNom() + color.RESET);
 				} else {
 					System.out.println("    " + color.RED_BOLD + "❌ Choix invalide. Le transfert a été annulé." + color.RESET);
 				}
@@ -367,9 +368,10 @@ public class Menu implements Runnable{
 			System.out.println("    " + color.RED_BOLD + "❌ Aucune créature disponible dans ce service" + color.RESET);
 			return null;
 		}
+		String emojiCreature = service.emoji();
 
 		for (int i = 0; i < creatures.size(); i++) {
-			System.out.println((i + 1) + ". " + creatures.get(i).getNom());
+			System.out.println("     " + emojiCreature + " "+(i + 1) + ". " + color.BRIGHT_MAGENTA + creatures.get(i).getNom() + color.RESET);
 		}
 
 		int choix = lireChoix();
