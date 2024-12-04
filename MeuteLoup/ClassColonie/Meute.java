@@ -1,10 +1,11 @@
 package ClassColonie;
 
-import java.util.ArrayList;
+import java.util.ArrayList; 
 import java.util.List;
 import java.util.Random;
 
-import Model.TextColor;
+import Affichage.TextColor;
+
 
 public class Meute {
     private Couple coupleAlpha; // Couple α (chef de la meute)

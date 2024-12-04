@@ -1,19 +1,18 @@
-package Controller;
+package Simulation;
 
-import java.util.ArrayList;
+import java.util.ArrayList; 
+
 import java.util.List;
 import java.util.Random;
 
-import ClassColonie.*;
-import Model.CentreQuarantaine;
-import Model.Creature;
-import Model.Crypte;
-import Model.HopitalFantastique;
-import Model.Medecin;
-import Model.Menu;
-import Model.ServiceMedical;
-import Model.ServiceStandard;
-import Model.TextColor;
+import Affichage.TextColor;
+import Creatures.Creature;
+import Creatures.Medecin;
+import ServicesMedicaux.CentreQuarantaine;
+import ServicesMedicaux.Crypte;
+import ServicesMedicaux.ServiceMedical;
+import ServicesMedicaux.ServiceStandard;
+
 
 public class Main {
 	private static TextColor color = new TextColor();
@@ -51,33 +50,7 @@ public class Main {
 
 		}
 		
-        System.out.println("=== Tests des Couleurs Standard ===");
-        System.out.println(TextColor.BLACK + "Texte noir" + TextColor.RESET);
-        System.out.println(TextColor.RED + "Texte rouge" + TextColor.RESET);
-        System.out.println(TextColor.GREEN + "Texte vert" + TextColor.RESET);
-        System.out.println(TextColor.YELLOW + "Texte jaune" + TextColor.RESET);
-        System.out.println(TextColor.BLUE + "Texte bleu" + TextColor.RESET);
-        System.out.println(TextColor.MAGENTA + "Texte magenta" + TextColor.RESET);
-        System.out.println(TextColor.CYAN + "Texte cyan" + TextColor.RESET);
-        System.out.println(TextColor.WHITE + "Texte blanc" + TextColor.RESET);
-
-        System.out.println("\n=== Tests des Couleurs Vives ===");
-        System.out.println(TextColor.BRIGHT_BLACK + "Texte noir clair" + TextColor.RESET);
-        System.out.println(TextColor.BRIGHT_RED + "Texte rouge clair" + TextColor.RESET);
-        System.out.println(TextColor.BRIGHT_GREEN + "Texte vert clair" + TextColor.RESET);
-        System.out.println(TextColor.BRIGHT_YELLOW + "Texte jaune clair" + TextColor.RESET);
-        System.out.println(TextColor.BRIGHT_BLUE + "Texte bleu clair" + TextColor.RESET);
-        System.out.println(TextColor.BRIGHT_MAGENTA + "Texte magenta clair" + TextColor.RESET);
-        System.out.println(TextColor.BRIGHT_CYAN + "Texte cyan clair" + TextColor.RESET);
-        System.out.println(TextColor.BRIGHT_WHITE + "Texte blanc clair" + TextColor.RESET);
-
-        System.out.println("\n=== Tests Gras ===");
-        System.out.println(TextColor.RED_BOLD + "Texte rouge gras" + TextColor.RESET);
-        System.out.println(TextColor.GREEN_BOLD + "Texte vert gras" + TextColor.RESET);
-        System.out.println(TextColor.CYAN_BOLD + "Texte cyan gras" + TextColor.RESET);
-        System.out.println(TextColor.BRIGHT_BLUE_BOLD + "Texte bleu clair gras" + TextColor.RESET);
-
-        System.out.println("\n=== Fin des tests ===");
+      
         
         
 		// Affichage des informations initiales

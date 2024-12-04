@@ -1,11 +1,13 @@
 package ClassColonie;
 
 import java.util.ArrayList;
+
 import java.util.List;
 import java.util.Random;
 import java.util.Scanner;
 
-import Model.TextColor;
+import Affichage.TextColor;
+
 
 public class Colonie {
 
