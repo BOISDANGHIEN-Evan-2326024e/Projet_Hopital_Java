@@ -245,7 +245,7 @@ public class Menu implements Runnable{
 	private void soignerCreatures(Medecin medecin) {
 		ServiceMedical service = medecin.getServiceAssocie();
 		if (service.getCreatures().isEmpty()) {
-			System.out.println("Le service " + service.getNom() + " ne contient aucune créature.");
+			System.out.println("    " + color.GREEN_BOLD + "Le service " + service.getNom() + " ne contient aucune créature."+ color.RESET);
 			return;
 		}
 

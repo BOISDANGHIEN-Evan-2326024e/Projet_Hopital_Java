@@ -101,8 +101,8 @@ public class HopitalFantastique {
 		for (ServiceMedical service : services) {
 			totalCreatures += service.getCreatures().size();
 		}
-		System.out.println(color.BRIGHT_BLUE +"Nombre de créatures dans l'hôpital : "+ color.RESET + totalCreatures);
-		System.out.println(color.BRIGHT_BLUE + "Nombre de créatures mortes depuis le début : "+ color.RESET + color.RED + nbrMort + color.RESET);
+		System.out.println("    " +color.BRIGHT_BLUE +"Nombre de créatures dans l'hôpital : "+ color.RESET + totalCreatures);
+		System.out.println("    " + color.BRIGHT_BLUE + "Nombre de créatures mortes depuis le début : "+ color.RESET + color.RED + nbrMort + color.RESET);
 	}
 
 	/**
@@ -158,7 +158,7 @@ public class HopitalFantastique {
 
 					// Verifie que le jeu ne doivent pas se terminer
 					if (verifierFinDuJeu()) {
-						System.out.println("\n=== Il y a eu trop de mort dans votre hopital ("+nbrMort+")... Le jeu est terminé. ===");
+						System.out.println("    " + color.RED_BOLD + "\n=== Il y a eu trop de mort dans votre hopital ("+nbrMort+")... Le jeu est terminé. ===" + color.RESET);
 						jeuTermine = true;
 						notify(); 
 						return;
@@ -166,7 +166,7 @@ public class HopitalFantastique {
 
 				}
 
-				System.out.println("\n=== Lancement de la Simulation : Tour "+ round +" ===");
+				System.out.println("    " + color.MAGENTA_BOLD + "\n=== Lancement de la Simulation : Tour "+ round +" ===" + color.RESET);
 				round++;
 				gererMortsEtHeritage();
 
@@ -205,7 +205,7 @@ public class HopitalFantastique {
 									choisirJustificationeMoraleCreature("bonus");
 									int augmentationMoral = random.nextInt(100) + 100; // Augmente entre 100 et 200 
 									if (!service.getCreatures().isEmpty()) {
-										System.out.println( service.getNom() + " : Le moral des créatures augmente !");
+										System.out.println( service.getNom() + color.GREEN + " : Le moral des créatures augmente !" + color.RESET);
 										for (Creature creatureService : service.getCreatures()) {
 											creatureService.setMoral(creature.getMoral() + augmentationMoral);
 										}
@@ -215,7 +215,7 @@ public class HopitalFantastique {
 									choisirJustificationeMoraleCreature("malus");
 									int diminutionMoral = random.nextInt(100); // Augmente entre 0 a 100
 									if (!service.getCreatures().isEmpty()) {
-										System.out.println( service.getNom() + " : Le moral des créatures diminue !");
+										System.out.println( service.getNom() + color.RED + " : Le moral des créatures diminue !" + color.RESET);
 										for (Creature creatureService : service.getCreatures()) {
 											creatureService.setMoral(creature.getMoral() - diminutionMoral);
 										}
@@ -246,7 +246,7 @@ public class HopitalFantastique {
 								// Événement : Fuite de gaz
 								if (service instanceof CentreQuarantaine quarantaine && quarantaine.isIsolation()) {
 									quarantaine.setIsolation(false);
-									System.out.println("Une fuite de gaz a détruit l'isolation dans le service : " + service.getNom());
+									System.out.println(color.RED + "Une fuite de gaz a détruit l'isolation dans le service : " + service.getNom() + color.RESET);
 								}
 							}
 							case 2-> {
@@ -254,7 +254,7 @@ public class HopitalFantastique {
 								if (service instanceof Crypte crypte) {
 									int nouvelleVentilation = Math.max(0, crypte.getVentilation() - random.nextInt(3) - 1); // Réduit de 1 à 3
 									crypte.setVentilation(nouvelleVentilation);
-									System.out.println("La ventilation est bouchée dans le service : " + service.getNom() +  ". Niveau de ventilation : " + nouvelleVentilation);
+									System.out.println(color.RED + "La ventilation est bouchée dans le service : "  + service.getNom() + color.RESET + color.RED_BOLD + ". Niveau de ventilation : " + nouvelleVentilation + color.RESET);
 								}
 							}
 							case 3, 4, 5, 6 -> {
@@ -264,12 +264,12 @@ public class HopitalFantastique {
 								if ((service.getBudget() - reductionBudget) > 0) {
 									service.setCapital(service.getCapital() - reductionBudget);
 									service.reviserBudget();
-									System.out.println("Le budget du service " + service.getNom() + " a été réduit de " + reductionBudget + " crédits.");
+									System.out.println( color.RED + "Le budget du service " + service.getNom() + " a été réduit de " + color.RESET + color.RED_BOLD + reductionBudget + " crédits." + color.RESET);
 								}
 								else {
 									service.setCapital(0);
 									service.reviserBudget();
-									System.out.println("Le budget du service " + service.getNom() + " est de 0... Ca commence à chauffer");
+									System.out.println(color.RED_BOLD +"Le budget du service " + service.getNom() + " est de 0... Ca commence à chauffer" + color.RESET);
 								}
 							}
 							case 7, 8 -> {
@@ -277,7 +277,7 @@ public class HopitalFantastique {
 								choisirJustificationCapital("bonus");
 								int augmentationBudget = random.nextInt(200) + 100; // Augmente entre 100 et 300 crédits
 								service.setCapital(service.getCapital() + augmentationBudget);
-								System.out.println(" Le budget du service " + service.getNom() + " a été augmenté de " + augmentationBudget + " crédits.");
+								System.out.println( color.GREEN+ "Le budget du service " + service.getNom() + " a été augmenté de " +  color.RESET + color.GREEN_BOLD + augmentationBudget + " crédits." + color.RESET);
 							}
 							case 9 -> {
 
@@ -294,14 +294,14 @@ public class HopitalFantastique {
 								if (servicesVIP != null && !servicesVIP.isEmpty()) {
 									Random random = new Random();
 									ServiceMedical serviceVIP = servicesVIP.get(random.nextInt(servicesVIP.size()));
-									System.out.println("Les VIP avant votre vie :D : Le saint médecin rend visite au service " + serviceVIP.getNom());
+									System.out.println(color.BRIGHT_YELLOW_BOLD + "Les VIP avant votre vie :D : Le saint médecin rend visite au service " + serviceVIP.getNom() + color.RESET);
 									saintMedecin(serviceVIP);
 								} else {
 									Random random = new Random();
 									if (!service.getCreatures().isEmpty()) {
 										Creature creatureASoigner = service.getCreatures().get(random.nextInt(service.getCreatures().size()));
 										creatureASoigner.soigner(service);
-										System.out.println("Aucun VIP ? Occupons nous du sous peuple : " + creatureASoigner.getNom() + " est soigné et quitte donc le service " + service.getNom());
+										System.out.println(color.YELLOW + "Aucun VIP ? Occupons nous du sous peuple : " + creatureASoigner.getNom() + " est soigné et quitte donc le service " + service.getNom() + color.RESET);
 									}
 								}
 
@@ -349,10 +349,10 @@ public class HopitalFantastique {
 		}
 
 		if (nbrMort == 0) {
-			System.out.println("Aucune créature n'est morte");
+			System.out.println("    " + color.BRIGHT_GREEN_BOLD + "Aucune créature n'est morte" + color.RESET);
 		}
 		else {
-			System.out.println("Dans cette partie, " + nbrMort + " créatures sont mortes");
+			System.out.println("    "  + color.BRIGHT_RED_BOLD + "Dans cette partie, " + nbrMort + " créatures sont mortes");
 		}
 	}
 
@@ -365,7 +365,7 @@ public class HopitalFantastique {
 		if (random.nextInt(100) < 25) { 
 			int montant = random.nextInt(100) + 50; 
 			service.setBudget(service.getBudget() + montant);
-			System.out.println("Héritage reçu ! +" + montant + " crédits ajoutés au budget.");
+			System.out.println(color.GREEN + "Héritage reçu ! +" + color.RESET + color.GREEN_BOLD + montant + " crédits"+ color.RESET + color.GREEN +"ajoutés au budget." + color.RESET);
 		}
 	}
 
@@ -523,7 +523,7 @@ public class HopitalFantastique {
 					"Une panne d'équipement a immobilisé un service : "
 			};
 			String justification = justifications[random.nextInt(justifications.length)];
-			System.out.println(justification);
+			System.out.print(justification);
 			
 		}
 		else {
@@ -536,7 +536,7 @@ public class HopitalFantastique {
 					"Un partenariat avec un laboratoire a rapporté des fonds : "
 			};
 			String justification = justifications[random.nextInt(justifications.length)];
-			System.out.println(justification);
+			System.out.print(justification);
 			
 		}
 	}
@@ -549,7 +549,7 @@ public class HopitalFantastique {
 		List<Creature> creatures = service.getCreatures();
 
 		if (creatures.isEmpty()) {
-			System.out.println("Le service " + service.getNom() + " ne contient aucune créature.");
+			System.out.println("    " + color.GREEN_BOLD + "Le service " + service.getNom() + " ne contient aucune créature." + color.RESET);
 			return;
 		}
 
@@ -569,7 +569,7 @@ public class HopitalFantastique {
 		// Soigne les créatures choisies
 		for (Creature creature : creaturesChoisies) {
 			creature.soigner(service);
-			System.out.println("Le Saint medecin a soigné " + creature.getNom() + ".");
+			System.out.println(color.BRIGHT_YELLOW + "Le Saint medecin a soigné " + creature.getNom() + "." + color.RESET);
 		}
 	}
 
@@ -582,7 +582,7 @@ public class HopitalFantastique {
 		boolean contientVampire = service.getCreatures().stream()
 				.anyMatch(creature -> creature instanceof Vampire);
 		if (contientVampire) {
-			System.out.println("Sang à l'ail dans le service " + service.getNom() + " : Les maladies des créatures augmentent !");
+			System.out.println("Sang à l'ail dans le service " + service.getNom() + color.RED_BOLD +  " : Les maladies des créatures augmentent !" + color.RESET);
 			for (Creature creature : service.getCreatures()) {
 				if (!creature.getMaladies().isEmpty()) {
 					creature.getMaladies().forEach(Maladie::augmenterNiveau);
