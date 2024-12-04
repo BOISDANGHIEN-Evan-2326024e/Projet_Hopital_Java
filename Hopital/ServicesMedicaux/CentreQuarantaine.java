@@ -34,8 +34,7 @@ public class CentreQuarantaine extends ServiceMedical {
         this.isolation = isolation;
     }
 
-    /**
-     * void reviserBudget
+    /**Revise le budget d'un centre de quarantaine en fonction de ses caractéristiques
      */
     @Override
     public void reviserBudget() {
@@ -47,7 +46,7 @@ public class CentreQuarantaine extends ServiceMedical {
     }
     
     /**
-     * void afficherDetails
+     * Affiche les details du service
      */
 	@Override
 	public void afficherDetails() {

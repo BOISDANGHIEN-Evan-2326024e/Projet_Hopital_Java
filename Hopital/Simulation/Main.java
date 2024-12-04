@@ -16,7 +16,9 @@ import ServicesMedicaux.ServiceStandard;
 
 public class Main {
 	private static TextColor color = new TextColor();
-	
+	/*
+	 * Lance la simulation de l'hopital fantastique
+	 */
 	public static void main(String[] args) {
 
 		HopitalFantastique hopital = new HopitalFantastique("Hôpital Fantastique", 10);		
@@ -49,34 +51,37 @@ public class Main {
 			ajouterCreaturesAuService(standard, 5 + random.nextInt(3));
 
 		}
-		
-      
-        
-        
+
+
 		// Affichage des informations initiales
-        System.out.println(color.BRIGHT_BLUE_BOLD  +"=== Informations Initiales de l'Hôpital ===\n" + color.RESET);
-      
-        hopital.afficherStatistiques();
-        hopital.afficherDetailsCreatures();
+		System.out.println(color.BRIGHT_BLUE_BOLD  +"=== Informations Initiales de l'Hôpital ===\n" + color.RESET);
 
-        // Démarrer la simulation
-        System.out.println(color.GREEN_BOLD  +"\n=== Démarrage de la Simulation ===" + color.RESET);
-        hopital.demarrerSimulation();
+		hopital.afficherStatistiques();
+		hopital.afficherDetailsCreatures();
 
-        // Démarrer le menu pour permettre à l'utilisateur de prendre la main
-        Menu menu = new Menu(hopital);
-        new Thread(menu).start(); // Lance le menu en ligne de commande
+		// Démarrer la simulation
+		System.out.println(color.GREEN_BOLD  +"\n=== Démarrage de la Simulation ===" + color.RESET);
+		hopital.demarrerSimulation();
+
+		// Démarrer le menu pour permettre à l'utilisateur de prendre la main
+		Menu menu = new Menu(hopital);
+		// Lance le menu en ligne de commande
+		new Thread(menu).start(); 
 	}
-
+	/*
+	 * Ajoute des Créature malades dès le début
+	 */
 	private static void ajouterCreaturesAuService(ServiceMedical service, int nombre) {
 		for (int i = 0; i < nombre; i++) {
 			Creature creature = HopitalFantastique.genererNouvelleCreature(service);
-			creature.tomberMaladeDebut(); // Créatures malades dès le début
+			creature.tomberMaladeDebut(); 
 			service.ajouterCreature(creature);
 		}
 	}
 
-
+	/*
+	 * Genere un nom aléatoire pour le medecin
+	 */
 	public static String genererNomMedecin() {
 		List<String> nomsMedecinsDisponibles = new ArrayList<>(List.of(
 				"Albano", "Serre", "Boisdanghien", "Nevot", 
@@ -91,7 +96,7 @@ public class Main {
 		Random random = new Random();
 		int index = random.nextInt(nomsMedecinsDisponibles.size());
 		String nom = nomsMedecinsDisponibles.get(index);
-		nomsMedecinsDisponibles.remove(index); // Supprime le nom utilisé
+		nomsMedecinsDisponibles.remove(index); // Supprime le nom utilisé pour eviter les doublons
 		return nom;
 	}
 

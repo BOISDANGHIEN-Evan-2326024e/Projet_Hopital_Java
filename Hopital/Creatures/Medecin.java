@@ -24,7 +24,7 @@ public class Medecin {
     }
 
     /**
-     * void examiner
+     *  examiner une créature 
      * @param service
      */
     public void examiner(ServiceMedical service) {
@@ -32,7 +32,7 @@ public class Medecin {
         service.afficherDetails();
     }
     /**
-     * void soigner
+     *  soigner une creature
      * @param creature
      */
     public void soigner(Creature creature) {
@@ -46,7 +46,7 @@ public class Medecin {
     }
     
     /**
-     * void reviserBudget
+     * Réviser le budget d'une service medical
      */
     public void reviserBudget() {
         if (ecoPossible) {
@@ -60,7 +60,7 @@ public class Medecin {
     }
 
     /**
-     * void verifierEco
+     * Verifier si l'economie d'une service est possible
      */
   //Met à jour l'état ecoPossible si nécessaire 
     public void verifierEco() { 
@@ -72,7 +72,7 @@ public class Medecin {
     }
 
     /**
-     * void transfererCreature
+     * Transferer une créature entre deux services
      * @param creature
      * @param serviceDepart
      * @param serviceArrivee

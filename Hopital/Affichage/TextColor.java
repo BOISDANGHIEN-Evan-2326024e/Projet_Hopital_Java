@@ -2,11 +2,11 @@ package Affichage;
 
 public class TextColor {
     // Réinitialisation
-    public static final String RESET = "\u001B[0m";      // Réinitialise la couleur
+    public static final String RESET = "\u001B[0m";  
 
     // Styles généraux
-    public static final String BOLD = "\u001B[1m";       // Gras
-    public static final String UNDERLINE = "\u001B[4m";  // Souligné
+    public static final String BOLD = "\u001B[1m";     
+    public static final String UNDERLINE = "\u001B[4m"; 
 
     // Couleurs standard
     public static final String BLACK = "\u001B[30m";

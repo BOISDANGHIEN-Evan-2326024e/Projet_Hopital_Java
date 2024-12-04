@@ -53,13 +53,11 @@ public abstract class ServiceMedical {
     }
 
     /**
-     * Maladie obtenirMaladieDepuisService
+     * Permet de recuperer une maladie presente dans son service
      * @return
      */
     public Maladie obtenirMaladieDepuisService() {
         Random random = new Random();
-
-        // On parcourt les créatures dans le service
         for (Creature creature : creatures) {
             List<Maladie> maladies = creature.getMaladies();
             if (maladies != null && !maladies.isEmpty()) {
@@ -69,14 +67,11 @@ public abstract class ServiceMedical {
                 // Créer une nouvelle instance de la maladie avec le même nom mais évolution différente
                 Maladie nouvelleMaladie = new Maladie(maladieOriginale.getNomComplet(),
                                                        maladieOriginale.getNomAbrege(),
-                                                       random.nextInt(5) + 10);  // Niveau de gravité aléatoire entre 10 et max 15
-
-                // Retourne la nouvelle maladie
+                                                       random.nextInt(5) + 10);  
                 return nouvelleMaladie;
             }
         }
 
-        // Retourne null si aucune maladie n'est trouvée
         return null;
     }
 
@@ -173,16 +168,15 @@ public abstract class ServiceMedical {
      * @param capitalService
      */
     protected void conversionNiveauBudget(int capitalService) {
-        int tranche = capitalService / 400; // Division pour déterminer la tranche
+        int tranche = capitalService / 400; 
 
         switch (tranche) {
-            case 0 -> budget = "inexistant";  // < 400
-            case 1 -> budget = "insuffisant"; // [400, 800[
-            case 2 -> budget = "faible";      // [800, 1200[
-            case 3 -> budget = "médiocre";    // [1200, 1600[
-            case 4 -> budget = "suffisant";   // [1600, 2000[
-            case 5 -> budget = "bon";         // [2000, 2400[
-            default -> budget = "excellent";  // >= 2400
+            case 0 -> budget = "inexistant"; 
+            case 1 -> budget = "insuffisant"; 
+            case 2 -> budget = "faible";     
+            case 3 -> budget = "médiocre";   
+            case 5 -> budget = "bon";         
+            default -> budget = "excellent"; 
         }
 
         System.out.println("Le niveau du budget pour le service " + nom + " est : " + budget);
@@ -214,6 +208,7 @@ public abstract class ServiceMedical {
 	
 	/**
 	 * String emoji
+	 * Associe un emoji precis au type de creature présente dans le service
 	 * @return
 	 */
 	public String emoji() {

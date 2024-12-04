@@ -21,7 +21,7 @@ public class Orque extends Creature {
     
 
     /**
-     * void trepasser
+	 *Si la crature meurt, elle démoraliser son entourage avant de mourir
      */
     @Override
     public void trepasser(ServiceMedical service) {
@@ -32,7 +32,7 @@ public class Orque extends Creature {
     }
 
     /**
-     * void contaminer
+     * Contamine son entourage, ses voisins attrapes une de ses maladies
      * @param service
      */
     private void contaminer(ServiceMedical service) {

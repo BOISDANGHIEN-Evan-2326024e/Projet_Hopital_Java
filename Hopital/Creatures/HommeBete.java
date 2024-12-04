@@ -23,6 +23,7 @@ public class HommeBete extends Creature{
 	
 	/**
 	 * void trepasser
+	 * Si la crature meurt, elle contaminer son entourage avant de mourir
 	 */
     @Override
     public void trepasser(ServiceMedical service) {
@@ -34,6 +35,7 @@ public class HommeBete extends Creature{
 
     /**
      * void contaminer
+     * Contamine son entourage, ses voisins attrapes une de ses maladies
      * @param service
      */
     private void contaminer(ServiceMedical service) {

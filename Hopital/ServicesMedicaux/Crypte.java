@@ -53,7 +53,7 @@ public class Crypte extends ServiceMedical {
     }
 
     /**
-     * void reviserBudget
+    /**Revise le budget d'une crypte en fonction de ses caractéristiques
      */
     @Override
     public void reviserBudget() {
@@ -67,7 +67,7 @@ public class Crypte extends ServiceMedical {
     }
 
     /**
-     * void afficherDetails
+     * Affiche les details du service
      */
 	@Override
 	public void afficherDetails() {

@@ -2,7 +2,6 @@ package Simulation;
 
 
 
-import java.awt.Color;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -27,7 +26,8 @@ public class Menu implements Runnable{
 	}
 	
 	/**
-	 * void run
+	 * Lance le thread permettant au joueur de jouer son tour et 
+	 * de mettre en pause le thread principal pour qu'il fasse des actions
 	 */
 	@Override
 	public void run() {
@@ -114,7 +114,7 @@ public class Menu implements Runnable{
 	}
 	
 	/**
-	 * void afficherMedecin
+	 * Affiche les medecins disponibles et leur service associer
 	 */
 	private void afficherMedecin() {
 		List<Medecin> medecins = hopital.getMedecins();
@@ -149,7 +149,7 @@ public class Menu implements Runnable{
 	}
 	
 	/**
-	 * Medecin choisirMedecin
+	 * Permet au joueur de choisir un medecin 
 	 * @return
 	 */
 	private Medecin choisirMedecin() {
@@ -162,7 +162,7 @@ public class Menu implements Runnable{
 
 		int choix = lireChoix();
 
-		// Gérer les choix supplémentaires
+		// Gérer les choix supplémentaires comme les affichages des statistiques ou l'adandon de partie
 		while (choix == medecins.size() + 1 || choix == medecins.size() + 2 || choix < 0 || choix > medecins.size() + 3) {
 			if (choix == medecins.size() + 1) {
 				hopital.afficherStatistiques();
@@ -178,7 +178,7 @@ public class Menu implements Runnable{
 		}
 
 		if (choix > 0 && choix <= medecins.size()) {
-			return medecins.get(choix - 1); // Retourne le médecin sélectionné
+			return medecins.get(choix - 1); 
 		}
 
 		System.out.println("Choix invalide.");
@@ -187,7 +187,7 @@ public class Menu implements Runnable{
 
 
 	/**
-	 * void afficherOption
+	 * Affiche les options disponibles en fonction du coup disponible dans le service
 	 * 
 	 * @param ecoPossible
 	 * @param service
@@ -219,7 +219,7 @@ public class Menu implements Runnable{
 	}
 
 	/**
-	 * int lireChoix
+	 * Lis le choix et verifie que le joueur ne rentre pas un autre caratere que celui demandé
 	 * @return
 	 */
 	private int lireChoix() {
@@ -239,7 +239,7 @@ public class Menu implements Runnable{
 	}
 
 	/**
-	 * void soignerCreatures
+	 * Laisse au joueur le choix de quelle creature il veut soigner
 	 * @param medecin
 	 */
 	private void soignerCreatures(Medecin medecin) {
@@ -267,7 +267,7 @@ public class Menu implements Runnable{
 
 
 	/**
-	 * void reviserBudget
+	 * Permet de reviser le budet du service associé au medecin selectionné
 	 * @param medecin
 	 */
 	private void reviserBudget(Medecin medecin) {
@@ -279,7 +279,7 @@ public class Menu implements Runnable{
 	}
 
 	/**
-	 * void transfererCreature
+	 * Transfere une creature entre deux services compatible
 	 * @param medecin
 	 */
 	private void transfererCreature(Medecin medecin) {
@@ -330,7 +330,7 @@ public class Menu implements Runnable{
 
 
 	/**
-	 * ServiceMedical choisirService
+	 *Permet au joueur de choisir avec quel service il veut faire le transfert
 	 * @return
 	 */
 	private ServiceMedical choisirService() {
@@ -355,7 +355,7 @@ public class Menu implements Runnable{
 	}
 
 	/**
-	 * Creature choisirCreature
+	 *Choisi une creature disponible dans un service
 	 * 
 	 * @param service
 	 * @return

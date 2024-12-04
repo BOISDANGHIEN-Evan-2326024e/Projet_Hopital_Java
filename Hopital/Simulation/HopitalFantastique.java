@@ -116,7 +116,7 @@ public class HopitalFantastique {
 	}
 	
 	/**
-	 * void demarrerSimulation
+	 * Demarre la simulation du jeu qui se mettra en pause quand se sera le tour du joueur et qui 
 	 */
 	public void demarrerSimulation() {
 		Thread simulationThread = new Thread(() -> {
@@ -156,7 +156,7 @@ public class HopitalFantastique {
 						}
 					}
 
-
+					// Verifie que le jeu ne doivent pas se terminer
 					if (verifierFinDuJeu()) {
 						System.out.println("\n=== Il y a eu trop de mort dans votre hopital ("+nbrMort+")... Le jeu est terminé. ===");
 						jeuTermine = true;
@@ -200,7 +200,6 @@ public class HopitalFantastique {
 										creature.getMaladies().get(0).augmenterNiveau();
 									}
 								}
-								//case 6 -> mangerPapierToilette(service, creature);
 								case 8 -> sangAil(service);
 								case 5 -> { 
 									choisirJustificationeMoraleCreature("bonus");
@@ -331,7 +330,7 @@ public class HopitalFantastique {
 
 
 	/**
-	 * void gererMortsEtHeritage
+	 * Genere l'evenenement heritage a la mort d'un joueur
 	 */
 	public void gererMortsEtHeritage() {
 
@@ -358,7 +357,7 @@ public class HopitalFantastique {
 	}
 
 	/**
-	 * void lancerHeritage
+	 * lance l'evenement heritage
 	 * @param service
 	 */
 	public void lancerHeritage(ServiceMedical service) {
@@ -371,7 +370,7 @@ public class HopitalFantastique {
 	}
 
 	/**
-	 * boolean verifierFinDuJeu
+	 * Verifie si le jeu doit se terminer
 	 * @return
 	 */
 	public boolean verifierFinDuJeu() {
@@ -382,7 +381,8 @@ public class HopitalFantastique {
 	}
 
 	/**
-	 * static Creature genererNouvelleCreature
+	 * static Creature genererNouvelleCreature 
+	 * genere un creature deja malade et qui dependra du type de creature deja presente dans le service
 	 * @param service
 	 * @return
 	 */
@@ -472,7 +472,7 @@ public class HopitalFantastique {
 
 
 	/**
-	 * void choisirJustificationMoraleCreature
+	 * Choisi une justification pour affecter le morale d'une creature 
 	 * @param bm
 	 */
 	public void choisirJustificationeMoraleCreature(String bm) {
@@ -510,7 +510,7 @@ public class HopitalFantastique {
 
 
 	/**
-	 * void choisirJustificationCapital
+	 * Choisi une justification pour affecter le capital d'un service 
 	 * @param bm
 	 */
 	public void choisirJustificationCapital(String bm) {
@@ -542,7 +542,7 @@ public class HopitalFantastique {
 	}
 
 	/**
-	 *  void saintMedecin
+	 *  Lance l'evenement Saint medecin qui soigne 3 creature VIP d'un service
 	 * @param service
 	 */
 	public void saintMedecin(ServiceMedical service) {
@@ -575,7 +575,7 @@ public class HopitalFantastique {
 
 
 	/** 
-	 * void sangAil
+	 * Lance l'evenement sang a l'ail qui fait que toutes les creatures d'un service attrape une maladie
 	 * @param service
 	 */
 	private void sangAil(ServiceMedical service) {

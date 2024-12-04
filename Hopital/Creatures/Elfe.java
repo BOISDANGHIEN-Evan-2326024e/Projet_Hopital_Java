@@ -17,14 +17,8 @@ public class Elfe extends Creature {
 	}
 
 	/**
-	 * void demoraliser
-	 */
-	public void demoraliser() {
-		System.out.println(getNom() + " démoralise son entourage !");
-	}
-
-	/**
 	 * void trepasser
+	 *Si la crature meurt, elle démoraliser son entourage avant de mourir
 	 */
     @Override
     public void trepasser(ServiceMedical service) {
@@ -36,6 +30,7 @@ public class Elfe extends Creature {
     
     /**
      * void demoraliser
+     * Une créature peut démoraliser son entourage, le moral de toutes les crétures diminuent
      * @param service
      */
     private void demoraliser(ServiceMedical service) {

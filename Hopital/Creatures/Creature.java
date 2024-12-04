@@ -58,14 +58,15 @@ public abstract class Creature {
 	 */
 	public void attendre(List<Creature> autresCreatures, int round) {
 		if (attenteStrategy != null) {
-			attenteStrategy.attendre(this, autresCreatures, round);  // Appel de la méthode attendre de la stratégie
+			// Appel de la méthode attendre de la stratégie
+			attenteStrategy.attendre(this, autresCreatures, round);  
 		}
 	}
 
 	/**
 	 * void assignerStrategie
+	 * Affecter la stratégie en fonction de la catégorie
 	 */
-	// Exemple de méthode pour affecter la stratégie en fonction de la catégorie
 	public void assignerStrategie() {
 		if (this.getCategorie() == Categorie.TRIAGE) {
 			setAttenteStrategy(new AttenteTriageStrategy());
@@ -73,39 +74,7 @@ public abstract class Creature {
 			setAttenteStrategy(new AttenteVIPStrategy());
 		}
 	}
-	/*
-	public void attendre(List<Creature> autresCreatures, int round) {
-		double probabiliteColere = 5 * round;
-
-		if (getCategorie() == Categorie.TRIAGE) {
-			if (autresCreatures.size() > 1) { // Si il n'est pas seul
-				if ((getMoral() - 5 * probabiliteColere) < 0) {
-					setMoral(0);
-				}
-				else {
-					setMoral(getMoral() - 5 * probabiliteColere);
-				}
-			} else {
-				if ((getMoral() - 10 * probabiliteColere) < 0) {
-					setMoral(0);
-				}
-				else {
-					setMoral(getMoral() - 10 * probabiliteColere);
-					System.out.println(getNom() + " se sent seul.");
-				}	
-			}
-
-		} else if (getCategorie() == Categorie.VIP) {
-			if ((getMoral() - 15 * probabiliteColere) < 0) {
-				setMoral(0);
-			}
-			else {
-				setMoral(getMoral() - 15 * probabiliteColere); // Diminuer fortement le moral si un VIP attend trop longtemps
-				System.out.println(getNom() + " n'est peu plus d'attendre.");
-			}
-		}
-
-	}*/
+	
 
 	/**
 	 * void hurler
@@ -115,6 +84,7 @@ public abstract class Creature {
 	}
 
 	/**
+	 * Genere une maladie aléatoire pour l'affecter à une créature
 	 * void tomberMaladeDebut
 	 */
 	public void tomberMaladeDebut() {
@@ -124,6 +94,7 @@ public abstract class Creature {
 	}
 
 	/**
+	 * permet à une créature de tomber malade d'une maladie déja présente dans le service
 	 * void tomberMalade
 	 * @param service
 	 */
@@ -156,6 +127,7 @@ public abstract class Creature {
 
 	/**
 	 * void trepasser
+	 * Quand une créature meurt, elle quitte le service
 	 * @param service
 	 */
 	public void trepasser(ServiceMedical service) {
@@ -172,7 +144,7 @@ public abstract class Creature {
 	}
 
 	/**
-	 * Maladie genererMaladieAleatoire
+	 * Maladie genererMaladieAleatoire, genere son nom et son accronyme aléatoirement
 	 * @return
 	 */
 	private Maladie genererMaladieAleatoire() {

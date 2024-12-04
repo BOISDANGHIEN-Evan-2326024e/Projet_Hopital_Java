@@ -20,7 +20,7 @@ public class Maladie {
     }
 
     /**
-     * void diminuerNiveau
+     * Diminue le niveau d'une maladie
      */
     public void diminuerNiveau() {
         if (niveauActuel > 0) {
@@ -29,7 +29,7 @@ public class Maladie {
     }
 
     /**
-     * void augmenterNiveau
+     * augemente le niveau d'une maladie
      */
     public void augmenterNiveau() {
         if (niveauActuel < niveauMax) {
@@ -38,7 +38,7 @@ public class Maladie {
     }
 
     /**
-     * void changerNiveauActuel
+     * cahnge le niveau actuelle maladie
      * @param niveauActuelChang
      */
     public void changerNiveauActuel(int niveauActuelChang) {

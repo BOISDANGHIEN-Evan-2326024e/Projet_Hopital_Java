@@ -19,6 +19,7 @@ public class Zombie extends Creature{
 	
 	/**
 	 * void trepasser
+	 * Si un zombie meurt, il se regenere
 	 */
 	@Override
     public void trepasser(ServiceMedical service) {

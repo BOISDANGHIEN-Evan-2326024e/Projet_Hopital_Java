@@ -19,7 +19,7 @@ public class ServiceStandard extends ServiceMedical{
 	}
 
     /**
-     * void reviserBudget
+     * Revise le budget d'un service standard
      */
 	@Override
 	public void reviserBudget() {
@@ -27,7 +27,7 @@ public class ServiceStandard extends ServiceMedical{
 	}
 
 	/**
-	 * void afficherDetails
+     * Affiche les details du service
 	 */
 	@Override
 	public void afficherDetails() {

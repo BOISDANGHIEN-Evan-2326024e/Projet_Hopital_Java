@@ -20,7 +20,7 @@ public class Vampire extends Creature{
 	}
 
 	/**
-	 * void trepasser
+	 * Si un vampire meurt, il contamine et demoralise son entourage  et se regenere
 	 */
 	@Override
 	public void trepasser(ServiceMedical service) {
@@ -45,7 +45,7 @@ public class Vampire extends Creature{
 	}
 
 	/**
-	 * void contaminer
+     * Une créature peut démoraliser son entourage, le moral de toutes les crétures diminuent
 	 * @param service
 	 */
 	private void contaminer(ServiceMedical service) {
@@ -63,7 +63,7 @@ public class Vampire extends Creature{
 	}
 
 	/**
-	 * void regenerer
+	 * Si un vampire meurt, il se regenere
 	 */
 	private void regenerer() {
 		System.out.println(getNom() + " se régénère immédiatement après sa mort !");

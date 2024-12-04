@@ -5,6 +5,9 @@ import java.util.Scanner;
 
 public class MainLauncher {
 
+	/*
+	 * Lance le choix au joueur de lancer une simulation
+	 */
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
 
@@ -20,10 +23,10 @@ public class MainLauncher {
         while (true) {
             choix = scanner.next();
             if (choix.equals("HF")) {
-                classNameToLaunch = "Simulation.Main"; // Package + classe principale
+                classNameToLaunch = "Simulation.Main"; 
                 break;
             } else if (choix.equals("C")) {
-                classNameToLaunch = "ClassColonie.MainColonie"; // Package + classe principale
+                classNameToLaunch = "ClassColonie.MainColonie"; 
                 break;
             } else {
                 System.out.println("Choix invalide ! Veuillez entrer HF ou C.");
@@ -37,7 +40,6 @@ public class MainLauncher {
             // Récupérer la méthode `main`
             Method mainMethod = mainClass.getMethod("main", String[].class);
 
-            // Appeler la méthode `main` avec un tableau d'arguments vide
             System.out.println("Lancement de : " + classNameToLaunch);
             mainMethod.invoke(null, (Object) new String[]{});
         } catch (Exception e) {
@@ -45,6 +47,5 @@ public class MainLauncher {
             e.printStackTrace();
         }
 
-        scanner.close(); // Fermer le scanner
     }
 }
