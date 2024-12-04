@@ -1,25 +1,44 @@
-package Model;
+package Creatures;
 
 import java.util.Random;
 
+import Enum.Categorie;
+import Maladie.Maladie;
+import ServicesMedicaux.ServiceMedical;
+
 public class HommeBete extends Creature{
 
+	/**
+	 * HommeBete
+	 * @param nom
+	 * @param sexe
+	 * @param poids
+	 * @param taille
+	 * @param age
+	 */
 	public HommeBete(String nom, String sexe, double poids, double taille, String age) {
 		super(nom, sexe, poids, taille, age);
 		
 	}
 	
+	/**
+	 * void trepasser
+	 */
     @Override
     public void trepasser(ServiceMedical service) {
-        moral = 0;
-        System.out.println(nom + " (Homme-Bête) est décédé.");
+        setMoral(0);
+        System.out.println(getNom() + " (Homme-Bête) est décédé.");
         contaminer(service);
         service.retirerCreature(this);
     }
 
+    /**
+     * void contaminer
+     * @param service
+     */
     private void contaminer(ServiceMedical service) {
         if (!maladies.isEmpty()) {
-            System.out.println(nom + " contamine une autre créature dans le service " + service.getNom() + ".");
+            System.out.println(getNom() + " contamine une autre créature dans le service " + service.getNom() + ".");
             for (Creature creature : service.getCreatures()) {
                 if (!creature.equals(this)) {
                 	Random random = new Random();
@@ -31,6 +50,9 @@ public class HommeBete extends Creature{
         }
     }
 
+    /**
+     * Categorie getCategorie
+     */
 	@Override
 	public Categorie getCategorie() {
 		return Categorie.TRIAGE; // Homme-Bête est une créature de triage
