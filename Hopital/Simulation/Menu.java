@@ -2,6 +2,7 @@ package Simulation;
 
 
 
+import java.awt.Color;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -198,22 +199,22 @@ public class Menu implements Runnable{
 		System.out.println("Argent actuel : " + argent);
 
 		if (argent >= 500) {
-			System.out.println("1. Soigner les créatures dans un service médical -- Coût 500 -- DISPONIBLE");
+			System.out.println("    " + color.GREEN_BOLD + "💉 1. Soigner les créatures dans un service médical -- Coût 500 -- DISPONIBLE" + color.RESET);
 		} else {
-			System.out.println("1. Soigner les créatures dans un service médical -- Coût 500 -- IMPOSSIBLE");
+			System.out.println("    " + color.RED_BOLD + "❌ 1. Soigner les créatures dans un service médical -- Coût 500 -- IMPOSSIBLE" + color.RESET);
 		}
 
-		System.out.println("2. Réviser le budget d'un service médical -- Gain 100 -- DISPONIBLE");
+		System.out.println("    " + color.YELLOW_BOLD + "✔️ 2. Réviser le budget d'un service médical -- Gain 100 -- DISPONIBLE" + color.RESET);
 
 		if (argent >= 200) {
-			System.out.println("3. Transférer une créature entre services médicaux -- Coût 200 -- DISPONIBLE");
+			System.out.println("    " + color.GREEN_BOLD + "✔️ 3. Transférer une créature entre services médicaux -- Coût 200 -- DISPONIBLE" + color.RESET);
 		} else {
-			System.out.println("3. Transférer une créature entre services médicaux -- Coût 200 -- IMPOSSIBLE");
+			System.out.println("    " + color.RED_BOLD + "❌ 3. Transférer une créature entre services médicaux -- Coût 200 -- IMPOSSIBLE" + color.RESET);
 		}
 
-		System.out.println("4. Fin des actions pour ce médecin");
+		System.out.println("    " + color.BRIGHT_BLACK + "🛑 4. Fin des actions pour ce médecin" + color.RESET);
 		if (ecoPossible && eco) {
-			System.out.println("5. Economisez -- Gain 1000 -- (Attention cette action prend tout le tour) ");
+			System.out.println("    " + color.CYAN + "💶 5. Economisez -- Gain 1000 -- (Attention cette action prend tout le tour) " + color.RESET);
 		}
 	}
 
@@ -259,7 +260,7 @@ public class Menu implements Runnable{
 			Creature creatureChoisie = creatures.get(choix - 1);
 			medecin.soigner(creatureChoisie);
 		} else {
-			System.out.println("Choix invalide.");
+			System.out.println("    " + color.RED_BOLD + " ⛔Choix invalide." + color.RESET);
 		}
 	}
 
@@ -317,13 +318,13 @@ public class Menu implements Runnable{
 					medecin.transfererCreature(creature, serviceDepart, serviceArrivee);
 					System.out.println("Créature " + creature.getNom() + " transférée de " + serviceDepart.getNom() + " à " + serviceArrivee.getNom());
 				} else {
-					System.out.println("Choix invalide. Le transfert a été annulé.");
+					System.out.println("    " + color.RED_BOLD + "❌ Choix invalide. Le transfert a été annulé." + color.RESET);
 				}
 			} else {
-				System.out.println("Aucun service compatible trouvé pour ce transfert. Le transfert est annulé.");
+				System.out.println("    " + color.RED_BOLD + "❌ Aucun service compatible trouvé pour ce transfert. Le transfert est annulé." + color.RESET);
 			}
 		} else {
-			System.out.println("Service de départ invalide ou aucune créature disponible.");
+			System.out.println("    " + color.RED_BOLD + "❌ Service de départ invalide ou aucune créature disponible." + color.RESET);
 		}
 	}
 
@@ -335,11 +336,11 @@ public class Menu implements Runnable{
 	private ServiceMedical choisirService() {
 		List<ServiceMedical> services = hopital.getServices();
 		if (services.isEmpty()) {
-			System.out.println("Aucun service médical disponible.");
+			System.out.println("    " + color.RED_BOLD + "❌Aucun service médical disponible." + color.RESET);
 			return null;
 		}
 
-		System.out.println("Sélectionnez un service médical :");
+		System.out.println("    " + color.YELLOW_BOLD + "Sélectionnez un service médical :");
 		for (int i = 0; i < services.size(); i++) {
 			System.out.println((i + 1) + ". " + services.get(i).getNom());
 		}
@@ -348,7 +349,7 @@ public class Menu implements Runnable{
 		if (choix > 0 && choix <= services.size()) {
 			return services.get(choix - 1);
 		} else {
-			System.out.println("Choix invalide.");
+			System.out.println("    " + color.RED_BOLD + "❌ Choix invalide." + color.RESET);
 			return null;
 		}
 	}
@@ -362,7 +363,7 @@ public class Menu implements Runnable{
 	private Creature choisirCreature(ServiceMedical service) {
 		List<Creature> creatures = service.getCreatures();
 		if (creatures.isEmpty()) {
-			System.out.println("Aucune créature disponible dans ce service.");
+			System.out.println("    " + color.RED_BOLD + "❌ Aucune créature disponible dans ce service" + color.RESET);
 			return null;
 		}
 
@@ -374,7 +375,7 @@ public class Menu implements Runnable{
 		if (choix > 0 && choix <= creatures.size()) {
 			return creatures.get(choix - 1);
 		} else {
-			System.out.println("Choix invalide.");
+			System.out.println("    " + color.RED_BOLD + "❌ Choix invalide." + color.RESET);
 			return null;
 		}
 	}
