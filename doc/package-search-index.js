@@ -1,1 +1,1 @@
-packageSearchIndex = [{"l":"All Packages","u":"allpackages-index.html"},{"l":"ClassColonie"}];updateSearchResults();
+packageSearchIndex = [{"l":"Affichage"},{"l":"All Packages","u":"allpackages-index.html"},{"l":"Attente"},{"l":"ClassColonie"},{"l":"Creatures"},{"l":"Enum"},{"l":"Main"},{"l":"Maladie"},{"l":"ServicesMedicaux"},{"l":"Simulation"},{"l":"TestColonie"},{"l":"Tests"}];updateSearchResults();
