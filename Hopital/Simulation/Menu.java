@@ -245,14 +245,14 @@ public class Menu implements Runnable{
 	private void soignerCreatures(Medecin medecin) {
 		ServiceMedical service = medecin.getServiceAssocie();
 		if (service.getCreatures().isEmpty()) {
-			System.out.println("Le service " + service.getNom() + " ne contient aucune créature.");
+			System.out.println("    " + color.GREEN_BOLD + "Le service " + service.getNom() + " ne contient aucune créature."+ color.RESET);
 			return;
 		}
 
 		System.out.println("Sélectionnez une créature à soigner dans le service " + service.getNom() + " :");
 		List<Creature> creatures = service.getCreatures();
 		for (int i = 0; i < creatures.size(); i++) {
-			System.out.println((i + 1) + ". " + creatures.get(i).getNom() + " (Moral: " + creatures.get(i).getMoral() + ")");
+			System.out.println("    " + (i + 1) + ". " + creatures.get(i).getNom() + " (Moral: " + creatures.get(i).getMoral() + ")");
 		}
 
 		int choix = lireChoix();
