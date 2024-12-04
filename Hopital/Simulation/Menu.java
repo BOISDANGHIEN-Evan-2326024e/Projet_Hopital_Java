@@ -251,8 +251,9 @@ public class Menu implements Runnable{
 
 		System.out.println("Sélectionnez une créature à soigner dans le service " + service.getNom() + " :");
 		List<Creature> creatures = service.getCreatures();
+		String emojiCreature = service.emoji();
 		for (int i = 0; i < creatures.size(); i++) {
-			System.out.println((i + 1) + ". " + creatures.get(i).getNom() + " (Moral: " + creatures.get(i).getMoral() + ")");
+			System.out.println("     " + emojiCreature + " " + color.BRIGHT_CYAN+ (i + 1) + ". " + creatures.get(i).getNom() + color.RESET+" (Moral: " + creatures.get(i).getMoral() + ")");
 		}
 
 		int choix = lireChoix();
