@@ -45,6 +45,5 @@ public class MainLauncher {
             e.printStackTrace();
         }
 
-        scanner.close(); // Fermer le scanner
     }
 }
