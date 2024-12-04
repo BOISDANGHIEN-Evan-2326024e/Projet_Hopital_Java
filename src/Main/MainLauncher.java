@@ -1,4 +1,5 @@
 package Main;
+
 import java.lang.reflect.Method;
 import java.util.Scanner;
 
@@ -8,20 +9,25 @@ public class MainLauncher {
         Scanner scanner = new Scanner(System.in);
 
         // Demander à l'utilisateur quel module lancer
-        System.out.println("Quel simulation souhaitez-vous lancer ?");
-        System.out.println("1 - Hopital fantastique");
-        System.out.println("2 - Colonie de Lycanthrope");
-        int choix = scanner.nextInt();
+        System.out.println("Quelle simulation souhaitez-vous lancer ?");
+        System.out.println("1 - Hopital fantastique : rentrez HF");
+        System.out.println("2 - Colonie de Lycanthrope : rentrez C");
 
-        // Déterminer la classe à exécuter
-        String classNameToLaunch;
-        if (choix == 1) {
-            classNameToLaunch = "Simulation.Main"; // Package + classe principale
-        } else if (choix == 2) {
-            classNameToLaunch = "ClassColonie.MainColonie"; // Package + classe principale
-        } else {
-            System.out.println("Choix invalide !");
-            return;
+        String choix;
+        String classNameToLaunch = "";
+
+        // Boucle pour obtenir un choix valide
+        while (true) {
+            choix = scanner.next();
+            if (choix.equals("HF")) {
+                classNameToLaunch = "Simulation.Main"; // Package + classe principale
+                break;
+            } else if (choix.equals("C")) {
+                classNameToLaunch = "ClassColonie.MainColonie"; // Package + classe principale
+                break;
+            } else {
+                System.out.println("Choix invalide ! Veuillez entrer HF ou C.");
+            }
         }
 
         try {
@@ -38,5 +44,7 @@ public class MainLauncher {
             System.err.println("Erreur lors du lancement : " + e.getMessage());
             e.printStackTrace();
         }
+
+        scanner.close(); // Fermer le scanner
     }
 }
